@@ -1,0 +1,19 @@
+h1,h2{
+}
+
+body{
+	text-align: center;
+}
+
+.hide{
+    display: hide;
+}
+
+#div_cmnd{
+	border-style: solid; 
+}
+
+#all_tables{
+	border-style: solid; 
+}
+
