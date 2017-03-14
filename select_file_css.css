@@ -1,3 +1,4 @@
+
 h1,h2{
 }
 
@@ -11,9 +12,38 @@ body{
 
 #div_cmnd{
 	border-style: solid; 
+	padding: 3%;
 }
 
-#all_tables{
-	border-style: solid; 
+.th_cmd{
+	border-style: solid;
 }
 
+.last_col{
+	border-right: solid;
+}
+
+table { /* table dei cmd */
+	padding: 3%;
+}
+
+#graphics_type{
+	border-style: solid;
+	
+}
+
+
+
+#myWorkContent{
+	border-style: solid;
+    width:80%;
+    height:auto;
+    overflow-x: scroll;
+    /* overflow-y: scroll; */
+    white-space: nowrap;
+}
+
+#myWorkContent a { /* non serve */
+    display: inline-block;
+    vertical-align: middle;
+}
