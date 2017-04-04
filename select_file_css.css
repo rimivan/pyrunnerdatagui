@@ -12,7 +12,7 @@ body{
 
 #div_cmnd{
 	border-style: solid; 
-	padding: 3%;
+	padding: 2%;
 }
 
 .th_cmd{
@@ -29,16 +29,14 @@ table { /* table dei cmd */
 
 #graphics_type{
 	border-style: solid;
-	
 }
-
 
 
 #myWorkContent{
 	border-style: solid;
     width:80%;
     height:auto;
-    overflow-x: scroll;
+    overflow-x: auto;
     /* overflow-y: scroll; */
     white-space: nowrap;
 }
@@ -46,4 +44,19 @@ table { /* table dei cmd */
 #myWorkContent a { /* non serve */
     display: inline-block;
     vertical-align: middle;
+}
+
+.bordered{
+	padding: 5px;
+	border-style: solid;
+}
+
+.removedBenchmarkDiv{
+	padding: 5px;
+	border-style: solid;
+	overflow-x: auto;
+}
+
+.checkbox{
+	padding:5px;
 }
