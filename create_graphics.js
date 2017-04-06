@@ -93,10 +93,12 @@ jQuery(document).ready(function(){
 			});
 			//console.log(bench_only_id_arr);
 
-
+			//console.log(all_cmdObjectWithAvgTime);
 			//grafici con test completed
 			if(clicked_id ==="line"){
-				lineChart(cmdObjArr,"container_comp",bench_only_id_arr,"completed"); // creazione grafico per test completed
+
+			console.log(all_cmdObjectWithAvgTime);
+				lineChart(all_cmdObjectWithAvgTime,"container_comp",bench_only_id_arr,"completed"); // creazione grafico per test completed
 			}else if(clicked_id==="stacked"){
 				stackedChart(cmdObjArr,"container_comp",bench_only_id_arr,"completed");	
 			}else if(clicked_id==="scatter"){
@@ -126,10 +128,10 @@ jQuery(document).ready(function(){
             	tmpObj.cmdId = objNotComp.name;
             	tmpObj.notCompData = objNotComp.data;
             	if(allCmdCheck[index].active == "true"){
-            		console.log("True");
+            		//console.log("True");
             		tmpObj.active = "true";
             	}else{
-            		console.log("false");
+            		//console.log("false");
             		tmpObj.active = "false";
             	}
             	newNotCompletedArray.push(tmpObj);
@@ -140,7 +142,7 @@ jQuery(document).ready(function(){
             var cmdObjToGraphicsArray=[]; // array degli oggetti not completed da visualizzare sul grafico in base ai dati aggiornati dalla aggiunta o rimozione di benchmark
 
             allCmdCheck.forEach(function(cmdId,cmdIndex){
-			console.log(cmdId);            	
+			//console.log(cmdId);            	
             	var cmdObjToGraphics = {
             		name: "",
             		data : []
@@ -148,7 +150,7 @@ jQuery(document).ready(function(){
 				cmdObjToGraphics.name = cmdId.id;
 
 				if(cmdId.active == "true"){
-					console.log("true, "+cmdId.id)
+					//console.log("true, "+cmdId.id)
 					bench_id_arr.forEach(function(benchElem,benchIndex){
 	            	//console.log(notCompleted_all.data[index]);
 						//console.log(benchElem);
@@ -163,7 +165,6 @@ jQuery(document).ready(function(){
 	            cmdObjToGraphicsArray.push(cmdObjToGraphics);
 	        }
             });
-	        console.log(cmdObjToGraphicsArray);
 
             
 
@@ -329,8 +330,4 @@ jQuery(document).ready(function(){
 			});
 		});
 	}
-
-
-	
-	
 });
