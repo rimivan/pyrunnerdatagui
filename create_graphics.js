@@ -7,9 +7,12 @@ jQuery(document).ready(function(){
 		var cmd_id;
 		var cmd_id_array = [];
 		var cmdObjArr;
+		var cmdObjWithAvg_array;
+		var tmpAvgData;
 		var tmpDataString;
 		var tmpDataArrayString;
 		var tmpDataArray;
+
 
 
 		var allCmdCheck = [];
@@ -44,67 +47,115 @@ jQuery(document).ready(function(){
 					"active":sessionStorage.getItem(id)
 				});
 			});
-			//cmd_id = sessionStorage.getItem("cmd_array");
 
 			allCmdCheck.forEach(function(cmdCheck,index){
-				//console.log(cmdCheck);
 				if(cmdCheck.active =="true"){
 					cmd_id_array.push(cmdCheck.id);
 				}
 			});
-			//cmd_id_array = cmd_id.split(",");
 
 			cmdObjArr = [];
+			cmdObjWithAvg_array = [];
+			
 
 			tmpDataString;
 			tmpDataArrayString = [];
 			tmpDataArray = [];
+
+			var cmd_Bench_AvgTime_array = [];
+
 			cmd_id_array.forEach(function(elem,index){
+
+				var tmpBenchWithAvgTime ={
+				};
 
 				var obj = {
 					name:"",
 					data: []
 				};
+
+
+				var cmdObjAvg = {
+					name:"",
+					data:[]
+				};
+
 				if(sessionStorage[elem]){ // dall' id del command costruisco il json che servira per il grafico
 					obj.name = elem;
+					cmdObjAvg.name = elem;
+
 					tmpDataString = sessionStorage.getItem(elem);
 					tmpDataArrayString = tmpDataString.split(",");
 
 					tmpDataArray = [];
-
+					
+					all_cmdObjectWithAvgTime.forEach(function(cmdAvg,indexAvg){
+						if(elem == cmdAvg.name){ // significa che il command cmdAvg.name è attivo
+							tmpAvgData = [];
+							cmdAvg.data.forEach(function(benchAvg,indexBench){
+								//console.log("cmdAvg : "+cmdAvg.name+" "+benchAvg);
+								if(bench_id_arr[indexBench].active=="true"){ 
+									tmpAvgData.push(benchAvg);
+										tmpBenchWithAvgTime[bench_id_arr[indexBench].id] = benchAvg;
+								}
+							});
+						}
+					});
 					tmpDataArrayString.forEach(function(val,index){
-						if(bench_id_arr[index].active=="true"){ 
+						if(bench_id_arr[index].active=="true" ){ 
 							//console.log(bench_id_arr[index].id+" , "+val);
 							tmpDataArray.push(parseInt(val));
 						}
 						
 					});
+					
+					cmdObjAvg.data = tmpAvgData;
 					obj.data = tmpDataArray;
 				}else{
 					console.log("elemento command non trovato nella sessionStorage");
 				}
+				cmdObjWithAvg_array.push(cmdObjAvg);
 				cmdObjArr.push(obj);
+				cmd_Bench_AvgTime_array.push(tmpBenchWithAvgTime);
 			});
-			
+				
+
+			var keys;
+			cmd_Bench_AvgTime_array.forEach(function(elemnt,indexElem){
+				keys = Object.keys(elemnt).sort(function(a,b){return elemnt[a]-elemnt[b]});
+				console.log(keys);
+			});
 			bench_only_id_arr = [];
+			//console.log(bench_id_arr);
 			bench_id_arr.forEach(function(val,index){
 				if(val.active == "true")
 					bench_only_id_arr.push(val.id);
 			});
-			//console.log(bench_only_id_arr);
 
-			//console.log(all_cmdObjectWithAvgTime);
-			//grafici con test completed
+			console.log(cmd_Bench_AvgTime_array);
+
+			//grafico line su avg time ordinati
 			if(clicked_id ==="line"){
+				//console.log(cmdObjWithAvg_array);
+				all_cmdObjectWithAvgTime.forEach(function(cmd,ind){
+					cmd.data.sort( function(a, b){return a-b} );
+				});
+				//console.log(bench_only_id_arr);
+				lineChart(cmdObjWithAvg_array,"container_1",keys); // creazione grafico per test completed
+				$("#graphic_2").hide();
+			}
 
-			console.log(all_cmdObjectWithAvgTime);
-				lineChart(all_cmdObjectWithAvgTime,"container_comp",bench_only_id_arr,"completed"); // creazione grafico per test completed
-			}else if(clicked_id==="stacked"){
-				stackedChart(cmdObjArr,"container_comp",bench_only_id_arr,"completed");	
-			}else if(clicked_id==="scatter"){
-				scatterChart(cmdObjArr,"container_comp",bench_only_id_arr,"completed");
-			}else{
-				alert("Nessun grafico disponibile!");
+			//grafico riassuntivo sui test completi e non completi
+			if(clicked_id==="stacked"){
+				//console.log(cmdObjArr);
+				stackedChart(cmdObjArr,"container_1",bench_only_id_arr,"completed");
+				$("#graphic_2").show();	
+			}
+
+			//grafico scatter su avg time a due istanze
+			if(clicked_id==="scatter"){
+				scatterChart(cmdObjArr,"container_1",bench_only_id_arr,"completed");
+				$("#graphic_2").hide();
 			}
 
 		}else{
@@ -168,15 +219,10 @@ jQuery(document).ready(function(){
 
             
 
-            if(clicked_id === "line"){
-            	lineChart(cmdObjToGraphicsArray,"container_notcomp",bench_only_id_arr,"notcompleted");//creazione grafico per test not completed
-            }else if(clicked_id === "stacked"){
-            	stackedChart(cmdObjToGraphicsArray,"container_notcomp",bench_only_id_arr,"notcompleted");
-            }else if(clicked_id === "scatter"){
-            	scatterChart(cmdObjToGraphicsArray,"container_notcomp",bench_only_id_arr,"notcompleted");
-            }else{
-            	alert("Nessun grafico disponibile!");
+            if(clicked_id === "stacked"){
+            	stackedChart(cmdObjToGraphicsArray,"container_2",bench_only_id_arr,"notcompleted");
             }
+
 
           }else{
           	alert("Non è possibile caricare i test Non Completati!");
@@ -186,13 +232,10 @@ jQuery(document).ready(function(){
 
 
 
-	function lineChart(param,appendTo,categories,compOrNotComp){
+	function lineChart(param,appendTo,categories){
 		var title;
-		if(compOrNotComp === "completed"){
-			title = "Line chart of Completed test!";
-		}else{
-			title = "Line chart of NOT Completed test!";
-		}
+			title = "Line chart of Average Time!";
+		
 		$(function () {
 			Highcharts.chart(appendTo, {
 				title: {
@@ -326,7 +369,7 @@ jQuery(document).ready(function(){
 					}
 				},
 				series:
-				param
+					param
 			});
 		});
 	}

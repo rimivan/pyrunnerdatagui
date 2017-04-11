@@ -4,6 +4,8 @@ var cmdWithAvgTime = {
 };
 var all_cmdObjectWithAvgTime = [];
 
+
+var arrayBenchAvgTime =[];
 jQuery(document).ready(function(){
 
 	var filenameSelected = sessionStorage.getItem("filename");
@@ -24,10 +26,26 @@ jQuery(document).ready(function(){
                	});
                	sessionStorage.setItem("cmd_array",cmd_id_array);
 
-               	cmd_id_array.forEach(function(command_element,index) {
-               		var currId = command_element.replace(' ','');
-               		$("#div_cmnd").append("<div class='ui toggle checkbox cmnd'><input type='checkbox' class='check_cmnd' name='public' id='check_"+currId+"' checked ><label>"+command_element+"</label></div>");
-               	});
+
+                
+                cmd_id_array.forEach(function(command_element,index) {
+                    var currId = command_element.replace(' ','');
+                    $("#div_cmnd").append("<div class='ui toggle checkbox cmnd'><input type='checkbox' class='check_cmnd' name='public' id='check_"+currId+"' checked ><label>"+command_element+"</label></div>");
+                    $("#compareCmdGraph").append("<input name='compare' class='compareCheckbox' type='checkbox' id='compareCheck_"+currId+"'/><label for='compareCheck_"+currId+"' class='inline'>"+command_element+"</label>");
+                });
+                
+
+                // DA SISTEMARE
+                $('.compareCheckbox').on('click', function (e) {
+                    if ($('.compareCheckbox:checked').length < 3) {
+                        $(this).attr('checked', true);
+                        alert("allowed only 3");
+                    }
+                    else if($('.compareCheckbox:checked')){
+                        $(this).removeAttr('checked');
+                    }
+                       
+                });
                 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
@@ -256,6 +274,7 @@ jQuery(document).ready(function(){
 
                 var solution_array = [];
                 var notCompleted_array = [];
+                
                 cmd_id_array.forEach(function(command_element,index) { // scandisco per gli id dei command che ho.
                 	cmdWithAvgTime = {
                 		name:"",
@@ -266,7 +285,14 @@ jQuery(document).ready(function(){
                     cmdWithAvgTime.name = nospaceCmd;
                     var arrayOfLaunchNumForBench = [];
                     $(xml).find('benchmark').each(function(benchmark_i){
-                		var idCurrentBenchmark =$(this).attr("id");
+                        var idCurrentBenchmark =$(this).attr("id");
+
+                        var bench = {
+                            idBench:idCurrentBenchmark,
+                            //arrayOfAvgTime:[]
+                        };
+                        
+
                 		var testcases=$(this).find("testcase");
                 		testcases.each(function(testcase_j){
                 			var this_commands = $(this).find("command");
@@ -327,8 +353,10 @@ jQuery(document).ready(function(){
                         }
                         sessionStorage.setItem("launchForBenchObj_"+index,JSON.stringify(launchForBenchObj));
                         avgTime = parseFloat(avgTime); // se non lo converto avgTime viene trattato come stringa
+                        bench[nospaceCmd]=avgTime;
                         cmdWithAvgTime.data.push(avgTime);
 
+                        //console.log("Avg TIme"+nospaceCmd+"   "+avgTime);
 
                         launchNumForBench = 0;
                         solution = 0;
@@ -336,11 +364,11 @@ jQuery(document).ready(function(){
                         avgMem = 0;
                         avgTime = 0;
                         sumTime = 0;
+                        
+                        arrayBenchAvgTime.push(bench);
                     });//end foreach benchmark
-                        //console.log("launch for comdn: "+command_element+" - "+launchNumForCmd);
-
-						cmdWithAvgTime.data.sort( function(a, b){return a-b} );                        	
-                        console.log(cmdWithAvgTime.data);
+						//cmdWithAvgTime.data.sort( function(a, b){return a-b} ); 
+                        //console.log(cmdWithAvgTime.data);
                         all_cmdObjectWithAvgTime.push(cmdWithAvgTime);
                         totalAvgMem /= launchNumForCmd;
 	                	totalAvgTime /= launchNumForCmd;
@@ -391,6 +419,26 @@ jQuery(document).ready(function(){
 
             	});//end foreach cmd_id
     sessionStorage.setItem("notcompleted", JSON.stringify(notCompletedObj_array)); // serve per la creazione dei grafici nel "sumTable.js"
+    console.log(arrayBenchAvgTime);
+    
+    var arrayOfBenchAndAvg = [];
+
+    /*benchmark_id_array.forEach(function(benchid,i){
+        var tmp = {
+            idBench:benchid
+        };
+
+        cmd_id_array.forEach(function(){
+            arrayBenchAvgTime.forEach(function(benchAvgElem,j){
+
+                tmp.idBench = benchAvgElem.idBench;
+                var arrayAvgTime = [];
+                
+            });
+            
+        });
+    });*/
+
 
     function updateTotalInTable( nospaceCmd,index,totalSolution,totalAvgTime,totalSumTime,totalAvgMem ){
         $("#total_row").append("<td class='"+nospaceCmd+" solution cmd_"+index+"'><b>"+totalSolution+"</b></td>");
