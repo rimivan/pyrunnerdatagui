@@ -33,7 +33,7 @@ jQuery(document).ready(function(){
 					command.active = "false";
 				}
 
-				allCmdCheck.push(command);
+				allCmdCheck.push(command);	//allCmdCheck mi dice i command attivi e non attivi
 			});
 
 
@@ -64,7 +64,7 @@ jQuery(document).ready(function(){
 
 			var cmd_Bench_AvgTime_array = [];
 
-			cmd_id_array.forEach(function(elem,index){
+			cmd_id_array.forEach(function(elem,index){ // in cmd_id_array ho già i cmd attivi così da prendere solo quelli necessari
 
 				var tmpBenchWithAvgTime ={
 				};
@@ -101,8 +101,8 @@ jQuery(document).ready(function(){
 							});
 						}
 					});
-					tmpDataArrayString.forEach(function(val,index){
-						if(bench_id_arr[index].active=="true" ){ 
+					tmpDataArrayString.forEach(function(val,index){ // risistemo obj per cmdObjArr, in modo che ogni volta che il grafico deve essere aggiornato
+						if(bench_id_arr[index].active=="true" ){ 	//verifico che il benchmark sia attivo e prendo i dati corrispondenti all'indice del benchmark
 							//console.log(bench_id_arr[index].id+" , "+val);
 							tmpDataArray.push(parseInt(val));
 						}
@@ -123,7 +123,6 @@ jQuery(document).ready(function(){
 			var keys;
 			cmd_Bench_AvgTime_array.forEach(function(elemnt,indexElem){
 				keys = Object.keys(elemnt).sort(function(a,b){return elemnt[a]-elemnt[b]});
-				console.log(keys);
 			});
 			bench_only_id_arr = [];
 			//console.log(bench_id_arr);
@@ -137,11 +136,11 @@ jQuery(document).ready(function(){
 			//grafico line su avg time ordinati
 			if(clicked_id ==="line"){
 				//console.log(cmdObjWithAvg_array);
-				all_cmdObjectWithAvgTime.forEach(function(cmd,ind){
-					cmd.data.sort( function(a, b){return a-b} );
+				arrayOfObjectTimeTestCase.forEach(function(obj,ind){
+					obj.data.sort( function(a, b){return a-b} );
 				});
 				//console.log(bench_only_id_arr);
-				lineChart(cmdObjWithAvg_array,"container_1",keys); // creazione grafico per test completed
+				lineChart(arrayOfObjectTimeTestCase,"container_1"/*,keys*/); // creazione grafico per test completed
 				$("#graphic_2").hide();
 			}
 

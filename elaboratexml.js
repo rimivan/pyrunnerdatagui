@@ -4,8 +4,9 @@ var cmdWithAvgTime = {
 };
 var all_cmdObjectWithAvgTime = [];
 
-
+var arrayTimeTestCase = [];
 var arrayBenchAvgTime =[];
+var arrayOfObjectTimeTestCase = [];
 jQuery(document).ready(function(){
 
 	var filenameSelected = sessionStorage.getItem("filename");
@@ -275,13 +276,25 @@ jQuery(document).ready(function(){
                 var solution_array = [];
                 var notCompleted_array = [];
                 
+                var cmdTestcaseTime = {
+                    name:"",
+                    data:[]
+                };
                 cmd_id_array.forEach(function(command_element,index) { // scandisco per gli id dei command che ho.
-                	cmdWithAvgTime = {
+                	cmdTestcaseTime = {
+                        name:"",
+                         data:[]
+                    };
+
+                    arrayTimeTestCase = [];
+                   
+                    cmdWithAvgTime = { // non servirà
                 		name:"",
                 		data:[]
                 	};
 
                     var nospaceCmd = cmd_id_array[index].replace(" ",""); // i command hanno uno spazio nel nome: bb 8 diventa bb8
+                    cmdTestcaseTime.name = nospaceCmd;
                     cmdWithAvgTime.name = nospaceCmd;
                     var arrayOfLaunchNumForBench = [];
                     $(xml).find('benchmark').each(function(benchmark_i){
@@ -295,6 +308,7 @@ jQuery(document).ready(function(){
 
                 		var testcases=$(this).find("testcase");
                 		testcases.each(function(testcase_j){
+                            var tcaseTime=0;
                 			var this_commands = $(this).find("command");
                 			this_commands.each(function(command_k){
                 				if( cmd_id_array[index] === this_commands[command_k].id ){
@@ -306,8 +320,8 @@ jQuery(document).ready(function(){
                 						currentStats.each(function(stats_h){
                 							var mem = parseFloat( $(this).attr("memory") ) ;
                 							var time = parseFloat( $(this).attr("time") ) ;
-
-                							avgMem += mem;
+                                            tcaseTime = time; // tempo del testcase
+                                            avgMem += mem;
                 							avgTime +=time;
                 							sumTime += time;
                                     		totalAvgMem += mem;//somma di tutte le medie
@@ -325,7 +339,8 @@ jQuery(document).ready(function(){
                 					});
                 				}
                 			});
-                		});
+                            arrayTimeTestCase.push(tcaseTime);
+                        });
                 		solution_array.push(solution);
                 		notCompleted_array.push(notCompleted);
 	                	//console.log("dati avg mem : avg mem : "+avgMem+" / "+launchNumForBench);
@@ -369,6 +384,9 @@ jQuery(document).ready(function(){
                     });//end foreach benchmark
 						//cmdWithAvgTime.data.sort( function(a, b){return a-b} ); 
                         //console.log(cmdWithAvgTime.data);
+                        cmdTestcaseTime.data = arrayTimeTestCase;
+                        arrayOfObjectTimeTestCase.push(cmdTestcaseTime);
+                        
                         all_cmdObjectWithAvgTime.push(cmdWithAvgTime);
                         totalAvgMem /= launchNumForCmd;
 	                	totalAvgTime /= launchNumForCmd;
@@ -419,10 +437,8 @@ jQuery(document).ready(function(){
 
             	});//end foreach cmd_id
     sessionStorage.setItem("notcompleted", JSON.stringify(notCompletedObj_array)); // serve per la creazione dei grafici nel "sumTable.js"
-    console.log(arrayBenchAvgTime);
-    
     var arrayOfBenchAndAvg = [];
-
+    console.log(arrayOfObjectTimeTestCase);
     /*benchmark_id_array.forEach(function(benchid,i){
         var tmp = {
             idBench:benchid
