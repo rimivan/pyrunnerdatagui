@@ -1,12 +1,11 @@
-var cmdWithAvgTime = {
-	name :"",
-	data:[]
-};
-var all_cmdObjectWithAvgTime = [];
+
 
 var arrayTimeTestCase = [];
-var arrayBenchAvgTime =[];
 var arrayOfObjectTimeTestCase = [];
+
+var allBenchmark;
+var allCommand;
+var allTestcase;
 jQuery(document).ready(function(){
 
 	var filenameSelected = sessionStorage.getItem("filename");
@@ -15,7 +14,11 @@ jQuery(document).ready(function(){
 		url : filenameSelected,
 		datatype:"xml",
 		success:function(xml){
+                allBenchmark = $(xml).find("benchmark");
+                allTestcase = $(xml).find("testcase");
+                allCommand = $(xml).find("command");
 
+                console.log(allCommand);
                	// ++++ Creazione lista di command a centro pagina iniziale ++++
                	var cmd_id_array = [];
                	var commands = $(xml).find("command");
@@ -39,8 +42,10 @@ jQuery(document).ready(function(){
                 // DA SISTEMARE
                 $('.compareCheckbox').on('click', function (e) {
                     if ($('.compareCheckbox:checked').length < 3) {
-                        $(this).attr('checked', true);
-                        alert("allowed only 3");
+                        if($(this).attr('checked'))
+                            $(this).attr('checked', false);
+                        else
+                            $(this).attr('checked', true);
                     }
                     else if($('.compareCheckbox:checked')){
                         $(this).removeAttr('checked');
@@ -278,28 +283,23 @@ jQuery(document).ready(function(){
                 
                 var cmdTestcaseTime = {
                     name:"",
-                    data:[]
+                    data:[],
                 };
                 cmd_id_array.forEach(function(command_element,index) { // scandisco per gli id dei command che ho.
                 	cmdTestcaseTime = {
                         name:"",
-                         data:[]
+                         data:[],
                     };
 
                     arrayTimeTestCase = [];
                    
-                    cmdWithAvgTime = { // non servirà
-                		name:"",
-                		data:[]
-                	};
+                    
 
                     var nospaceCmd = cmd_id_array[index].replace(" ",""); // i command hanno uno spazio nel nome: bb 8 diventa bb8
                     cmdTestcaseTime.name = nospaceCmd;
-                    cmdWithAvgTime.name = nospaceCmd;
                     var arrayOfLaunchNumForBench = [];
                     $(xml).find('benchmark').each(function(benchmark_i){
                         var idCurrentBenchmark =$(this).attr("id");
-
                         var bench = {
                             idBench:idCurrentBenchmark,
                             //arrayOfAvgTime:[]
@@ -320,7 +320,6 @@ jQuery(document).ready(function(){
                 						currentStats.each(function(stats_h){
                 							var mem = parseFloat( $(this).attr("memory") ) ;
                 							var time = parseFloat( $(this).attr("time") ) ;
-                                            tcaseTime = time; // tempo del testcase
                                             avgMem += mem;
                 							avgTime +=time;
                 							sumTime += time;
@@ -331,6 +330,8 @@ jQuery(document).ready(function(){
                 							var status = $(this).attr("status");
                 							if(status === "complete"){
                 								solution++;
+                								tcaseTime = time; // tempo del testcase
+                            					arrayTimeTestCase.push(tcaseTime);
                 							}else{
                 								notCompleted++;
                 							}
@@ -339,7 +340,6 @@ jQuery(document).ready(function(){
                 					});
                 				}
                 			});
-                            arrayTimeTestCase.push(tcaseTime);
                         });
                 		solution_array.push(solution);
                 		notCompleted_array.push(notCompleted);
@@ -369,7 +369,6 @@ jQuery(document).ready(function(){
                         sessionStorage.setItem("launchForBenchObj_"+index,JSON.stringify(launchForBenchObj));
                         avgTime = parseFloat(avgTime); // se non lo converto avgTime viene trattato come stringa
                         bench[nospaceCmd]=avgTime;
-                        cmdWithAvgTime.data.push(avgTime);
 
                         //console.log("Avg TIme"+nospaceCmd+"   "+avgTime);
 
@@ -380,14 +379,11 @@ jQuery(document).ready(function(){
                         avgTime = 0;
                         sumTime = 0;
                         
-                        arrayBenchAvgTime.push(bench);
                     });//end foreach benchmark
-						//cmdWithAvgTime.data.sort( function(a, b){return a-b} ); 
                         //console.log(cmdWithAvgTime.data);
                         cmdTestcaseTime.data = arrayTimeTestCase;
                         arrayOfObjectTimeTestCase.push(cmdTestcaseTime);
                         
-                        all_cmdObjectWithAvgTime.push(cmdWithAvgTime);
                         totalAvgMem /= launchNumForCmd;
 	                	totalAvgTime /= launchNumForCmd;
 
@@ -439,22 +435,7 @@ jQuery(document).ready(function(){
     sessionStorage.setItem("notcompleted", JSON.stringify(notCompletedObj_array)); // serve per la creazione dei grafici nel "sumTable.js"
     var arrayOfBenchAndAvg = [];
     console.log(arrayOfObjectTimeTestCase);
-    /*benchmark_id_array.forEach(function(benchid,i){
-        var tmp = {
-            idBench:benchid
-        };
-
-        cmd_id_array.forEach(function(){
-            arrayBenchAvgTime.forEach(function(benchAvgElem,j){
-
-                tmp.idBench = benchAvgElem.idBench;
-                var arrayAvgTime = [];
-                
-            });
-            
-        });
-    });*/
-
+    
 
     function updateTotalInTable( nospaceCmd,index,totalSolution,totalAvgTime,totalSumTime,totalAvgMem ){
         $("#total_row").append("<td class='"+nospaceCmd+" solution cmd_"+index+"'><b>"+totalSolution+"</b></td>");

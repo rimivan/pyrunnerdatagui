@@ -1,3 +1,5 @@
+var allCmdCheck = [];
+var dataForLineChart = [];
 jQuery(document).ready(function(){
 
 	$(".graphicbtn").on("click",function(){ // comandi completed
@@ -7,7 +9,7 @@ jQuery(document).ready(function(){
 		var cmd_id;
 		var cmd_id_array = [];
 		var cmdObjArr;
-		var cmdObjWithAvg_array;
+		//var cmdObjWithAvg_array;
 		var tmpAvgData;
 		var tmpDataString;
 		var tmpDataArrayString;
@@ -15,7 +17,6 @@ jQuery(document).ready(function(){
 
 
 
-		var allCmdCheck = [];
 		if(sessionStorage["bench_array"]){ // in session storage deve esserci bench_array(array degli id dei benchmark)
 			
 			allCmdCheck = [];
@@ -75,32 +76,21 @@ jQuery(document).ready(function(){
 				};
 
 
-				var cmdObjAvg = {
+				/*var cmdObjAvg = {
 					name:"",
 					data:[]
-				};
+				};*/
 
 				if(sessionStorage[elem]){ // dall' id del command costruisco il json che servira per il grafico
 					obj.name = elem;
-					cmdObjAvg.name = elem;
+					//cmdObjAvg.name = elem;
 
 					tmpDataString = sessionStorage.getItem(elem);
 					tmpDataArrayString = tmpDataString.split(",");
 
 					tmpDataArray = [];
 					
-					all_cmdObjectWithAvgTime.forEach(function(cmdAvg,indexAvg){
-						if(elem == cmdAvg.name){ // significa che il command cmdAvg.name è attivo
-							tmpAvgData = [];
-							cmdAvg.data.forEach(function(benchAvg,indexBench){
-								//console.log("cmdAvg : "+cmdAvg.name+" "+benchAvg);
-								if(bench_id_arr[indexBench].active=="true"){ 
-									tmpAvgData.push(benchAvg);
-										tmpBenchWithAvgTime[bench_id_arr[indexBench].id] = benchAvg;
-								}
-							});
-						}
-					});
+				
 					tmpDataArrayString.forEach(function(val,index){ // risistemo obj per cmdObjArr, in modo che ogni volta che il grafico deve essere aggiornato
 						if(bench_id_arr[index].active=="true" ){ 	//verifico che il benchmark sia attivo e prendo i dati corrispondenti all'indice del benchmark
 							//console.log(bench_id_arr[index].id+" , "+val);
@@ -109,12 +99,12 @@ jQuery(document).ready(function(){
 						
 					});
 					
-					cmdObjAvg.data = tmpAvgData;
+					//cmdObjAvg.data = tmpAvgData;
 					obj.data = tmpDataArray;
 				}else{
 					console.log("elemento command non trovato nella sessionStorage");
 				}
-				cmdObjWithAvg_array.push(cmdObjAvg);
+				//cmdObjWithAvg_array.push(cmdObjAvg);
 				cmdObjArr.push(obj);
 				cmd_Bench_AvgTime_array.push(tmpBenchWithAvgTime);
 			});
@@ -131,16 +121,12 @@ jQuery(document).ready(function(){
 					bench_only_id_arr.push(val.id);
 			});
 
-			console.log(cmd_Bench_AvgTime_array);
-
+			//activeCmdAndCommandForLineChart(arrayOfObjectTimeTestCase);
 			//grafico line su avg time ordinati
 			if(clicked_id ==="line"){
-				//console.log(cmdObjWithAvg_array);
-				arrayOfObjectTimeTestCase.forEach(function(obj,ind){
-					obj.data.sort( function(a, b){return a-b} );
-				});
-				//console.log(bench_only_id_arr);
-				lineChart(arrayOfObjectTimeTestCase,"container_1"/*,keys*/); // creazione grafico per test completed
+				elaborateDataForLineChart();
+					
+				lineChart(dataForLineChart,"container_1"); // creazione grafico per test completed
 				$("#graphic_2").hide();
 			}
 
@@ -151,15 +137,31 @@ jQuery(document).ready(function(){
 				$("#graphic_2").show();	
 			}
 
+			var test= {
+				name:"test1",
+				data:[[161.2, 51.6], [167.5, 59.3], [159.5, 49.2]]
+			}
+
+			var test2 = {
+				name:"test2",
+				data:[[170.2, 7.6], [16.5, 57.5], [59.5, 29.2]]
+			}
+
+			var arraytest = [];
+			arraytest.push(test);
+			arraytest.push(test2);
+
 			//grafico scatter su avg time a due istanze
 			if(clicked_id==="scatter"){
-				scatterChart(cmdObjArr,"container_1",bench_only_id_arr,"completed");
+				dataForScatterChart();
+				scatterChart(arraytest,"container_1",bench_only_id_arr,"completed");
 				$("#graphic_2").hide();
 			}
 
 		}else{
 			alert("Qualcosa è andato storto nella lettura dal sessionStorage.");
 		}
+
 
 		//creazione dati e grafici per i test non completi
 		if(sessionStorage["notcompleted"]){ // in session storage deve esserci l'elemento notcompleted
@@ -229,9 +231,22 @@ jQuery(document).ready(function(){
 
 	}); // end on click completed cmd table
 
+	function elaborateDataForLineChart(){
+		dataForLineChart = [];
+		allCmdCheck.forEach(function( cmdCheck,index)  {
+			if(cmdCheck.active =="true"){
+				arrayOfObjectTimeTestCase.forEach(function(obj,ind){
+					if(obj.name == cmdCheck.id ){
+						obj.data.sort( function(a,b) { return a-b } );
+						dataForLineChart.push(obj);
+					}
+				});
+			}
+		});
+	}
 
 
-	function lineChart(param,appendTo,categories){
+	function lineChart(param,appendTo){
 		var title;
 			title = "Line chart of Average Time!";
 		
@@ -241,7 +256,7 @@ jQuery(document).ready(function(){
 					text: title
 				},
 				xAxis: {
-					categories: categories
+					categories: ""
 				},
 
 				yAxis: {
@@ -363,7 +378,7 @@ jQuery(document).ready(function(){
 						},
 						tooltip: {
 							headerFormat: '<b>{series.name}</b><br>',
-							pointFormat: '{point.y}'
+							pointFormat: '{point.x} s,{point.y} s'
 						}
 					}
 				},
