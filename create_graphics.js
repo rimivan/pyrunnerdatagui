@@ -1,5 +1,6 @@
 var allCmdCheck = [];
 var dataForLineChart = [];
+var dataForScatterChart = [];
 jQuery(document).ready(function(){
 
 	$(".graphicbtn").on("click",function(){ // comandi completed
@@ -137,31 +138,36 @@ jQuery(document).ready(function(){
 				$("#graphic_2").show();	
 			}
 
-			var test= {
-				name:"test1",
-				data:[[161.2, 51.6], [167.5, 59.3], [159.5, 49.2]]
-			}
-
-			var test2 = {
-				name:"test2",
-				data:[[170.2, 7.6], [16.5, 57.5], [59.5, 29.2]]
-			}
-
-			var arraytest = [];
-			arraytest.push(test);
-			arraytest.push(test2);
+			
 
 			//grafico scatter su avg time a due istanze
+			var checkedCmdForScatter = [];
 			if(clicked_id==="scatter"){
-				dataForScatterChart();
-				scatterChart(arraytest,"container_1",bench_only_id_arr,"completed");
-				$("#graphic_2").hide();
+				controlCheckedCmd(); // crea l'array con gli id dei command checked
+				console.log("lenght: "+checkedCmdForScatter.lenght); // bisogna controllare che i checked siano due
+				if(checkedCmdForScatter.lenght != 0){
+					elaborateDataForScatterChart( checkedCmdForScatter ); // function in utility_script
+					scatterChart(dataForScatterChart,"container_1",bench_only_id_arr,"completed");
+					$("#graphic_2").hide();
+				}else{
+					alert("seleziona due cmd");
+				}
 			}
 
 		}else{
 			alert("Qualcosa è andato storto nella lettura dal sessionStorage.");
 		}
 
+		function controlCheckedCmd(){
+			var inputCheckCmd = $("#compareCmdGraph").children("input");
+			inputCheckCmd.each(function(inputCheck_index,inputCheck){
+				var currentIdCmdChecked = $(this).prop("id");
+				if( $(this).prop("checked") ){
+					var idCmdChecked = currentIdCmdChecked.split("_"); 
+					checkedCmdForScatter.push(idCmdChecked[1]);
+				}
+			});	
+		}
 
 		//creazione dati e grafici per i test non completi
 		if(sessionStorage["notcompleted"]){ // in session storage deve esserci l'elemento notcompleted
@@ -248,15 +254,17 @@ jQuery(document).ready(function(){
 
 	function lineChart(param,appendTo){
 		var title;
-			title = "Line chart of Average Time!";
-		
+			title = "Line chart of Testcases Time!";
 		$(function () {
 			Highcharts.chart(appendTo, {
 				title: {
 					text: title
 				},
 				xAxis: {
-					categories: ""
+					categories: "",
+					title:{
+						text:"Testcase number"
+					}
 				},
 
 				yAxis: {
@@ -288,7 +296,6 @@ jQuery(document).ready(function(){
 		}else{
 			title = "Stacked Bar Chart of NOT Completed Test!"
 		}
-
 		$(function () {
 			Highcharts.chart(appendTo, {
 				chart: {
@@ -335,20 +342,25 @@ jQuery(document).ready(function(){
 			Highcharts.chart(appendTo, {
 				chart: {
 					type: 'scatter',
-					zoomType: 'xy'
+					zoomType: 'xy',
+					width: 500,
+       				height: 500
 				},
 				title: {
 					text: title
 				},
 				xAxis: {
-					categories: categories
+					min:0,
+					//categories: categories
 				},
 				yAxis: {
+					min:0,
+					tickInterval: 10,
 					title: {
 						text: 'Number of '+compOrNotComp
 					}
 				},
-				legend: {
+				/*legend: {
 					layout: 'vertical',
 					align: 'left',
 					verticalAlign: 'top',
@@ -357,7 +369,7 @@ jQuery(document).ready(function(){
 					floating: true,
 					backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF',
 					borderWidth: 1
-				},
+				},*/
 				plotOptions: {
 					scatter: {
 						marker: {

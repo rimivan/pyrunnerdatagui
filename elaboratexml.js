@@ -6,21 +6,21 @@ var arrayOfObjectTimeTestCase = [];
 var allBenchmark;
 var allCommand;
 var allTestcase;
+var cmd_id_array = [];
 jQuery(document).ready(function(){
 
-	var filenameSelected = sessionStorage.getItem("filename");
-	$.ajax({ 
-		type : "GET",
-		url : filenameSelected,
-		datatype:"xml",
-		success:function(xml){
+    var filenameSelected = sessionStorage.getItem("filename");
+    $.ajax({ 
+        type : "GET",
+        url : filenameSelected,
+        datatype:"xml",
+        success:function(xml){
                 allBenchmark = $(xml).find("benchmark");
                 allTestcase = $(xml).find("testcase");
                 allCommand = $(xml).find("command");
 
                 console.log(allCommand);
-               	// ++++ Creazione lista di command a centro pagina iniziale ++++
-               	var cmd_id_array = [];
+                // ++++ Creazione lista di command a centro pagina iniziale ++++
                	var commands = $(xml).find("command");
 
                	commands.each(function(j){
@@ -39,7 +39,7 @@ jQuery(document).ready(function(){
                 });
                 
 
-                // DA SISTEMARE
+                // DA Ricontrollare 
                 $('.compareCheckbox').on('click', function (e) {
                     if ($('.compareCheckbox:checked').length < 3) {
                         if($(this).attr('checked'))
