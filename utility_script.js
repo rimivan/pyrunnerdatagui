@@ -3,21 +3,22 @@
 		dataForScatterChart = [];
 		
 		//leggi tutti i dati dagli array all
-		var testCaseObj;
+		var benchmarkObj;
 		
 			allBenchmark.each(function(bench_i,benchObj){
 				var benchmarkId = $(this).prop("id");
+				var arrayOfDataTimeTemp = [];
+					benchmarkObj = {
+						name:benchmarkId,//nome del testcase
+						data:[] // conterrà i due valori time dei due command selezionati
+					}
 				var testcases = $(this).find("testcase");
 				testcases.each(function(testcase_j,testcaseObj){
 					var currentTestcaseId = $(this).prop("id");
 
-					testCaseObj = {
-						name:"",//nome del testcase
-						data:[] // conterrà i due valori time dei due command selezionati
-					}
+					var arrayForTestCase = [];
 
 					var commands = $(this).find("command");
-					var arrayOfDataTimeTemp = [];
 					checkedCmdForScatter.forEach(function(cmdId,cmdIdIndex){
 					commands.each(function(cmd_k,cmdObj){
 						var currentCmdId = $(this).prop("id"); 
@@ -29,18 +30,20 @@
 								currentStats.each(function(stats_h){
 									var status = $(this).attr("status");
 									if(status === "complete"){
-										testCaseObj.name = currentTestcaseId;
+										//benchmarkObj.name = currentTestcaseId;
 										var time = parseFloat( $(this).attr("time") ) ;
-										arrayOfDataTimeTemp.push(time);
+										arrayForTestCase.push(time);
+								
 									}
 								});
 							});
 						}
 					});
-				});
-					testCaseObj.data.push(arrayOfDataTimeTemp);
-				dataForScatterChart.push(testCaseObj);
+				});arrayOfDataTimeTemp.push(arrayForTestCase);
 			});
+				//console.log(arrayOfDataTimeTemp);
+					benchmarkObj.data=arrayOfDataTimeTemp;
+				dataForScatterChart.push(benchmarkObj);
 		});
 		console.log(dataForScatterChart);
 	};

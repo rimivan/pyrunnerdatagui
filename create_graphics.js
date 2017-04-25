@@ -1,6 +1,8 @@
 var allCmdCheck = [];
 var dataForLineChart = [];
 var dataForScatterChart = [];
+
+
 jQuery(document).ready(function(){
 
 	$(".graphicbtn").on("click",function(){ // comandi completed
@@ -128,17 +130,19 @@ jQuery(document).ready(function(){
 				elaborateDataForLineChart();
 					
 				lineChart(dataForLineChart,"container_1"); // creazione grafico per test completed
+				$("#container_scatter").hide();
 				$("#graphic_2").hide();
+				$("#graphic_1").show();
 			}
 
 			//grafico riassuntivo sui test completi e non completi
 			if(clicked_id==="stacked"){
-				//console.log(cmdObjArr);
 				stackedChart(cmdObjArr,"container_1",bench_only_id_arr,"completed");
+				$("#container_scatter").hide();
+				$("#graphic_1").show();	
 				$("#graphic_2").show();	
 			}
 
-			
 
 			//grafico scatter su avg time a due istanze
 			var checkedCmdForScatter = [];
@@ -147,8 +151,10 @@ jQuery(document).ready(function(){
 				console.log("lenght: "+checkedCmdForScatter.lenght); // bisogna controllare che i checked siano due
 				if(checkedCmdForScatter.lenght != 0){
 					elaborateDataForScatterChart( checkedCmdForScatter ); // function in utility_script
-					scatterChart(dataForScatterChart,"container_1",bench_only_id_arr,"completed");
+					scatterChart(dataForScatterChart,"container_scatter",bench_only_id_arr,"completed");
+					$("#graphic_1").hide();
 					$("#graphic_2").hide();
+					$("#container_scatter").show();
 				}else{
 					alert("seleziona due cmd");
 				}
@@ -341,10 +347,35 @@ jQuery(document).ready(function(){
 		$(function () {
 			Highcharts.chart(appendTo, {
 				chart: {
+					events: {
+						load: function() {
+							var extremeY = this.yAxis[0].getExtremes();
+							var extremeX = this.xAxis[0].getExtremes();
+
+							var lineSeries = {
+								name:"diagonal line",
+								type: 'line',
+								data: [
+									[extremeX.min, extremeY.min],
+									[extremeX.max, extremeY.max]
+								],
+								lineWidth: 1,
+								lineColor: 'rgb(0,0,0)',
+								marker: {
+									enabled: false
+								}
+							};
+
+							this.addSeries(lineSeries);
+						}
+					},
 					type: 'scatter',
 					zoomType: 'xy',
-					width: 500,
-       				height: 500
+					width: 700,
+       				height: 700
+				},
+				legend:{
+					enabled:true
 				},
 				title: {
 					text: title
@@ -360,20 +391,11 @@ jQuery(document).ready(function(){
 						text: 'Number of '+compOrNotComp
 					}
 				},
-				/*legend: {
-					layout: 'vertical',
-					align: 'left',
-					verticalAlign: 'top',
-					x: 100,
-					y: 70,
-					floating: true,
-					backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF',
-					borderWidth: 1
-				},*/
+				
 				plotOptions: {
 					scatter: {
 						marker: {
-							radius: 3,
+							radius: 6,
 							states: {
 								hover: {
 									enabled: true,
@@ -398,5 +420,8 @@ jQuery(document).ready(function(){
 					param
 			});
 		});
+
 	}
+
+
 });
