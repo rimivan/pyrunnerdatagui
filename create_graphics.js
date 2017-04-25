@@ -148,8 +148,8 @@ jQuery(document).ready(function(){
 			var checkedCmdForScatter = [];
 			if(clicked_id==="scatter"){
 				controlCheckedCmd(); // crea l'array con gli id dei command checked
-				console.log("lenght: "+checkedCmdForScatter.lenght); // bisogna controllare che i checked siano due
-				if(checkedCmdForScatter.lenght != 0){
+				if(checkedCmdForScatter.length > 1){
+					 // bisogna controllare che i checked siano due
 					elaborateDataForScatterChart( checkedCmdForScatter ); // function in utility_script
 					scatterChart(dataForScatterChart,"container_scatter",bench_only_id_arr,"completed");
 					$("#graphic_1").hide();
