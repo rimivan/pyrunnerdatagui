@@ -1,5 +1,3 @@
-
-
 var arrayTimeTestCase = [];
 var arrayOfObjectTimeTestCase = [];
 
@@ -7,6 +5,8 @@ var allBenchmark;
 var allCommand;
 var allTestcase;
 var cmd_id_array = [];
+
+var regex = /[\_ | \W]*/gi;
 jQuery(document).ready(function(){
 
     var filenameSelected = sessionStorage.getItem("filename");
@@ -19,21 +19,23 @@ jQuery(document).ready(function(){
                 allTestcase = $(xml).find("testcase");
                 allCommand = $(xml).find("command");
 
-                console.log(allCommand);
+                //console.log(allCommand);
                 // ++++ Creazione lista di command a centro pagina iniziale ++++
                	var commands = $(xml).find("command");
 
                	commands.each(function(j){
-               		if( !(cmd_id_array.includes(commands[j].id)) ){
-               			cmd_id_array.push(commands[j].id);
+                    var currentIdCmd = commands[j].id.replace(regex,'');
+               		if( !(cmd_id_array.includes(currentIdCmd)) ){
+               			cmd_id_array.push(currentIdCmd);
                		}
                	});
+                //console.log(cmd_id_array);
                	sessionStorage.setItem("cmd_array",cmd_id_array);
 
 
                 
                 cmd_id_array.forEach(function(command_element,index) {
-                    var currId = command_element.replace(' ','');
+                    var currId = command_element.replace(regex, '');
                     $("#div_cmnd").append("<div class='ui toggle checkbox cmnd'><input type='checkbox' class='check_cmnd' name='public' id='check_"+currId+"' checked ><label>"+command_element+"</label></div>");
                     $("#compareCmdGraph").append("<input name='compare' class='compareCheckbox' type='checkbox' id='compareCheck_"+currId+"'/><label for='compareCheck_"+currId+"' class='inline'>"+command_element+"</label>");
                 });
@@ -66,7 +68,8 @@ jQuery(document).ready(function(){
 
                 //++++ Creazione tabella con tutti i dati ++++
                 function createTable(cmd,index) {
-                	var nospacecmd = cmd.replace(" ","");
+                	var nospacecmd = cmd.replace(regex, '');
+
                 	$("#cmd_row").append(
                 		"<th class='th_cmd "+nospacecmd+"' colspan='4' id='"+cmd+"'>"+cmd+"</th>"
                 		);
@@ -148,7 +151,7 @@ jQuery(document).ready(function(){
                         sessionStorage.setItem(clickedBenchId,"false");
                         $("#"+classOfTrToRemove).fadeOut();
                         //devo sottrarre i valori che nascondo ai totali
-                        updateTableMinus(valuesOfTr,clickedClass,sign);
+                        updateTable(valuesOfTr,clickedClass,sign);
                         
                     }else if( $(this).is(":checked") ){
                         sign="plus";
@@ -156,13 +159,13 @@ jQuery(document).ready(function(){
                         sessionStorage.setItem(clickedBenchId,"true");
                         $("#"+classOfTrToRemove).fadeIn();
                         //devo sommare i valori che ripristino ai totali
-                        updateTableMinus(valuesOfTr,clickedClass,sign);
+                        updateTable(valuesOfTr,clickedClass,sign);
                     }
 
                     $("#stacked").click();
                 });
 
-                function updateTableMinus(valuesOfTr,clickedClass,sign){
+                function updateTable(valuesOfTr,clickedClass,sign){
                     var splittedClass = clickedClass.split(" ");
                     var indexOfBenchClicked = splittedClass[0].split("_"); // solo indice del benchmark cliccato che servirà a farci avere il numero di volte che quel benchmark è stato lanciato
                     indexOfBenchClicked = indexOfBenchClicked[1];
@@ -203,20 +206,22 @@ jQuery(document).ready(function(){
                 function recalcTotalData(){ // medie totali
                     $("#total_row").replaceWith("<tr id='total_row' class='new'><td>TOTAL</td></tr>");
                     cmd_id_array.forEach(function(command_element,index) {
-                        var nospaceCmd = cmd_id_array[index].replace(" ","");
+                        var nospaceCmd = cmd_id_array[index].replace(regex, '');
+
                         var totalAvgMemRecalc = 0;
                         var totalAvgTimeRecalc = 0;
                         var totalSolutionRecalc = 0;
                         var totalSumTimeRecalc = 0;
                         $(xml).find('benchmark').each(function(bench_i){
                             var currentBenchmark = $(this).prop('id');
-                            var checked = sessionStorage.getItem(currentBenchmark);
+                            var checked = sessionStorage.getItem(currentBenchmark); // check dei benchmark
                             if( checked == "true" ){ //se gli id sono diversi prosegui nel ricalcolare la media
                                 var testcases=$(this).find("testcase");
                                 testcases.each(function(testcase_j){
                                     var this_commands = $(this).find("command");
                                     this_commands.each(function(command_k){
-                                        if( cmd_id_array[index] === this_commands[command_k].id ){
+                                        var idToCompare = this_commands[command_k].id.replace(regex,'');
+                                        if( cmd_id_array[index] === idToCompare ){
                                             var currentPyrunlim = $(this).find("pyrunlim");
                                             currentPyrunlim.each(function(py_l){
                                                 var currentStats = $(this).find("stats");
@@ -238,7 +243,6 @@ jQuery(document).ready(function(){
                                     });
                                 });
                             }
-                            //alert("recalc: "+currentBenchmark);
                         });
                         var newDivider = sessionStorage.getItem("LaunchForCmd_"+index);
                         totalAvgMemRecalc /= newDivider;
@@ -295,7 +299,7 @@ jQuery(document).ready(function(){
                    
                     
 
-                    var nospaceCmd = cmd_id_array[index].replace(" ",""); // i command hanno uno spazio nel nome: bb 8 diventa bb8
+                    var nospaceCmd = cmd_id_array[index].replace(regex, ''); // i command hanno uno spazio nel nome: bb 8 diventa bb8
                     cmdTestcaseTime.name = nospaceCmd;
                     var arrayOfLaunchNumForBench = [];
                     $(xml).find('benchmark').each(function(benchmark_i){
@@ -311,7 +315,8 @@ jQuery(document).ready(function(){
                             var tcaseTime=0;
                 			var this_commands = $(this).find("command");
                 			this_commands.each(function(command_k){
-                				if( cmd_id_array[index] === this_commands[command_k].id ){
+                				var idToCompare = this_commands[command_k].id.replace(regex, '');
+                                if( cmd_id_array[index] === idToCompare ){
                 					launchNumForBench++;
                 					launchNumForCmd++;
                 					var currentPyrunlim = $(this).find("pyrunlim");
@@ -419,8 +424,8 @@ jQuery(document).ready(function(){
 	                	totalAvgMem = 0;
 	                	totalAvgTime = 0;
 	                	totalSumTime = 0;
-                        command_element = command_element.replace(" ","");
-	                	sessionStorage.setItem(command_element,solution_array);
+                        command_element = command_element.replace(regex, '');
+                        sessionStorage.setItem(command_element,solution_array);
 
 	                	var notCompObj = {
 	                		name:command_element,
@@ -444,7 +449,7 @@ jQuery(document).ready(function(){
         $("#total_row").append("<td class='"+nospaceCmd+" last_col avgmem cmd_"+index+"'><b>"+totalAvgMem+"</b></td>");
     
         cmd_id_array.forEach(function(cmd,index){ // serve a nascondere i command non visibili, per evitare problemi grafici alla tabella
-				var currId = cmd.replace(' ','');
+				var currId = cmd.replace(regex, '');
 				if( $("."+currId).hasClass("cmdHide") ){
 					$("."+currId).hide();
 				} 
@@ -486,7 +491,7 @@ jQuery(document).ready(function(){
 		
 			$("."+onlyIdCommand).show();
 			cmd_id_array.forEach(function(cmd,index){
-				var currId = cmd.replace(' ','');
+				var currId = cmd.replace(regex, '');
 				if( $("."+currId).hasClass("cmdHide") ){
 					$("."+currId).hide();
 				} 

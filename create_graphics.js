@@ -7,6 +7,7 @@ jQuery(document).ready(function(){
 
 	$(".graphicbtn").on("click",function(){ // comandi completed
 		var clicked_id = $(this).attr("id");
+		console.log("clicked: "+clicked_id);
 		var benchmarkId;
 		var bench_id_arr;
 		var cmd_id;
@@ -29,7 +30,9 @@ jQuery(document).ready(function(){
 					active :""
 				};
 				var commandID = $(this).attr("id").split("_");
+				//console.log(commandID[1]);
 				command.id = commandID[1];
+
 
 				if($(this).is(":checked") ){
 					command.active = "true";
@@ -69,7 +72,7 @@ jQuery(document).ready(function(){
 			var cmd_Bench_AvgTime_array = [];
 
 			cmd_id_array.forEach(function(elem,index){ // in cmd_id_array ho già i cmd attivi così da prendere solo quelli necessari
-
+				console.log(elem);
 				var tmpBenchWithAvgTime ={
 				};
 
@@ -105,7 +108,7 @@ jQuery(document).ready(function(){
 					//cmdObjAvg.data = tmpAvgData;
 					obj.data = tmpDataArray;
 				}else{
-					console.log("elemento command non trovato nella sessionStorage");
+					console.log("elemento command non trovato nella sessionStorage:"+elem);
 				}
 				//cmdObjWithAvg_array.push(cmdObjAvg);
 				cmdObjArr.push(obj);
