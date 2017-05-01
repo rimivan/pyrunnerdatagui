@@ -22,7 +22,7 @@
 					checkedCmdForScatter.forEach(function(cmdId,cmdIdIndex){
 					commands.each(function(cmd_k,cmdObj){
 						var currentCmdId = $(this).prop("id"); 
-						currentCmdId = currentCmdId.replace(" ","");
+						currentCmdId = currentCmdId.replace(regex,'');
 						if(cmdId == currentCmdId){
 							var currentPyrunlim = $(this).find("pyrunlim");
 							currentPyrunlim.each(function(py_l){

@@ -1,5 +1,3 @@
-
-
 var arrayTimeTestCase = [];
 var arrayOfObjectTimeTestCase = [];
 
@@ -7,6 +5,7 @@ var allBenchmark;
 var allCommand;
 var allTestcase;
 var cmd_id_array = [];
+var regex = /[\_ | \W]/gi;
 jQuery(document).ready(function(){
 
     var filenameSelected = sessionStorage.getItem("filename");
@@ -19,13 +18,14 @@ jQuery(document).ready(function(){
                 allTestcase = $(xml).find("testcase");
                 allCommand = $(xml).find("command");
 
-                console.log(allCommand);
+                //console.log(allCommand);
                 // ++++ Creazione lista di command a centro pagina iniziale ++++
                	var commands = $(xml).find("command");
 
                	commands.each(function(j){
-               		if( !(cmd_id_array.includes(commands[j].id)) ){
-               			cmd_id_array.push(commands[j].id);
+                     var currentIdCmd = commands[j].id.replace(regex,'');
+               		if( !(cmd_id_array.includes(currentIdCmd)) ){
+               			cmd_id_array.push(currentIdCmd);
                		}
                	});
                	sessionStorage.setItem("cmd_array",cmd_id_array);
@@ -33,7 +33,7 @@ jQuery(document).ready(function(){
 
                 
                 cmd_id_array.forEach(function(command_element,index) {
-                    var currId = command_element.replace(' ','');
+                     var currId = command_element.replace(regex, '');
                     $("#div_cmnd").append("<div class='ui toggle checkbox cmnd'><input type='checkbox' class='check_cmnd' name='public' id='check_"+currId+"' checked ><label>"+command_element+"</label></div>");
                     $("#compareCmdGraph").append("<input name='compare' class='compareCheckbox' type='checkbox' id='compareCheck_"+currId+"'/><label for='compareCheck_"+currId+"' class='inline'>"+command_element+"</label>");
                 });
@@ -66,7 +66,7 @@ jQuery(document).ready(function(){
 
                 //++++ Creazione tabella con tutti i dati ++++
                 function createTable(cmd,index) {
-                	var nospacecmd = cmd.replace(" ","");
+                	var nospacecmd = cmd.replace(regex, '');
                 	$("#cmd_row").append(
                 		"<th class='th_cmd "+nospacecmd+"' colspan='4' id='"+cmd+"'>"+cmd+"</th>"
                 		);
@@ -203,7 +203,7 @@ jQuery(document).ready(function(){
                 function recalcTotalData(){ // medie totali
                     $("#total_row").replaceWith("<tr id='total_row' class='new'><td>TOTAL</td></tr>");
                     cmd_id_array.forEach(function(command_element,index) {
-                        var nospaceCmd = cmd_id_array[index].replace(" ","");
+                        var nospaceCmd = cmd_id_array[index].replace(regex, '');
                         var totalAvgMemRecalc = 0;
                         var totalAvgTimeRecalc = 0;
                         var totalSolutionRecalc = 0;
@@ -216,7 +216,8 @@ jQuery(document).ready(function(){
                                 testcases.each(function(testcase_j){
                                     var this_commands = $(this).find("command");
                                     this_commands.each(function(command_k){
-                                        if( cmd_id_array[index] === this_commands[command_k].id ){
+                                        var idToCompare = this_commands[command_k].id.replace(regex,'');
+                                        if( cmd_id_array[index] === idToCompare ){
                                             var currentPyrunlim = $(this).find("pyrunlim");
                                             currentPyrunlim.each(function(py_l){
                                                 var currentStats = $(this).find("stats");
@@ -295,7 +296,7 @@ jQuery(document).ready(function(){
                    
                     
 
-                    var nospaceCmd = cmd_id_array[index].replace(" ",""); // i command hanno uno spazio nel nome: bb 8 diventa bb8
+                    var nospaceCmd = cmd_id_array[index].replace(regex, ''); // i command hanno uno spazio nel nome: bb 8 diventa bb8
                     cmdTestcaseTime.name = nospaceCmd;
                     var arrayOfLaunchNumForBench = [];
                     $(xml).find('benchmark').each(function(benchmark_i){
@@ -311,7 +312,8 @@ jQuery(document).ready(function(){
                             var tcaseTime=0;
                 			var this_commands = $(this).find("command");
                 			this_commands.each(function(command_k){
-                				if( cmd_id_array[index] === this_commands[command_k].id ){
+                				var idToCompare = this_commands[command_k].id.replace(regex, '');
+                                if( cmd_id_array[index] === idToCompare ){
                 					launchNumForBench++;
                 					launchNumForCmd++;
                 					var currentPyrunlim = $(this).find("pyrunlim");
@@ -419,7 +421,7 @@ jQuery(document).ready(function(){
 	                	totalAvgMem = 0;
 	                	totalAvgTime = 0;
 	                	totalSumTime = 0;
-                        command_element = command_element.replace(" ","");
+                        command_element = command_element.replace(regex,'');
 	                	sessionStorage.setItem(command_element,solution_array);
 
 	                	var notCompObj = {
@@ -444,7 +446,7 @@ jQuery(document).ready(function(){
         $("#total_row").append("<td class='"+nospaceCmd+" last_col avgmem cmd_"+index+"'><b>"+totalAvgMem+"</b></td>");
     
         cmd_id_array.forEach(function(cmd,index){ // serve a nascondere i command non visibili, per evitare problemi grafici alla tabella
-				var currId = cmd.replace(' ','');
+				var currId = cmd.replace(regex, '');
 				if( $("."+currId).hasClass("cmdHide") ){
 					$("."+currId).hide();
 				} 
@@ -486,7 +488,7 @@ jQuery(document).ready(function(){
 		
 			$("."+onlyIdCommand).show();
 			cmd_id_array.forEach(function(cmd,index){
-				var currId = cmd.replace(' ','');
+				var currId = cmd.replace(regex,'');
 				if( $("."+currId).hasClass("cmdHide") ){
 					$("."+currId).hide();
 				} 
