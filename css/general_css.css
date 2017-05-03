@@ -13,6 +13,7 @@ body{
 #div_cmnd{
 	border-style: solid; 
 	padding: 2%;
+	overflow-x: auto;
 }
 
 .th_cmd{
@@ -33,6 +34,7 @@ td{
 
 #graphics_type{
 	border-style: solid;
+	overflow-x: auto;
 }
 
 

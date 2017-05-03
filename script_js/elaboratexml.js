@@ -109,7 +109,7 @@ jQuery(document).ready(function(){
                 benchmark_id_array.forEach(function(benchmarkId_elem,benchIndex){
                     sessionStorage.setItem(benchmarkId_elem,"true");
                 	//numBench = benchIndex + 1;
-                	$("#tbody").append("<tr class='row_"+benchmarkId_elem+"' id='bench_"+benchIndex+"'><td> <a id='"+benchmarkId_elem+"' href='benchmark_page.html'>"+benchmarkId_elem+"</a></td>"+
+                	$("#tbody").append("<tr class='row_"+benchmarkId_elem+"' id='bench_"+benchIndex+"'><td> <a id='"+benchmarkId_elem+"' href='pages/benchmark_page.html'>"+benchmarkId_elem+"</a></td>"+
                        "</tr>");
 
                     $("#removedBench2").append("<div class='ui toggle checkbox'><input class='bench_"+benchIndex+" rem_bench' type='checkbox' name='public' checked ><label>"+benchmarkId_elem+"</label></div>");
