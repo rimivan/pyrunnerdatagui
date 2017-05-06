@@ -1,3 +1,4 @@
+
 //prendo i benchmark e i command attivi e elaboro i dati time per ogni testcase.
 	function elaborateDataForScatterChart( checkedCmdForScatter ){
 		dataForScatterChart = [];
@@ -5,6 +6,8 @@
 		
 			allBenchmarks.each(function(bench_i,benchObj){
 				var benchmarkId = $(this).prop("id");
+				if( sessionStorage.getItem(benchmarkId) == "true"){
+
 				var arrayOfDataTimeTemp = [];
 					benchmarkObj = {
 						name:benchmarkId,//nome del testcase
@@ -41,7 +44,8 @@
 				//console.log(arrayOfDataTimeTemp);
 				benchmarkObj.data=arrayOfDataTimeTemp;
 				dataForScatterChart.push(benchmarkObj);
-			});
+			}
+		});
 		console.log(dataForScatterChart);
 	};//end elaborate data for scatter.
 

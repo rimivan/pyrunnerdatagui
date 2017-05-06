@@ -34,20 +34,7 @@ jQuery(document).ready(function(){
                 });
                 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-                // DA Ricontrollare ; Checkbox dei command per il grafico scatter.
-                $('.compareCheckbox').on('click', function (e) {
-                    if ($('.compareCheckbox:checked').length < 3) {
-                        if($(this).attr('checked'))
-                            $(this).attr('checked', false);
-                        else
-                            $(this).attr('checked', true);
-                    }
-                    else if($('.compareCheckbox:checked')){
-                        $(this).removeAttr('checked');
-                    }
-                       
-                });
-                // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+                
 
 
                 // ++++ lista degli id benchmark ++++
@@ -85,42 +72,7 @@ jQuery(document).ready(function(){
                 $("#tbody").append("<tr id='total_row'><td>TOTAL</td>");
                 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-                //Evento sui check dei benchmark
-                var clickedBenchId;
-                $(".rem_bench").on('click',function(){
-                    var clickedClass = $(this).attr("class");
-                    clickedBenchId = $(this).next().html();
-                    //console.log("Id bench click: "+clickedBenchId);
-                    var classOfTrToRemove = clickedClass.split(" ");
-                    classOfTrToRemove = classOfTrToRemove[0]; //la classe nel checkbox è uguale all'id della riga da rimuovere o mostrare
-                    
-                    var valuesOfTr = []; // tutti i valori dei td. per evitare il primo td scandire dalla pos 1.
-                    $("#"+classOfTrToRemove).find("td").each(function(){
-                            var valueOfTd = $(this).html();
-                            valuesOfTr.push(valueOfTd);
-                        });
-                        valuesOfTr.splice(0,1); // rimuove il primo elemento della tr. (splice(index,howmany))
-                    
-                    var sign ="";
-                    if( ! ($(this).is(":checked"))  ){
-                        sign = "minus";
-                        ($(this)).attr("checked",false);
-                        sessionStorage.setItem(clickedBenchId,"false");
-                        $("#"+classOfTrToRemove).fadeOut();
-                        //devo sottrarre i valori che nascondo ai totali
-                        updateTable(valuesOfTr,clickedClass,sign); //update table in utility
-                        
-                    }else if( $(this).is(":checked") ){
-                        sign="plus";
-                        ($(this)).attr("checked",true);
-                        sessionStorage.setItem(clickedBenchId,"true");
-                        $("#"+classOfTrToRemove).fadeIn();
-                        //devo sommare i valori che ripristino ai totali
-                        updateTable(valuesOfTr,clickedClass,sign); // update table in utility
-                    }
-
-                    $("#stacked").click();
-                });
+                
 
                 
 
@@ -169,42 +121,8 @@ jQuery(document).ready(function(){
                             //arrayOfAvgTime:[]
                         };
 
-                		var testcases=$(this).find("testcase");
-                		testcases.each(function(testcase_j){
-                            var tcaseTime=0;
-                			var this_commands = $(this).find("command");
-                			this_commands.each(function(command_k){
-                				var idToCompare = this_commands[command_k].id.replace(regex, '');
-                                if( cmd_id_array[index] === idToCompare ){
-                					launchNumForBench++;
-                					launchNumForCmd++;
-                					var currentPyrunlim = $(this).find("pyrunlim");
-                					currentPyrunlim.each(function(py_l){
-                						var currentStats = $(this).find("stats");
-                						currentStats.each(function(stats_h){
-                							var mem = parseFloat( $(this).attr("memory") ) ;
-                							var time = parseFloat( $(this).attr("time") ) ;
-                                            avgMem += mem;
-                							avgTime +=time;
-                							sumTime += time;
-                                    		totalAvgMem += mem;//somma di tutte le medie
-                							totalAvgTime += time; // somma di tutte le medie
+                		testcasesData( $(this), command_element, index );
 
-
-                							var status = $(this).attr("status");
-                							if(status === "complete"){
-                								solution++;
-                								tcaseTime = time; // tempo del testcase
-                            					arrayTimeTestCase.push(tcaseTime);
-                							}else{
-                								notCompleted++;
-                							}
-
-                						});	
-                					});
-                				}
-                			});
-                        });
                 		solution_array.push(solution);
                 		notCompleted_array.push(notCompleted);
 	                	
@@ -300,38 +218,75 @@ jQuery(document).ready(function(){
     
 
     
+    function testcasesData(thisBenchmark,command_element,index){
+        var testcases=thisBenchmark.find("testcase");
+        testcases.each(function(testcase_j){
+            var tcaseTime=0;
+            var this_commands = $(this).find("command");
+            this_commands.each(function(command_k){
+                var idToCompare = this_commands[command_k].id.replace(regex, '');
+                if( cmd_id_array[index] === idToCompare ){
+                    launchNumForBench++;
+                    launchNumForCmd++;
+                    var currentPyrunlim = $(this).find("pyrunlim");
+                    currentPyrunlim.each(function(py_l){
+                        var currentStats = $(this).find("stats");
+                        currentStats.each(function(stats_h){
+                            var mem = parseFloat( $(this).attr("memory") ) ;
+                            var time = parseFloat( $(this).attr("time") ) ;
+                            avgMem += mem;
+                            avgTime +=time;
+                            sumTime += time;
+                            totalAvgMem += mem;//somma di tutte le medie
+                            totalAvgTime += time; // somma di tutte le medie
+                            var status = $(this).attr("status");
+                            if(status === "complete"){
+                                solution++;
+                                tcaseTime = time; // tempo del testcase
+                                arrayTimeTestCase.push(tcaseTime);
+                            }else{
+                                notCompleted++;
+                            }
 
-	$(".check_type").on('click',function(){ // check dei tipi di dati da selezionare/deselezionare (solution,avgmem,avgtime,sumtime)
-		var idBtn = $(this).attr("id");
-		var splitted = idBtn.split("_");
-		var onlyIdCommand = splitted[1];// solution/avgmem/avgtime/sumtime
-        
-		var colspan;
-		if( ! $("#check_"+onlyIdCommand).is(":checked")  ){
-			$("#check_"+onlyIdCommand).attr("checked",false);
-			$("."+onlyIdCommand).addClass("hideElem");
-			$("."+onlyIdCommand).hide();
-			colspan = parseInt ( $("#cmd_row").children("th").attr("colspan") ) ;
-			colspan--;
-			$("#cmd_row").children("th").attr("colspan",colspan);
-		}else if( $("#check_"+onlyIdCommand).is(":checked") ){
-			$("#check_"+onlyIdCommand).attr("checked",true);
-			$("."+onlyIdCommand).removeClass("hideElem");
-		
-			$("."+onlyIdCommand).show();
-			cmd_id_array.forEach(function(cmd,index){
-				var currId = cmd.replace(regex,'');
-				if( $("."+currId).hasClass("cmdHide") ){
-					$("."+currId).hide();
-				} 
-			});
+                        }); 
+                    });
+                }
+            });
+        });
+    }//end testcases data
+
+            // Events
+        	$(".check_type").on('click',function(){ // check dei tipi di dati da selezionare/deselezionare (solution,avgmem,avgtime,sumtime)
+        		var idBtn = $(this).attr("id");
+        		var splitted = idBtn.split("_");
+        		var onlyIdCommand = splitted[1];// solution/avgmem/avgtime/sumtime
+                
+        		var colspan;
+        		if( ! $("#check_"+onlyIdCommand).is(":checked")  ){
+        			$("#check_"+onlyIdCommand).attr("checked",false);
+        			$("."+onlyIdCommand).addClass("hideElem");
+        			$("."+onlyIdCommand).hide();
+        			colspan = parseInt ( $("#cmd_row").children("th").attr("colspan") ) ;
+        			colspan--;
+        			$("#cmd_row").children("th").attr("colspan",colspan);
+        		}else if( $("#check_"+onlyIdCommand).is(":checked") ){
+        			$("#check_"+onlyIdCommand).attr("checked",true);
+        			$("."+onlyIdCommand).removeClass("hideElem");
+        		
+        			$("."+onlyIdCommand).show();
+        			cmd_id_array.forEach(function(cmd,index){
+        				var currId = cmd.replace(regex,'');
+        				if( $("."+currId).hasClass("cmdHide") ){
+        					$("."+currId).hide();
+        				} 
+        			});
 
 
-			colspan = parseInt ( $("#cmd_row").children("th").attr("colspan") ) ;
-			colspan++;
-			$("#cmd_row").children("th").attr("colspan",colspan);
-		}
-	});
+        			colspan = parseInt ( $("#cmd_row").children("th").attr("colspan") ) ;
+        			colspan++;
+        			$("#cmd_row").children("th").attr("colspan",colspan);
+        		}
+        	});//end on click check type
 
 
         	$(".check_cmnd").on('click',function(){ // check dei command da selezionare/deselezionare
@@ -369,8 +324,62 @@ jQuery(document).ready(function(){
         		}
 
                 $("#stacked").click();
-        	});
+        	});//end on click check_cmnd
 
+
+            //Evento sui check dei benchmark
+                var clickedBenchId;
+                $(".rem_bench").on('click',function(){
+                    var clickedClass = $(this).attr("class");
+                    clickedBenchId = $(this).next().html();
+                    //console.log("Id bench click: "+clickedBenchId);
+                    var classOfTrToRemove = clickedClass.split(" ");
+                    classOfTrToRemove = classOfTrToRemove[0]; //la classe nel checkbox è uguale all'id della riga da rimuovere o mostrare
+                    
+                    var valuesOfTr = []; // tutti i valori dei td. per evitare il primo td scandire dalla pos 1.
+                    $("#"+classOfTrToRemove).find("td").each(function(){
+                            var valueOfTd = $(this).html();
+                            valuesOfTr.push(valueOfTd);
+                        });
+                        valuesOfTr.splice(0,1); // rimuove il primo elemento della tr. (splice(index,howmany))
+                    
+                    var sign ="";
+                    if( ! ($(this).is(":checked"))  ){
+                        sign = "minus";
+                        ($(this)).attr("checked",false);
+                        sessionStorage.setItem(clickedBenchId,"false");
+                        $("#"+classOfTrToRemove).fadeOut();
+                        //devo sottrarre i valori che nascondo ai totali
+                        updateTable(valuesOfTr,clickedClass,sign); //update table in utility
+                        
+                    }else if( $(this).is(":checked") ){
+                        sign="plus";
+                        ($(this)).attr("checked",true);
+                        sessionStorage.setItem(clickedBenchId,"true");
+                        $("#"+classOfTrToRemove).fadeIn();
+                        //devo sommare i valori che ripristino ai totali
+                        updateTable(valuesOfTr,clickedClass,sign); // update table in utility
+                    }
+
+                    $("#stacked").click();
+                }); //end on click rem_bench
+
+
+                // DA Ricontrollare ; Checkbox dei command per il grafico scatter.
+                $('.compareCheckbox').on('click', function (e) {
+                    if ($('.compareCheckbox:checked').length < 3) {
+                        if($(this).attr('checked'))
+                            $(this).attr('checked', false);
+                        else
+                            $(this).attr('checked', true);
+                    }
+                    else if($('.compareCheckbox:checked')){
+                        $(this).removeAttr('checked');
+                    }
+                       
+                });
+                // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+                //end events
 
             $("#stacked").click(); //quando si avvia la pagina la tabella visualizzata sarà la stacked bar.
 
