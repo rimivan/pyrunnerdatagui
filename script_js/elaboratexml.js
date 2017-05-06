@@ -1,10 +1,10 @@
 var arrayTimeTestCase = [];
 var arrayOfObjectTimeTestCase = [];
 
-var allBenchmark;
-var allCommand;
-var allTestcase;
-var cmd_id_array = [];
+var allBenchmarks;
+var allCommands;
+var allTestcases;
+var cmd_id_array = []; //array con gli id da usare nel codice
 var regex = /[\_ | \W]/gi;
 jQuery(document).ready(function(){
 
@@ -14,32 +14,27 @@ jQuery(document).ready(function(){
         url : filenameSelected,
         datatype:"xml",
         success:function(xml){
-                allBenchmark = $(xml).find("benchmark");
-                allTestcase = $(xml).find("testcase");
-                allCommand = $(xml).find("command");
+                allBenchmarks = $(xml).find("benchmark");
+                allTestcases = $(xml).find("testcase");
+                allCommands = $(xml).find("command");
 
-                //console.log(allCommand);
                 // ++++ Creazione lista di command a centro pagina iniziale ++++
-               	var commands = $(xml).find("command");
-
-               	commands.each(function(j){
-                     var currentIdCmd = commands[j].id.replace(regex,'');
+               	allCommands.each(function(j){
+                     var currentIdCmd = allCommands[j].id.replace(regex,'');
                		if( !(cmd_id_array.includes(currentIdCmd)) ){
                			cmd_id_array.push(currentIdCmd);
                		}
                	});
                	sessionStorage.setItem("cmd_array",cmd_id_array);
 
-
-                
                 cmd_id_array.forEach(function(command_element,index) {
-                     var currId = command_element.replace(regex, '');
+                    var currId = command_element;
                     $("#div_cmnd").append("<div class='ui toggle checkbox cmnd'><input type='checkbox' class='check_cmnd' name='public' id='check_"+currId+"' checked ><label>"+command_element+"</label></div>");
                     $("#compareCmdGraph").append("<input name='compare' class='compareCheckbox' type='checkbox' id='compareCheck_"+currId+"'/><label for='compareCheck_"+currId+"' class='inline'>"+command_element+"</label>");
                 });
-                
+                //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-                // DA Ricontrollare 
+                // DA Ricontrollare ; Checkbox dei command per il grafico scatter.
                 $('.compareCheckbox').on('click', function (e) {
                     if ($('.compareCheckbox:checked').length < 3) {
                         if($(this).attr('checked'))
@@ -55,9 +50,9 @@ jQuery(document).ready(function(){
                 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-                // ++++ creazione lista dei benchmark ++++
+                // ++++ lista degli id benchmark ++++
                 var benchmark_id_array = []
-                $(xml).find('benchmark').each(function(bench_i){
+                allBenchmarks.each(function(bench_i){
                 	var currentBenchmark = $(this).prop('id');
                 	benchmark_id_array.push(currentBenchmark);
                 });
@@ -65,50 +60,15 @@ jQuery(document).ready(function(){
 		        //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
                 //++++ Creazione tabella con tutti i dati ++++
-                function createTable(cmd,index) {
-                	var nospacecmd = cmd.replace(regex, '');
-                	$("#cmd_row").append(
-                		"<th class='th_cmd "+nospacecmd+"' colspan='4' id='"+cmd+"'>"+cmd+"</th>"
-                		);
-
-                	$("#type_row").append(
-                		"<th class='solution "+nospacecmd+" first_col' id='th_"+cmd+"_solution'>SOLUTION </th>"+
-                		"<th class='avgtime "+nospacecmd+"' id='th_"+cmd+"_avgtime'>AVG TIME </th>"+
-                		"<th class='sumtime "+nospacecmd+"' id='th_"+cmd+"_sumtime'>SUM TIME </th>"+
-                		"<th class='avgmem "+nospacecmd+" last_col' id='th_"+cmd+"_avgmem'>AVG MEM </th>"
-                		);
-                };
                 cmd_id_array.forEach(function(cmd,index){
-                	createTable(cmd,index)
+                	createTable(cmd,index); // chiamata alla funzione create table in utility
                 });
                 //+++++++++++++++++++++++++++++++++++++++++++++
 
-                //++++ funzione per arrotondare i decimali ++++
-                function roundTo(value, decimalpositions) {
-                	var i = value * Math.pow(10,decimalpositions);
-                	i = Math.round(i);
-                	var rounded = i / Math.pow(10,decimalpositions);
-                	return rounded;
-                }
-                //+++++++++++++++++++++++++++++++++++++++++++++++++++
 
-                //
-                /* TODO VERIFICARE SE NN UTILIZZATA $(".closecolbtn").on('click',function(){ // nasconde/visualizza la colonna del comando selezionato
-                	var columnToDelete = $(this).attr("id");
-                	var splitted = columnToDelete.split("_");
-                	var type = splitted[0];
-                	var cmdNumber = splitted[2];
-
-                	$("td."+type+".cmd_"+cmdNumber).addClass("hide");
-                	$("th."+type+".cmd_"+cmdNumber).addClass("hide");
-
-                });*/
-
-
-                //var numBench = 0;	dovrebbe nn servire
+                //Creazione base per appendere i dati alla tabella.
                 benchmark_id_array.forEach(function(benchmarkId_elem,benchIndex){
                     sessionStorage.setItem(benchmarkId_elem,"true");
-                	//numBench = benchIndex + 1;
                 	$("#tbody").append("<tr class='row_"+benchmarkId_elem+"' id='bench_"+benchIndex+"'><td> <a id='"+benchmarkId_elem+"' href='pages/benchmark_page.html'>"+benchmarkId_elem+"</a></td>"+
                        "</tr>");
 
@@ -123,7 +83,9 @@ jQuery(document).ready(function(){
                 });
 
                 $("#tbody").append("<tr id='total_row'><td>TOTAL</td>");
+                //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+                //Evento sui check dei benchmark
                 var clickedBenchId;
                 $(".rem_bench").on('click',function(){
                     var clickedClass = $(this).attr("class");
@@ -138,8 +100,6 @@ jQuery(document).ready(function(){
                             valuesOfTr.push(valueOfTd);
                         });
                         valuesOfTr.splice(0,1); // rimuove il primo elemento della tr. (splice(index,howmany))
-                        //console.log("Valori della tr cliccata:");
-                        //console.log(valuesOfTr);
                     
                     var sign ="";
                     if( ! ($(this).is(":checked"))  ){
@@ -148,7 +108,7 @@ jQuery(document).ready(function(){
                         sessionStorage.setItem(clickedBenchId,"false");
                         $("#"+classOfTrToRemove).fadeOut();
                         //devo sottrarre i valori che nascondo ai totali
-                        updateTableMinus(valuesOfTr,clickedClass,sign);
+                        updateTable(valuesOfTr,clickedClass,sign); //update table in utility
                         
                     }else if( $(this).is(":checked") ){
                         sign="plus";
@@ -156,108 +116,15 @@ jQuery(document).ready(function(){
                         sessionStorage.setItem(clickedBenchId,"true");
                         $("#"+classOfTrToRemove).fadeIn();
                         //devo sommare i valori che ripristino ai totali
-                        updateTableMinus(valuesOfTr,clickedClass,sign);
+                        updateTable(valuesOfTr,clickedClass,sign); // update table in utility
                     }
 
                     $("#stacked").click();
                 });
 
-                function updateTableMinus(valuesOfTr,clickedClass,sign){
-                    var splittedClass = clickedClass.split(" ");
-                    var indexOfBenchClicked = splittedClass[0].split("_"); // solo indice del benchmark cliccato che servirà a farci avere il numero di volte che quel benchmark è stato lanciato
-                    indexOfBenchClicked = indexOfBenchClicked[1];
-                    //console.log("index: "+indexOfBenchClicked);
+                
 
-                    var totalObj;
-                    totalObj =  JSON.parse (sessionStorage.getItem("arrayOfTotalObj")) ; // nella sessione ho gli oggetti che contengono nomecommand e totali.
-                    
-                    var currentNumLaunchForCmd;
-
-                    var launchForBenchObj;
-                    totalObj.forEach(function(obj,index){
-                        var totals = obj.totals; // totali, ci restituisce l'array dei totali per quel command
-                        //console.log(totals);
-
-                        launchForBenchObj = JSON.parse (sessionStorage.getItem("launchForBenchObj_"+index));
-                        //console.log("Command lanciato per benchmark:");
-                        //console.log(launchForBenchObj.launchForBenchValues[indexOfBenchClicked]); // abbiamo il numero di volte che il cmd è stato lanciato per quel benchmark
-                        
-                        currentNumLaunchForCmd = parseInt(sessionStorage.getItem("LaunchForCmd_"+index));
-                        var newValueOfLaunchCmd;
-                        var currentLaunchForBench = parseInt( launchForBenchObj.launchForBenchValues[indexOfBenchClicked] );
-                        if(sign=="minus"){
-                            newValueOfLaunchCmd = currentNumLaunchForCmd - currentLaunchForBench;
-                        }else if(sign=="plus"){
-                            newValueOfLaunchCmd = currentNumLaunchForCmd + currentLaunchForBench;
-                        }
-                        //console.log("New launch for cmd : "+newValueOfLaunchCmd);
-                        sessionStorage.setItem("LaunchForCmd_"+index, newValueOfLaunchCmd );
-                    });
-                    
-                    //arrayNumLaunchForCmd[ind] = arrayNumLaunchForCmd[ind] - launchForBenchObj.launchForBenchValues[indexOfBenchClicked];
-                    recalcTotalData();
-                    //aggiorna i totali di valuesOfTr e provare ad aggiornare anche i totali salvati nella sessionStorage
-                }
-
-                // function ricalcola medie
-                function recalcTotalData(){ // medie totali
-                    $("#total_row").replaceWith("<tr id='total_row' class='new'><td>TOTAL</td></tr>");
-                    cmd_id_array.forEach(function(command_element,index) {
-                        var nospaceCmd = cmd_id_array[index].replace(regex, '');
-                        var totalAvgMemRecalc = 0;
-                        var totalAvgTimeRecalc = 0;
-                        var totalSolutionRecalc = 0;
-                        var totalSumTimeRecalc = 0;
-                        $(xml).find('benchmark').each(function(bench_i){
-                            var currentBenchmark = $(this).prop('id');
-                            var checked = sessionStorage.getItem(currentBenchmark);
-                            if( checked == "true" ){ //se gli id sono diversi prosegui nel ricalcolare la media
-                                var testcases=$(this).find("testcase");
-                                testcases.each(function(testcase_j){
-                                    var this_commands = $(this).find("command");
-                                    this_commands.each(function(command_k){
-                                        var idToCompare = this_commands[command_k].id.replace(regex,'');
-                                        if( cmd_id_array[index] === idToCompare ){
-                                            var currentPyrunlim = $(this).find("pyrunlim");
-                                            currentPyrunlim.each(function(py_l){
-                                                var currentStats = $(this).find("stats");
-                                                currentStats.each(function(stats_h){
-                                                    var mem = parseFloat( $(this).attr("memory") ) ;
-                                                    var time = parseFloat( $(this).attr("time") ) ;
-
-                                                    totalAvgMemRecalc += mem;//somma di tutte le medie
-                                                    totalAvgTimeRecalc += time; // somma di tutte le medie
-                                                    totalSumTimeRecalc += time;
-
-                                                    var statusRecalc = $(this).attr("status");
-                                                    if(statusRecalc === "complete"){
-                                                        totalSolutionRecalc++;
-                                                    }
-                                                }); 
-                                            });  
-                                        }
-                                    });
-                                });
-                            }
-                            //alert("recalc: "+currentBenchmark);
-                        });
-                        var newDivider = sessionStorage.getItem("LaunchForCmd_"+index);
-                        totalAvgMemRecalc /= newDivider;
-                        totalAvgTimeRecalc /= newDivider;
-
-                        totalAvgTimeRecalc = roundTo(totalAvgTimeRecalc,2);
-                        totalAvgMemRecalc = roundTo(totalAvgMemRecalc,2);
-                        totalSumTimeRecalc = roundTo(totalSumTimeRecalc,2);
-
-                       /* console.log("New avgMem : "+totalAvgMemRecalc+" - divider : "+newDivider);
-                        console.log("New avgTime : "+totalAvgTimeRecalc+" - divider : "+newDivider);
-                        console.log("Total SUMTIME nuovo:"+totalSumTimeRecalc);
-                        console.log("Total solution nuovo:"+totalSolutionRecalc);*/
-
-                        
-                        updateTotalInTable(nospaceCmd,index,totalSolutionRecalc,totalAvgTimeRecalc,totalSumTimeRecalc,totalAvgMemRecalc);
-                    });
-                }
+                
  
 
                 var arrayOfTotalObj = [];
@@ -282,30 +149,25 @@ jQuery(document).ready(function(){
                 var solution_array = [];
                 var notCompleted_array = [];
                 
-                var cmdTestcaseTime = {
-                    name:"",
-                    data:[],
-                };
+                var cmdTestcaseTime;
+                                                                        //Elaborazione di tutti i dati
                 cmd_id_array.forEach(function(command_element,index) { // scandisco per gli id dei command che ho.
                 	cmdTestcaseTime = {
                         name:"",
                          data:[],
                     };
 
-                    arrayTimeTestCase = [];
-                   
+                    arrayTimeTestCase = []; // array con i tempi dei testcase di un command, per il grafico scatter
                     
-
-                    var nospaceCmd = cmd_id_array[index].replace(regex, ''); // i command hanno uno spazio nel nome: bb 8 diventa bb8
-                    cmdTestcaseTime.name = nospaceCmd;
+                    var currentCmd = command_element/*cmd_id_array[index].replace(regex, '')*/; // i command hanno uno spazio nel nome: bb 8 diventa bb8
+                    cmdTestcaseTime.name = currentCmd;
                     var arrayOfLaunchNumForBench = [];
-                    $(xml).find('benchmark').each(function(benchmark_i){
+                    allBenchmarks.each(function(benchmark_i){
                         var idCurrentBenchmark =$(this).attr("id");
                         var bench = {
                             idBench:idCurrentBenchmark,
                             //arrayOfAvgTime:[]
                         };
-                        
 
                 		var testcases=$(this).find("testcase");
                 		testcases.each(function(testcase_j){
@@ -345,7 +207,7 @@ jQuery(document).ready(function(){
                         });
                 		solution_array.push(solution);
                 		notCompleted_array.push(notCompleted);
-	                	//console.log("dati avg mem : avg mem : "+avgMem+" / "+launchNumForBench);
+	                	
 	                	avgMem = avgMem / launchNumForBench;
 	                	avgTime = avgTime / launchNumForBench;
 
@@ -354,10 +216,10 @@ jQuery(document).ready(function(){
 	                	sumTime = sumTime.toFixed(2);
 	                	sumTime = parseFloat(sumTime);
 	                	
-                		$("#avgmem_cmd_"+index+"_bench_"+benchmark_i).replaceWith("<td class='"+nospaceCmd+" last_col avgmem cmd_"+index+"' id='avgmem_cmd_"+index+"_bench_"+benchmark_i+"'>"+avgMem+"</td>"); // potrebbe servire la riaggiunta dell'id
-                		$("#sol_cmd_"+index+"_bench_"+benchmark_i).replaceWith("<td class='"+nospaceCmd+" first_col solution cmd_"+index+"' id='sol_cmd_"+index+"_bench_"+benchmark_i+"'>"+solution+"</td>");
-                		$("#avgtime_cmd_"+index+"_bench_"+benchmark_i).replaceWith("<td class='"+nospaceCmd+" avgtime cmd_"+index+"' id='avgtime_cmd_"+index+"_bench_"+benchmark_i+"'>"+avgTime+"</td>");
-                		$("#sumtime_cmd_"+index+"_bench_"+benchmark_i).replaceWith("<td class='"+nospaceCmd+" sumtime cmd_"+index+"' id='sumtime_cmd_"+index+"_bench_"+benchmark_i+"'>"+sumTime+"</td>");
+                		$("#avgmem_cmd_"+index+"_bench_"+benchmark_i).replaceWith("<td class='"+currentCmd+" last_col avgmem cmd_"+index+"' id='avgmem_cmd_"+index+"_bench_"+benchmark_i+"'>"+avgMem+"</td>"); // potrebbe servire la riaggiunta dell'id
+                		$("#sol_cmd_"+index+"_bench_"+benchmark_i).replaceWith("<td class='"+currentCmd+" first_col solution cmd_"+index+"' id='sol_cmd_"+index+"_bench_"+benchmark_i+"'>"+solution+"</td>");
+                		$("#avgtime_cmd_"+index+"_bench_"+benchmark_i).replaceWith("<td class='"+currentCmd+" avgtime cmd_"+index+"' id='avgtime_cmd_"+index+"_bench_"+benchmark_i+"'>"+avgTime+"</td>");
+                		$("#sumtime_cmd_"+index+"_bench_"+benchmark_i).replaceWith("<td class='"+currentCmd+" sumtime cmd_"+index+"' id='sumtime_cmd_"+index+"_bench_"+benchmark_i+"'>"+sumTime+"</td>");
 
                         totalSolution += solution;
                         totalSumTime += sumTime;
@@ -370,9 +232,7 @@ jQuery(document).ready(function(){
                         }
                         sessionStorage.setItem("launchForBenchObj_"+index,JSON.stringify(launchForBenchObj));
                         avgTime = parseFloat(avgTime); // se non lo converto avgTime viene trattato come stringa
-                        bench[nospaceCmd]=avgTime;
-
-                        //console.log("Avg TIme"+nospaceCmd+"   "+avgTime);
+                        bench[currentCmd]=avgTime;
 
                         launchNumForBench = 0;
                         solution = 0;
@@ -404,7 +264,7 @@ jQuery(document).ready(function(){
                         tmpTotals.push(totalAvgTime);
                         tmpTotals.push(totalSumTime);
                         tmpTotals.push(totalAvgMem);
-                        totalObj.totalOf = nospaceCmd;
+                        totalObj.totalOf = currentCmd;
                         totalObj.totals = tmpTotals;
                         arrayOfTotalObj.push(totalObj);
 
@@ -414,7 +274,7 @@ jQuery(document).ready(function(){
 	                	launchNumForCmd = 0;
 
                         //Inserisce nella tabella grafica i totali
-                        updateTotalInTable(nospaceCmd,index,totalSolution,totalAvgTime,totalSumTime,totalAvgMem);
+                        updateTotalInTable(currentCmd,index,totalSolution,totalAvgTime,totalSumTime,totalAvgMem);
 	                	
                         //azzera variabili per i totali
                         totalSolution = 0;
@@ -439,37 +299,9 @@ jQuery(document).ready(function(){
     console.log(arrayOfObjectTimeTestCase);
     
 
-    function updateTotalInTable( nospaceCmd,index,totalSolution,totalAvgTime,totalSumTime,totalAvgMem ){
-        $("#total_row").append("<td class='"+nospaceCmd+" solution cmd_"+index+"'><b>"+totalSolution+"</b></td>");
-        $("#total_row").append("<td class='"+nospaceCmd+" avgtime cmd_"+index+"'><b>"+totalAvgTime+"</b></td>");
-        $("#total_row").append("<td class='"+nospaceCmd+" sumtime cmd_"+index+"'><b>"+totalSumTime+"</b></td>");
-        $("#total_row").append("<td class='"+nospaceCmd+" last_col avgmem cmd_"+index+"'><b>"+totalAvgMem+"</b></td>");
     
-        cmd_id_array.forEach(function(cmd,index){ // serve a nascondere i command non visibili, per evitare problemi grafici alla tabella
-				var currId = cmd.replace(regex, '');
-				if( $("."+currId).hasClass("cmdHide") ){
-					$("."+currId).hide();
-				} 
-		});
 
-        if($(".solution").hasClass("hideElem")){
-            $(".solution").hide();
-        }
-
-        if($(".avgmem").hasClass("hideElem")){
-            $(".avgmem").hide();
-        }
-         
-        if($(".avgtime").hasClass("hideElem")){
-            $(".avgtime").hide();
-        }
-
-        if($(".sumtime").hasClass("hideElem")){
-            $(".sumtime").hide();
-        }
-    }
-
-	$(".check_type").on('click',function(){ // tipi di dati da visualizzare
+	$(".check_type").on('click',function(){ // check dei tipi di dati da selezionare/deselezionare (solution,avgmem,avgtime,sumtime)
 		var idBtn = $(this).attr("id");
 		var splitted = idBtn.split("_");
 		var onlyIdCommand = splitted[1];// solution/avgmem/avgtime/sumtime
@@ -499,11 +331,10 @@ jQuery(document).ready(function(){
 			colspan++;
 			$("#cmd_row").children("th").attr("colspan",colspan);
 		}
-
 	});
 
 
-        	$(".check_cmnd").on('click',function(){
+        	$(".check_cmnd").on('click',function(){ // check dei command da selezionare/deselezionare
         		var idBtn = $(this).attr("id");
         		var splitted = idBtn.split("_");
         		var onlyIdCommand = splitted[1];

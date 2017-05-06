@@ -10,36 +10,16 @@ jQuery(document).ready(function(){
 		var benchmarkId;
 		var bench_id_arr;
 		var cmd_id;
-		var cmd_id_array = [];
+		var cmd_id_array = []; // qui conterrà solo i command attivi
 		var cmdObjArr;
-		//var cmdObjWithAvg_array;
 		var tmpAvgData;
 		var tmpDataString;
 		var tmpDataArrayString;
 		var tmpDataArray;
 
-
-
 		if(sessionStorage["bench_array"]){ // in session storage deve esserci bench_array(array degli id dei benchmark)
-			
 			allCmdCheck = [];
-			var checkCmd = $(".check_cmnd").each(function(check,index){
-				var command = {
-					id:"",
-					active :""
-				};
-				var commandID = $(this).attr("id").split("_");
-				command.id = commandID[1];
-
-				if($(this).is(":checked") ){
-					command.active = "true";
-				}else{
-					command.active = "false";
-				}
-
-				allCmdCheck.push(command);	//allCmdCheck mi dice i command attivi e non attivi
-			});
-
+			commandChecker(); //function in utility
 
 			benchmarkId = sessionStorage.getItem("bench_array");
 			var tmpIdBench  = benchmarkId.split(","); // tutti gli presenti in session storage
@@ -54,11 +34,11 @@ jQuery(document).ready(function(){
 
 			allCmdCheck.forEach(function(cmdCheck,index){
 				if(cmdCheck.active =="true"){
-					cmd_id_array.push(cmdCheck.id);
+					cmd_id_array.push(cmdCheck.id); // solo i command attivi
 				}
 			});
 
-			cmdObjArr = [];
+			cmdObjArr = []; // array con i dati dei command per i grafici
 			cmdObjWithAvg_array = [];
 			
 
@@ -66,65 +46,41 @@ jQuery(document).ready(function(){
 			tmpDataArrayString = [];
 			tmpDataArray = [];
 
-			var cmd_Bench_AvgTime_array = [];
-
 			cmd_id_array.forEach(function(elem,index){ // in cmd_id_array ho già i cmd attivi così da prendere solo quelli necessari
-				//console.log(elem);
-				var tmpBenchWithAvgTime ={
-				};
-
 				var obj = {
 					name:"",
 					data: []
 				};
 
-
-				/*var cmdObjAvg = {
-					name:"",
-					data:[]
-				};*/
-
 				if(sessionStorage[elem]){ // dall' id del command costruisco il json che servira per il grafico
 					obj.name = elem;
-					//cmdObjAvg.name = elem;
 
 					tmpDataString = sessionStorage.getItem(elem);
 					tmpDataArrayString = tmpDataString.split(",");
 
 					tmpDataArray = [];
-					
-				
 					tmpDataArrayString.forEach(function(val,index){ // risistemo obj per cmdObjArr, in modo che ogni volta che il grafico deve essere aggiornato
 						if(bench_id_arr[index].active=="true" ){ 	//verifico che il benchmark sia attivo e prendo i dati corrispondenti all'indice del benchmark
-							//console.log(bench_id_arr[index].id+" , "+val);
 							tmpDataArray.push(parseInt(val));
 						}
-						
 					});
 					
-					//cmdObjAvg.data = tmpAvgData;
 					obj.data = tmpDataArray;
 				}else{
 					console.log("elemento command non trovato nella sessionStorage:"+elem);
 				}
-				//cmdObjWithAvg_array.push(cmdObjAvg);
 				cmdObjArr.push(obj);
-				cmd_Bench_AvgTime_array.push(tmpBenchWithAvgTime);
-			});
 				
-
-			var keys;
-			cmd_Bench_AvgTime_array.forEach(function(elemnt,indexElem){
-				keys = Object.keys(elemnt).sort(function(a,b){return elemnt[a]-elemnt[b]});
 			});
+			
 			bench_only_id_arr = [];
-			//console.log(bench_id_arr);
+			
 			bench_id_arr.forEach(function(val,index){
 				if(val.active == "true")
 					bench_only_id_arr.push(val.id);
 			});
 
-			//activeCmdAndCommandForLineChart(arrayOfObjectTimeTestCase);
+			
 			//grafico line su avg time ordinati
 			if(clicked_id ==="line"){
 				elaborateDataForLineChart();
@@ -177,9 +133,7 @@ jQuery(document).ready(function(){
 
 		//creazione dati e grafici per i test non completi
 		if(sessionStorage["notcompleted"]){ // in session storage deve esserci l'elemento notcompleted
-			
 			var notCompleted_all = JSON.parse (sessionStorage.getItem("notcompleted")) ;
-            //console.log(notCompleted_all[0].name);
 
             var newNotCompletedArray =[];
             notCompleted_all.forEach(function(objNotComp,index){
@@ -192,21 +146,16 @@ jQuery(document).ready(function(){
             	tmpObj.cmdId = objNotComp.name;
             	tmpObj.notCompData = objNotComp.data;
             	if(allCmdCheck[index].active == "true"){
-            		//console.log("True");
             		tmpObj.active = "true";
             	}else{
-            		//console.log("false");
             		tmpObj.active = "false";
             	}
             	newNotCompletedArray.push(tmpObj);
             });
-
-            //console.log(newNotCompletedArray);
            
             var cmdObjToGraphicsArray=[]; // array degli oggetti not completed da visualizzare sul grafico in base ai dati aggiornati dalla aggiunta o rimozione di benchmark
 
             allCmdCheck.forEach(function(cmdId,cmdIndex){
-			//console.log(cmdId);            	
             	var cmdObjToGraphics = {
             		name: "",
             		data : []
@@ -214,20 +163,13 @@ jQuery(document).ready(function(){
 				cmdObjToGraphics.name = cmdId.id;
 
 				if(cmdId.active == "true"){
-					//console.log("true, "+cmdId.id)
 					bench_id_arr.forEach(function(benchElem,benchIndex){
-	            	//console.log(notCompleted_all.data[index]);
-						//console.log(benchElem);
-
-
 							if(benchElem.active == "true"){
-			            	//	console.log("cmdid : "+cmdId+" id in not comp: "+notCompleted_all[cmdIndex].name);
 			            		cmdObjToGraphics.data.push( notCompleted_all[cmdIndex].data[benchIndex] ); // solo per benchmark
 			            	}
-			            	//console.log(notCompleted_all[cmdIndex].data[benchIndex]);
 			        });
-	            cmdObjToGraphicsArray.push(cmdObjToGraphics);
-	        }
+	           		cmdObjToGraphicsArray.push(cmdObjToGraphics);
+	       		}
             });
 
             
