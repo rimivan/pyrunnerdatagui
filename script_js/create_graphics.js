@@ -4,11 +4,11 @@ var dataForScatterChart = [];
 
 
 jQuery(document).ready(function(){
+	var bench_id_arr;
 
 	$(".graphicbtn").on("click",function(){ // comandi completed
 		var clicked_id = $(this).attr("id");
 		var benchmarkId;
-		var bench_id_arr;
 		var cmd_id;
 		var cmd_id_array = []; // qui conterrà solo i command attivi
 		var cmdObjArr;
@@ -59,13 +59,13 @@ jQuery(document).ready(function(){
 					tmpDataArrayString = tmpDataString.split(",");
 
 					tmpDataArray = [];
-					tmpDataArrayString.forEach(function(val,index){ // risistemo obj per cmdObjArr, in modo che ogni volta che il grafico deve essere aggiornato
-						if(bench_id_arr[index].active=="true" ){ 	//verifico che il benchmark sia attivo e prendo i dati corrispondenti all'indice del benchmark
-							tmpDataArray.push(parseInt(val));
-						}
-					});
-					
-					obj.data = tmpDataArray;
+							tmpDataArrayString.forEach(function(val,index){ // risistemo obj per cmdObjArr, in modo che ogni volta che il grafico deve essere aggiornato
+								if(bench_id_arr[index].active=="true" ){ 	//verifico che il benchmark sia attivo e prendo i dati corrispondenti all'indice del benchmark
+									tmpDataArray.push(parseInt(val));
+								}
+							});
+							
+						obj.data = tmpDataArray;
 				}else{
 					console.log("elemento command non trovato nella sessionStorage:"+elem);
 				}
@@ -84,7 +84,7 @@ jQuery(document).ready(function(){
 			//grafico line su avg time ordinati
 			if(clicked_id ==="line"){
 				elaborateDataForLineChart();
-					
+
 				lineChart(dataForLineChart,"container_1"); // creazione grafico per test completed
 				$("#container_scatter").hide();
 				$("#graphic_2").hide();
@@ -135,24 +135,24 @@ jQuery(document).ready(function(){
 		if(sessionStorage["notcompleted"]){ // in session storage deve esserci l'elemento notcompleted
 			var notCompleted_all = JSON.parse (sessionStorage.getItem("notcompleted")) ;
 
-            var newNotCompletedArray =[];
-            notCompleted_all.forEach(function(objNotComp,index){
-            	var tmpObj = {
-            		cmdId:"",
-            		active:"",
-            		notCompData:[]
-            	};
+		var newNotCompletedArray =[];
+		notCompleted_all.forEach(function(objNotComp,index){
+			var tmpObj = {
+				cmdId:"",
+				active:"",
+				notCompData:[]
+			};
 
-            	tmpObj.cmdId = objNotComp.name;
-            	tmpObj.notCompData = objNotComp.data;
-            	if(allCmdCheck[index].active == "true"){
-            		tmpObj.active = "true";
-            	}else{
-            		tmpObj.active = "false";
-            	}
-            	newNotCompletedArray.push(tmpObj);
-            });
-           
+			tmpObj.cmdId = objNotComp.name;
+			tmpObj.notCompData = objNotComp.data;
+			if(allCmdCheck[index].active == "true"){
+				tmpObj.active = "true";
+			}else{
+				tmpObj.active = "false";
+			}
+			newNotCompletedArray.push(tmpObj);
+		});
+
             var cmdObjToGraphicsArray=[]; // array degli oggetti not completed da visualizzare sul grafico in base ai dati aggiornati dalla aggiunta o rimozione di benchmark
 
             allCmdCheck.forEach(function(cmdId,cmdIndex){
@@ -160,16 +160,16 @@ jQuery(document).ready(function(){
             		name: "",
             		data : []
             	};
-				cmdObjToGraphics.name = cmdId.id;
+            	cmdObjToGraphics.name = cmdId.id;
 
-				if(cmdId.active == "true"){
-					bench_id_arr.forEach(function(benchElem,benchIndex){
-							if(benchElem.active == "true"){
+            	if(cmdId.active == "true"){
+            		bench_id_arr.forEach(function(benchElem,benchIndex){
+            			if(benchElem.active == "true"){
 			            		cmdObjToGraphics.data.push( notCompleted_all[cmdIndex].data[benchIndex] ); // solo per benchmark
 			            	}
-			        });
-	           		cmdObjToGraphicsArray.push(cmdObjToGraphics);
-	       		}
+			            });
+            		cmdObjToGraphicsArray.push(cmdObjToGraphics);
+            	}
             });
 
             
@@ -179,151 +179,157 @@ jQuery(document).ready(function(){
             }
 
 
-          }else{
-          	alert("Non è possibile caricare i test Non Completati!");
-          }
+        }else{
+        	alert("Non è possibile caricare i test Non Completati!");
+        }
 
 	}); // end on click completed cmd table
 
-	function elaborateDataForLineChart(){
-		dataForLineChart = [];
-		allCmdCheck.forEach(function( cmdCheck,index)  {
-			if(cmdCheck.active =="true"){
-				arrayOfObjectTimeTestCase.forEach(function(obj,ind){
-					if(obj.name == cmdCheck.id ){
-						obj.data.sort( function(a,b) { return a-b } );
-						dataForLineChart.push(obj);
-					}
-				});
+
+function elaborateDataForLineChart(){ // riempe dataLineForChart per poi essere passato alla funzione che Line
+	dataForLineChart = [];
+	var cmdObjForLine;
+	arrayDeiValoriDiAvgPerSingoloTestcase.forEach(function(arrCmd,index_k){	
+		if(allCmdCheck[index_k].active == "true"){
+			console.log(allCmdCheck[index_k].id+ ":true");
+			var oggetto = {
+				name:allCmdCheck[index_k].id,
 			}
-		});
-	}
+			var arrayLineData = [];
 
-
-	function lineChart(param,appendTo){
-		var title;
-			title = "Line chart of Testcases Time!";
-		$(function () {
-			Highcharts.chart(appendTo, {
-				title: {
-					text: title
-				},
-				xAxis: {
-					categories: "",
-					title:{
-						text:"Testcase number"
-					}
-				},
-
-				yAxis: {
-					title: {
-						text: title
-					}
-				},
-				legend: {
-					layout: 'vertical',
-					align: 'right',
-					verticalAlign: 'middle',
-				},
-
-				plotOptions: {
-					series: {
-					}
-				},
-				series: 
-					param // oggetti dei comand completed
-
-				});
-		});
-	};
-
-	function stackedChart(param,appendTo,categories,compOrNotComp){
-		var title;
-		if(compOrNotComp === "completed"){
-			title = "Stacked Bar Chart of Completed Test!"
-		}else{
-			title = "Stacked Bar Chart of NOT Completed Test!"
-		}
-		$(function () {
-			Highcharts.chart(appendTo, {
-				chart: {
-					type: 'bar'
-				},
-				title: {
-					text: title
-				},
-				xAxis: {
-					categories: categories
-				},
-				yAxis: {
-					min: 0,
-					title: {
-						text: title
-					}
-				},
-				legend: {
-					reversed: true
-				},
-				plotOptions: {
-					bar: {
-						dataLabels: {
-							enabled: false
-						}
-					}
-				},
-				series: 
-				param
-				
-				
+			arrCmd.forEach(function(valTcase,index_l){
+				if( sessionStorage.getItem(valTcase.name) =="true" ){
+					arrayLineData.push(valTcase.data);
+				}
 			});
-		});
-	}
-
-	function scatterChart(param,appendTo,categories,compOrNotComp){
-		var title;
-		if(compOrNotComp === "completed"){
-			title = "Scatter chart Of Completed Test!";
-		}else{
-			title = "Scatter chart Of NOT Completed Test!";
+			arrayLineData.sort( function(a,b) { return a-b } );
+			oggetto.data = arrayLineData;
+			dataForLineChart.push(oggetto);
 		}
-		$(function () {
-			Highcharts.chart(appendTo, {
-				chart: {
-					events: {
-						load: function() {
-							var extremeY = this.yAxis[0].getExtremes();
-							var extremeX = this.xAxis[0].getExtremes();
+	});
+	console.log(dataForLineChart);
+}
 
-							var lineSeries = {
-								name:"diagonal line",
-								type: 'line',
-								data: [
-									[extremeX.min, extremeY.min],
-									[extremeX.max, extremeY.max]
-								],
-								lineWidth: 1,
-								lineColor: 'rgb(0,0,0)',
-								marker: {
-									enabled: false
-								}
-							};
 
-							this.addSeries(lineSeries);
-						}
-					},
-					type: 'scatter',
-					zoomType: 'xy',
-					width: 700,
-       				height: 700
-				},
-				legend:{
-					enabled:true
-				},
+function lineChart(param,appendTo){
+	var title;
+	title = "Line chart of Testcases Time!";
+	$(function () {
+		Highcharts.chart(appendTo, {
+			title: {
+				text: title
+			},
+			xAxis: {
+				categories: "",
+				title:{
+					text:"Testcase number"
+				}
+			},
+
+			yAxis: {
 				title: {
 					text: title
+				}
+			},
+			legend: {
+				layout: 'vertical',
+				align: 'right',
+				verticalAlign: 'middle',
+			},
+			series: 
+					param // oggetti dei comand completed
+		});
+	});
+};
+
+function stackedChart(param,appendTo,categories,compOrNotComp){
+	var title;
+	if(compOrNotComp === "completed"){
+		title = "Stacked Bar Chart of Completed Test!"
+	}else{
+		title = "Stacked Bar Chart of NOT Completed Test!"
+	}
+	$(function () {
+		Highcharts.chart(appendTo, {
+			chart: {
+
+				type: 'bar'
+			},
+			title: {
+				text: title
+			},
+			xAxis: {
+				categories: categories
+			},
+			yAxis: {
+				min: 0,
+				title: {
+					text: title
+				}
+			},
+			legend: {
+				reversed: true
+			},
+			plotOptions: {
+				bar: {
+					dataLabels: {
+						enabled: false
+					}
+				}
+			},
+			series: 
+			param
+
+
+		});
+	});
+}
+
+function scatterChart(param,appendTo,categories,compOrNotComp){
+	var title;
+	if(compOrNotComp === "completed"){
+		title = "Scatter chart Of Completed Test!";
+	}else{
+		title = "Scatter chart Of NOT Completed Test!";
+	}
+	$(function () {
+		Highcharts.chart(appendTo, {
+			chart: {
+				events: {
+					load: function() {
+						var extremeY = this.yAxis[0].getExtremes();
+						var extremeX = this.xAxis[0].getExtremes();
+
+						var lineSeries = {
+							name:"diagonal line",
+							type: 'line',
+							data: [
+							[extremeX.min, extremeY.min],
+							[extremeX.max, extremeY.max]
+							],
+							lineWidth: 1,
+							lineColor: 'rgb(0,0,0)',
+							marker: {
+								enabled: false
+							}
+						};
+
+						this.addSeries(lineSeries);
+					}
 				},
-				xAxis: {
-					min:0,
+				type: 'scatter',
+				zoomType: 'xy',
+				width: 700,
+				height: 700
+			},
+			legend:{
+				enabled:true
+			},
+			title: {
+				text: title
+			},
+			xAxis: {
+				min:0,
 					//categories: categories
 				},
 				yAxis: {
@@ -359,11 +365,11 @@ jQuery(document).ready(function(){
 					}
 				},
 				series:
-					param
+				param
 			});
-		});
+	});
 
-	}
+}
 
 
 });

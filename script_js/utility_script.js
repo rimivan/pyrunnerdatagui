@@ -22,7 +22,7 @@
 					checkedCmdForScatter.forEach(function(cmdId,cmdIdIndex){
 						commands.each(function(cmd_k,cmdObj){
 							var currentCmdId = $(this).prop("id"); 
-							currentCmdId = currentCmdId.replace(regex,'');
+							currentCmdId = currentCmdId.replace(regex,'-');
 							if(cmdId == currentCmdId){
 								var currentPyrunlim = $(this).find("pyrunlim");
 								currentPyrunlim.each(function(py_l){
@@ -106,7 +106,7 @@
     function recalcTotalData(){ // medie totali
         $("#total_row").replaceWith("<tr id='total_row' class='new'><td>TOTAL</td></tr>");
         cmd_id_array.forEach(function(command_element,index) {
-        	var currentCmd = cmd_id_array[index]/*.replace(regex, '')*/;
+        	var currentCmd = cmd_id_array[index];
         	var totalAvgMemRecalc = 0;
         	var totalAvgTimeRecalc = 0;
         	var totalSolutionRecalc = 0;
@@ -119,7 +119,7 @@
 	                    testcases.each(function(testcase_j){
 	                    	var this_commands = $(this).find("command");
 	                    	this_commands.each(function(command_k){
-	                    		var idToCompare = this_commands[command_k].id.replace(regex,'');
+	                    		var idToCompare = this_commands[command_k].id.replace(regex,'-');
 	                    		if( cmd_id_array[index] === idToCompare ){
 	                    			var currentPyrunlim = $(this).find("pyrunlim");
 	                    			currentPyrunlim.each(function(py_l){
@@ -163,7 +163,7 @@
         $("#total_row").append("<td class='"+nospaceCmd+" last_col avgmem cmd_"+index+"'><b>"+totalAvgMem+"</b></td>");
     
         cmd_id_array.forEach(function(cmd,index){ // serve a nascondere i command non visibili, per evitare problemi grafici alla tabella
-				var currId = cmd.replace(regex, '');
+				var currId = cmd;
 				if( $("."+currId).hasClass("cmdHide") ){
 					$("."+currId).hide();
 				} 

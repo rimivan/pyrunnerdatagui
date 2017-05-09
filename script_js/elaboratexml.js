@@ -1,6 +1,8 @@
 var arrayTimeTestCase = [];
 var arrayOfObjectTimeTestCase = [];
 
+var arrayDeiValoriDiAvgPerSingoloTestcase = [];
+
 var allBenchmarks;
 var allCommands;
 var allTestcases;
@@ -20,7 +22,7 @@ jQuery(document).ready(function(){
 
                 // ++++ Creazione lista di command a centro pagina iniziale ++++
                	allCommands.each(function(j){
-                     var currentIdCmd = allCommands[j].id.replace(regex,'');
+                     var currentIdCmd = allCommands[j].id.replace(regex,'-');
                		if( !(cmd_id_array.includes(currentIdCmd)) ){
                			cmd_id_array.push(currentIdCmd);
                		}
@@ -108,10 +110,10 @@ jQuery(document).ready(function(){
                         name:"",
                          data:[],
                     };
-
+                    var arrayDiTuttiIValori = [];
                     arrayTimeTestCase = []; // array con i tempi dei testcase di un command, per il grafico scatter
                     
-                    var currentCmd = command_element/*cmd_id_array[index].replace(regex, '')*/; // i command hanno uno spazio nel nome: bb 8 diventa bb8
+                    var currentCmd = command_element; // i command hanno uno spazio nel nome: bb 8 diventa bb8
                     cmdTestcaseTime.name = currentCmd;
                     var arrayOfLaunchNumForBench = [];
                     allBenchmarks.each(function(benchmark_i){
@@ -121,7 +123,7 @@ jQuery(document).ready(function(){
                             //arrayOfAvgTime:[]
                         };
 
-                		testcasesData( $(this), command_element, index );
+                		testcasesData( $(this), command_element, index,arrayDiTuttiIValori );
 
                 		solution_array.push(solution);
                 		notCompleted_array.push(notCompleted);
@@ -199,7 +201,7 @@ jQuery(document).ready(function(){
 	                	totalAvgMem = 0;
 	                	totalAvgTime = 0;
 	                	totalSumTime = 0;
-                        command_element = command_element.replace(regex,'');
+                        command_element = command_element.replace(regex,'-');
 	                	sessionStorage.setItem(command_element,solution_array);
 
 	                	var notCompObj = {
@@ -210,21 +212,27 @@ jQuery(document).ready(function(){
 
 	                	solution_array = [];
 	                	notCompleted_array = [];
-
-            	});//end foreach cmd_id
+                        
+                        arrayDeiValoriDiAvgPerSingoloTestcase.push(arrayDiTuttiIValori);
+                });//end foreach cmd_id
     sessionStorage.setItem("notcompleted", JSON.stringify(notCompletedObj_array)); // serve per la creazione dei grafici nel "sumTable.js"
     var arrayOfBenchAndAvg = [];
     console.log(arrayOfObjectTimeTestCase);
-    
+    console.log(arrayDeiValoriDiAvgPerSingoloTestcase);    
 
     
-    function testcasesData(thisBenchmark,command_element,index){
+    function testcasesData(thisBenchmark,command_element,index, arrayDiTuttiIValori){ // index è index del cmd
+        
         var testcases=thisBenchmark.find("testcase");
+        
         testcases.each(function(testcase_j){
+         var piccoloOggetto = {
+            name:thisBenchmark.prop("id"),
+        };
             var tcaseTime=0;
             var this_commands = $(this).find("command");
             this_commands.each(function(command_k){
-                var idToCompare = this_commands[command_k].id.replace(regex, '');
+                var idToCompare = this_commands[command_k].id.replace(regex, '-');
                 if( cmd_id_array[index] === idToCompare ){
                     launchNumForBench++;
                     launchNumForCmd++;
@@ -243,26 +251,34 @@ jQuery(document).ready(function(){
                             if(status === "complete"){
                                 solution++;
                                 tcaseTime = time; // tempo del testcase
+                                piccoloOggetto.data = tcaseTime;    
+
                                 arrayTimeTestCase.push(tcaseTime);
+                                arrayDiTuttiIValori.push(piccoloOggetto);
                             }else{
                                 notCompleted++;
                             }
-
                         }); 
                     });
                 }
             });
         });
+        
     }//end testcases data
 
+
             // Events
+            var numberCheck_type = $(".check_type").length;
         	$(".check_type").on('click',function(){ // check dei tipi di dati da selezionare/deselezionare (solution,avgmem,avgtime,sumtime)
-        		var idBtn = $(this).attr("id");
+                
+                var idBtn = $(this).attr("id");
         		var splitted = idBtn.split("_");
         		var onlyIdCommand = splitted[1];// solution/avgmem/avgtime/sumtime
                 
         		var colspan;
         		if( ! $("#check_"+onlyIdCommand).is(":checked")  ){
+                    numberCheck_type--;
+                    console.log("number check: "+numberCheck_type);
         			$("#check_"+onlyIdCommand).attr("checked",false);
         			$("."+onlyIdCommand).addClass("hideElem");
         			$("."+onlyIdCommand).hide();
@@ -270,37 +286,53 @@ jQuery(document).ready(function(){
         			colspan--;
         			$("#cmd_row").children("th").attr("colspan",colspan);
         		}else if( $("#check_"+onlyIdCommand).is(":checked") ){
+                    numberCheck_type++;
+                    console.log("number check: "+numberCheck_type);
         			$("#check_"+onlyIdCommand).attr("checked",true);
         			$("."+onlyIdCommand).removeClass("hideElem");
         		
         			$("."+onlyIdCommand).show();
         			cmd_id_array.forEach(function(cmd,index){
-        				var currId = cmd.replace(regex,'');
+        				var currId = cmd.replace(regex,'-');
         				if( $("."+currId).hasClass("cmdHide") ){
         					$("."+currId).hide();
         				} 
         			});
 
-
         			colspan = parseInt ( $("#cmd_row").children("th").attr("colspan") ) ;
         			colspan++;
         			$("#cmd_row").children("th").attr("colspan",colspan);
         		}
+                console.log("Num bench:"+numberOfBenchmark);
+                if(numberCheck_type == 0 ){
+                    alert("Seleziona almeno una tipologia di dato!");
+                    $("#main_table").hide();
+                    $("#graphic_wrapper").hide();
+                }else if(numberOfBenchmark == 0){
+                    $("#main_table").hide();
+                    $("#graphic_wrapper").hide();
+                }else{
+                    $("#main_table").show();
+                    $("#graphic_wrapper").show();
+                }
         	});//end on click check type
 
-
+            var numberOfCmd = cmd_id_array.length;
         	$(".check_cmnd").on('click',function(){ // check dei command da selezionare/deselezionare
-        		var idBtn = $(this).attr("id");
+                
+                var idBtn = $(this).attr("id");
         		var splitted = idBtn.split("_");
         		var onlyIdCommand = splitted[1];
 
         		if( ! $("#check_"+onlyIdCommand).is(":checked")  ){
+                    numberOfCmd--;
         			$("#check_"+onlyIdCommand).attr("checked",false);
         			$("."+onlyIdCommand).hide();
 
 					$("."+onlyIdCommand).addClass("cmdHide");        			
 
         		}else if( $("#check_"+onlyIdCommand).is(":checked") ){
+                    numberOfCmd++;
         			$("#check_"+onlyIdCommand).attr("checked",true);
                     $("."+onlyIdCommand).show();
 
@@ -322,14 +354,25 @@ jQuery(document).ready(function(){
                         $(".sumtime").hide();
                     }
         		}
-
+                if(numberOfCmd == 0){
+                    alert("Non hai selezionato nessun cmd!");
+                    $("#myWorkContent").hide();
+                    $("#graphics_type").hide();
+                    $("#graphic_wrapper").hide();
+                }else{
+                    $("#myWorkContent").show();
+                    $("#graphics_type").show();
+                    $("#graphic_wrapper").show();
+                }
                 $("#stacked").click();
         	});//end on click check_cmnd
 
 
             //Evento sui check dei benchmark
                 var clickedBenchId;
+                var numberOfBenchmark = $(".rem_bench").length;
                 $(".rem_bench").on('click',function(){
+
                     var clickedClass = $(this).attr("class");
                     clickedBenchId = $(this).next().html();
                     //console.log("Id bench click: "+clickedBenchId);
@@ -345,6 +388,8 @@ jQuery(document).ready(function(){
                     
                     var sign ="";
                     if( ! ($(this).is(":checked"))  ){
+                        numberOfBenchmark--;
+                        console.log("num bench:"+numberOfBenchmark);
                         sign = "minus";
                         ($(this)).attr("checked",false);
                         sessionStorage.setItem(clickedBenchId,"false");
@@ -353,6 +398,8 @@ jQuery(document).ready(function(){
                         updateTable(valuesOfTr,clickedClass,sign); //update table in utility
                         
                     }else if( $(this).is(":checked") ){
+                        numberOfBenchmark++;
+                        console.log("num bench:"+numberOfBenchmark);
                         sign="plus";
                         ($(this)).attr("checked",true);
                         sessionStorage.setItem(clickedBenchId,"true");
@@ -360,12 +407,23 @@ jQuery(document).ready(function(){
                         //devo sommare i valori che ripristino ai totali
                         updateTable(valuesOfTr,clickedClass,sign); // update table in utility
                     }
-
+                    console.log("num check type:"+numberCheck_type);
+                    if(numberOfBenchmark == 0 ){
+                        $("#main_table").hide();
+                        $("#graphic_wrapper").hide();
+                        alert("Hai deselezionato tutti i benchmark")
+                    }else if(numberCheck_type == 0){
+                        $("#main_table").hide();
+                        $("#graphic_wrapper").hide();
+                    }else{
+                        $("#main_table").show();
+                        $("#graphic_wrapper").show();
+                    }
                     $("#stacked").click();
                 }); //end on click rem_bench
 
 
-                // DA Ricontrollare ; Checkbox dei command per il grafico scatter.
+                //Checkbox dei command per il grafico scatter.
                 $('.compareCheckbox').on('click', function (e) {
                     if ($('.compareCheckbox:checked').length < 3) {
                         if($(this).attr('checked'))
