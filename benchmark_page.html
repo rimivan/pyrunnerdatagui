@@ -3,10 +3,68 @@
 <head>
     <title>Benchmark Page</title>
     <meta charset="UTF-8">
-    <meta name="description" content="">
-    <meta name="keywords" content="">
+
+    <link href="css/general_css.css" rel="stylesheet" type="text/css">
+    <script language="javascript" type="text/javascript" src="jquery-1.12.3.min.js"></script>
+	
+    <script src="script_js/utility_script.js" type="text/javascript" charset="utf-8"></script>
+	<!-- <script src="script_js/elaboratexml.js" type="text/javascript" charset="utf-8"></script> -->
+	<script src="script_js/create_graphics.js" type="text/javascript" charset="utf-8"></script>
+	<script src="script_js/benchmarkPage.js" type="text/javascript" charset="utf-8"></script>
+
+	<!-- Semantic UI-->
+    <script src="semantic_ui_framework/semantic.min.js"></script>
+    <link rel="stylesheet" href="semantic_ui_framework/semantic.min.css" media="all" />
+
+    <!-- KICKSTART -->
+	<script src="kickstart_framework/js/kickstart.js"></script> 
+	<link rel="stylesheet" href="kickstart_framework/css/kickstart.css" media="all" />
+
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script> 
+
+	<script type="text/javascript">
+		google.charts.load('current', {'packages':['gauge']});
+
+      
+  </script>
+
+
+
 </head>
 <body>
+	<h1>Details of selected benchmark:</h1>
+	<h2 id="selBenchTitle"></h2>
 
+	<div class="col_2"></div>
+		<button id="summary" type="">Riepilogo Benchmark</button>
+		<div class="col_2" id="summary_gauge_solution">
+		</div>
+
+		<div class="col_2" id="summary_gauge_sumtime">
+		</div>
+		
+		<div class="col_2" id="summary_gauge_avgtime">
+		</div>
+		
+		<div class="col_2" id="summary_gauge_avgmemory">
+		</div>
+	<div class="col_2"></div>
+
+	<div>
+		
+	</div>
+
+	<div class="" id="div_testcase_table"> 
+		<table class="ui definition table" id="testcase_table">
+			<thead id="thead_table">
+				<tr id="cmd_row_1">
+					<td></td>
+				</tr>
+				<tr id="type_row_1"><td></td></tr>
+			</thead>
+			<tbody id="tbody_testcase">
+			</tbody>
+		</table>
+	</div>
 </body>
 </html>

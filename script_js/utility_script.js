@@ -50,18 +50,18 @@
 	};//end elaborate data for scatter.
 
 
-	function createTable(cmd,index) {
+	function createMainTable(cmd,index,cmdRow,typeRow) {
 		var currentCmd = cmd;
-		$("#cmd_row").append(
-			"<th class='th_cmd "+currentCmd+"' colspan='4' id='"+cmd+"'>"+cmd+"</th>"
+		$("#"+cmdRow).append(
+			"<th class='th_cmd "+currentCmd+"' colspan='4' id='"+cmd+"'>"+cmdID[cmd]+"</th>"
 			);
 
-		$("#type_row").append(
+		$("#"+typeRow).append(
 			"<th class='solution "+currentCmd+" first_col' id='th_"+cmd+"_solution'>SOLUTION </th>"+
 			"<th class='avgtime "+currentCmd+"' id='th_"+cmd+"_avgtime'>AVG TIME </th>"+
 			"<th class='sumtime "+currentCmd+"' id='th_"+cmd+"_sumtime'>SUM TIME </th>"+
 			"<th class='avgmem "+currentCmd+" last_col' id='th_"+cmd+"_avgmem'>AVG MEM </th>"
-			);
+		);
 	};
 
 
@@ -75,7 +75,7 @@
      //+++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-    function updateTable(valuesOfTr,clickedClass,sign){
+    function updateTable(valuesOfTr,clickedClass,sign){ // update alla rimozione di righe(benchmark)
     	var splittedClass = clickedClass.split(" ");
         var indexOfBenchClicked = splittedClass[0].split("_"); // solo indice del benchmark cliccato che servirà a farci avere il numero di volte che quel benchmark è stato lanciato
         indexOfBenchClicked = indexOfBenchClicked[1];

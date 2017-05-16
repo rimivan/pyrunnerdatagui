@@ -135,23 +135,23 @@ jQuery(document).ready(function(){
 		if(sessionStorage["notcompleted"]){ // in session storage deve esserci l'elemento notcompleted
 			var notCompleted_all = JSON.parse (sessionStorage.getItem("notcompleted")) ;
 
-		var newNotCompletedArray =[];
-		notCompleted_all.forEach(function(objNotComp,index){
-			var tmpObj = {
-				cmdId:"",
-				active:"",
-				notCompData:[]
-			};
+			var newNotCompletedArray =[];
+			notCompleted_all.forEach(function(objNotComp,index){
+				var tmpObj = {
+					cmdId:"",
+					active:"",
+					notCompData:[]
+				};
 
-			tmpObj.cmdId = objNotComp.name;
-			tmpObj.notCompData = objNotComp.data;
-			if(allCmdCheck[index].active == "true"){
-				tmpObj.active = "true";
-			}else{
-				tmpObj.active = "false";
-			}
-			newNotCompletedArray.push(tmpObj);
-		});
+				tmpObj.cmdId = objNotComp.name;
+				tmpObj.notCompData = objNotComp.data;
+				if(allCmdCheck[index].active == "true"){
+					tmpObj.active = "true";
+				}else{
+					tmpObj.active = "false";
+				}
+				newNotCompletedArray.push(tmpObj);
+			});
 
             var cmdObjToGraphicsArray=[]; // array degli oggetti not completed da visualizzare sul grafico in base ai dati aggiornati dalla aggiunta o rimozione di benchmark
 
@@ -222,13 +222,13 @@ function lineChart(param,appendTo){
 			xAxis: {
 				categories: "",
 				title:{
-					text:"Testcase number"
+					text:"Testcase number:"
 				}
 			},
 
 			yAxis: {
 				title: {
-					text: title
+					text: "Testcase time: "
 				}
 			},
 			legend: {
@@ -238,6 +238,7 @@ function lineChart(param,appendTo){
 			},
 			series: 
 					param // oggetti dei comand completed
+			
 		});
 	});
 };
@@ -331,14 +332,14 @@ function scatterChart(param,appendTo,categories,compOrNotComp){
 			xAxis: {
 				min:0,
 					//categories: categories
-				},
-				yAxis: {
+			},
+			yAxis: {
 					min:0,
 					tickInterval: 10,
 					title: {
 						text: 'Number of '+compOrNotComp
 					}
-				},
+			},
 				
 				plotOptions: {
 					scatter: {

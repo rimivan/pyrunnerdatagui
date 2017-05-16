@@ -1,5 +1,6 @@
 
 h1,h2{
+	text-align: center;
 }
 
 body{
@@ -29,7 +30,7 @@ table { /* table dei cmd */
 }
 
 td{
-	text-align: right;
+	text-align: right !important;
 }
 
 #graphics_type{
@@ -70,3 +71,4 @@ td{
 #container_1{
 	height: 500px;
 }
+
