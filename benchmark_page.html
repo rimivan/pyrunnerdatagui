@@ -5,10 +5,10 @@
     <meta charset="UTF-8">
 
     <link href="css/general_css.css" rel="stylesheet" type="text/css">
+    <link href="css/sidenav_style.css" rel="stylesheet" type="text/css">
     <script language="javascript" type="text/javascript" src="jquery-1.12.3.min.js"></script>
 	
     <script src="script_js/utility_script.js" type="text/javascript" charset="utf-8"></script>
-	<!-- <script src="script_js/elaboratexml.js" type="text/javascript" charset="utf-8"></script> -->
 	<script src="script_js/create_graphics.js" type="text/javascript" charset="utf-8"></script>
 	<script src="script_js/benchmarkPage.js" type="text/javascript" charset="utf-8"></script>
 
@@ -35,36 +35,94 @@
 	<h1>Details of selected benchmark:</h1>
 	<h2 id="selBenchTitle"></h2>
 
-	<div class="col_2"></div>
-		<button id="summary" type="">Riepilogo Benchmark</button>
-		<div class="col_2" id="summary_gauge_solution">
-		</div>
-
-		<div class="col_2" id="summary_gauge_sumtime">
-		</div>
-		
-		<div class="col_2" id="summary_gauge_avgtime">
-		</div>
-		
-		<div class="col_2" id="summary_gauge_avgmemory">
-		</div>
-	<div class="col_2"></div>
-
-	<div>
-		
+	<div id="mySidenav" class="sidenav">
+		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+		<ul class="listColour" id="tcaseList">Select/Deselect Benchmark</ul>
 	</div>
 
-	<div class="" id="div_testcase_table"> 
-		<table class="ui definition table" id="testcase_table">
-			<thead id="thead_table">
-				<tr id="cmd_row_1">
-					<td></td>
-				</tr>
-				<tr id="type_row_1"><td></td></tr>
-			</thead>
-			<tbody id="tbody_testcase">
-			</tbody>
-		</table>
+<!-- Use any element to open the sidenav -->
+<button type="" id="openSidenav">Menu</button>
+	
+	<button type="" id="modalTcase">modalTcaseList</button>
+	<div class="ui long modal" id="testcaseListModal">
+		<i class="close icon"></i>
+		<div class="header">
+			Modal Title
+		</div>
+		<ul id="listTestcase">
+		</ul>
+		<div class="actions">
+			<div class="ui button">Cancel</div>
+			<div class="ui button">OK</div>
+		</div>
+	</div>
+
+	<button id="summary" type="">Riepilogo Benchmark</button>
+
+	<div class="col_12" id="div_allGauge">
+		<div class="col_2"></div>
+			<div class="col_2" id="summary_gauge_solution">
+			</div>
+
+			<div class="col_2" id="summary_gauge_sumtime">
+			</div>
+			
+			<div class="col_2" id="summary_gauge_avgtime">
+			</div>
+			
+			<div class="col_2" id="summary_gauge_avgmemory">
+			</div>
+		<div class="col_2"></div>
+	</div>
+
+	<div class="col_12"> <!-- Command list -->
+		<div class="col_3"><!-- Empty -->
+		</div>
+		
+		<div class="col_6" id="div_cmnd_benchPage">
+			<div>Commands List:</div>
+		</div>
+
+		<div class="col_3"><!-- Empty -->
+		</div>
+	</div>
+
+
+	<div class="col_12">
+		<div class="col_1"></div>
+
+		<div class="col_10" id="myWorkContent">
+			<div class="col_12">
+					<div class="col_4 bordered">
+						<div class='ui toggle checkbox cmnd' ><input id="check_status" type='checkbox' class='check_type_benchPage' name='public' checked ><label>Status</label></div>
+					</div>
+
+					<div class="col_4 bordered">
+						<div class='ui toggle checkbox cmnd' ><input id="check_time" type='checkbox' class='check_type_benchPage' name='public' checked ><label>Time</label></div>
+					</div>
+
+					<div class="col_4 bordered">
+						<div class='ui toggle checkbox cmnd' ><input id="check_memory" type='checkbox' class='check_type_benchPage' name='public' checked ><label>Memory</label></div>
+					</div>
+			</div>
+
+
+			<div class="" id="div_testcase_table"> 
+				<table class="ui definition table" id="testcase_table">
+					<thead id="thead_table">
+						<tr id="cmd_row_1">
+							<td></td>
+						</tr>
+						<tr id="type_row_1"><td></td></tr>
+					</thead>
+					<tbody id="tbody_testcase">
+					</tbody>
+				</table>
+			</div>
+
+		</div>
+
+		<div class="col_1"></div>
 	</div>
 </body>
 </html>

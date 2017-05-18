@@ -9,6 +9,7 @@
     <script language="javascript" type="text/javascript" src="jquery-1.12.3.min.js"></script>
     
     <link href="css/general_css.css" rel="stylesheet" type="text/css">
+    <link href="css/sidenav_style.css" rel="stylesheet" type="text/css">
 
 	<!--  <script src="http://code.highcharts.com/highcharts.js"></script> -->
 	<script src="highcharts/code/highcharts.js"></script>
@@ -29,6 +30,31 @@
 <body>
 	<h1>Navigate the output</h1>
 	<h2>TITLE</h2>
+
+	<div id="mySidenav" class="sidenav">
+		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+		<ul class="listColour" id="benchList">Select/Deselect Benchmark</ul>
+	</div>
+
+<!-- Use any element to open the sidenav -->
+<button type="" id="openSidenav">Menu</button>
+
+	<button type="" id="modalBench">mod</button>
+	<div class="ui long modal" id="benchListModal">
+		<i class="close icon"></i>
+		<div class="header">
+			Modal Title
+		</div>
+		<ul id="listBenchmark">
+		</ul>
+		<div class="actions">
+			<div class="ui button">Cancel</div>
+			<div class="ui button">OK</div>
+		</div>
+	</div>
+
+	
+
 
 	<!-- Al centro: lista command -->
 	<div class="col_12"> <!-- Command list -->

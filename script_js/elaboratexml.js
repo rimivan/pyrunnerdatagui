@@ -18,7 +18,23 @@ var allCommands;
 var allTestcases;
 var cmd_id_array = []; //array con gli id da usare nel codice
 var regex = /[\_ | \W]/gi;
+
+/* Set the width of the side navigation to 250px */
+function openNav() {
+    document.getElementById("mySidenav").style.width = "40%";
+}
+
+/* Set the width of the side navigation to 0 */
+function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+} 
+
 jQuery(document).ready(function(){
+	$("#openSidenav").on('click',openNav);
+
+	$("#modalBench").on('click',function(){
+		$('#benchListModal').modal('show');
+	});
 
     var filenameSelected = sessionStorage.getItem("filename");
     $.ajax({ 
@@ -75,6 +91,8 @@ jQuery(document).ready(function(){
                        "</tr>");
 
                     $("#removedBench2").append("<div class='ui toggle checkbox'><input class='bench_"+benchIndex+" rem_bench' type='checkbox' name='public' checked ><label>"+benchmarkId_elem+"</label></div>");
+                    $("#listBenchmark").append("<li><div class='ui toggle checkbox'><input class='bench_"+benchIndex+" rem_bench' type='checkbox' name='public' checked ><label>"+benchmarkId_elem+"</label></div></li>");
+                    $("#benchList").append("<li><div class='ui toggle checkbox'><input class='bench_"+benchIndex+" rem_bench' type='checkbox' name='public' checked ><label class='listColour'>"+benchmarkId_elem+"</label></div></li>");
 
                     cmd_id_array.forEach(function(cmd,ind){
                       $("#bench_"+benchIndex).append("<td first_col' id='sol_cmd_"+ind+"_bench_"+benchIndex+"'></td>"+ 
@@ -292,7 +310,6 @@ jQuery(document).ready(function(){
             // Events
             var numberCheck_type = $(".check_type").length;
         	$(".check_type").on('click',function(){ // check dei tipi di dati da selezionare/deselezionare (solution,avgmem,avgtime,sumtime)
-                
                 var idBtn = $(this).attr("id");
         		var splitted = idBtn.split("_");
         		var onlyIdCommand = splitted[1];// solution/avgmem/avgtime/sumtime
@@ -313,9 +330,8 @@ jQuery(document).ready(function(){
         		
         			$("."+onlyIdCommand).show();
         			cmd_id_array.forEach(function(cmd,index){
-        				var currId = cmd.replace(regex,'-');
-        				if( $("."+currId).hasClass("cmdHide") ){
-        					$("."+currId).hide();
+        				if( $("."+cmd).hasClass("cmdHide") ){
+        					$("."+cmd).hide();
         				} 
         			});
 
@@ -347,9 +363,7 @@ jQuery(document).ready(function(){
                     numberOfCmd--;
         			$("#check_"+onlyIdCommand).attr("checked",false);
         			$("."+onlyIdCommand).hide();
-
 					$("."+onlyIdCommand).addClass("cmdHide");        			
-
         		}else if( $("#check_"+onlyIdCommand).is(":checked") ){
                     numberOfCmd++;
         			$("#check_"+onlyIdCommand).attr("checked",true);
@@ -409,6 +423,8 @@ jQuery(document).ready(function(){
                         valuesOfTr.splice(0,1); // rimuove il primo elemento della tr. (splice(index,howmany))
                     
                     var sign ="";
+
+                    alert(classOfTrToRemove);
                     if( ! ($(this).is(":checked"))  ){
                         numberOfBenchmark--;
                         sign = "minus";
