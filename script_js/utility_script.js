@@ -1,6 +1,6 @@
 
 //prendo i benchmark e i command attivi e elaboro i dati time per ogni testcase.
-	function elaborateDataForScatterChart( checkedCmdForScatter ){
+	function elaborateDataForScatterChart( checkedCmdForScatter ){ // scatter chart of home.html
 		dataForScatterChart = [];
 		var benchmarkObj;
 		

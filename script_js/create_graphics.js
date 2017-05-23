@@ -6,11 +6,11 @@ var dataForScatterChart = [];
 jQuery(document).ready(function(){
 	var bench_id_arr;
 
-	$(".graphicbtn").on("click",function(){ // comandi completed
+	$(".graphicbtn").on("click",function(){ // grafici homepage
 		var clicked_id = $(this).attr("id");
 		var benchmarkId;
 		var cmd_id;
-		var cmd_id_array = []; // qui conterrà solo i command attivi
+		var cmd_id_array = []; // conterrà solo i command attivi
 		var cmdObjArr;
 		var tmpAvgData;
 		var tmpDataString;
@@ -72,7 +72,6 @@ jQuery(document).ready(function(){
 				cmdObjArr.push(obj);
 				
 			});
-			
 			bench_only_id_arr = [];
 			
 			bench_id_arr.forEach(function(val,index){
@@ -183,9 +182,9 @@ jQuery(document).ready(function(){
         	alert("Non è possibile caricare i test Non Completati!");
         }
 
-	}); // end on click completed cmd table
+	}); // end on click 
 
-
+										//line chart of home.html
 function elaborateDataForLineChart(){ // riempe dataLineForChart per poi essere passato alla funzione che Line
 	dataForLineChart = [];
 	var cmdObjForLine;
@@ -211,80 +210,9 @@ function elaborateDataForLineChart(){ // riempe dataLineForChart per poi essere 
 }
 
 
-function lineChart(param,appendTo){
-	var title;
-	title = "Line chart of Testcases Time!";
-	$(function () {
-		Highcharts.chart(appendTo, {
-			title: {
-				text: title
-			},
-			xAxis: {
-				categories: "",
-				title:{
-					text:"Testcase number:"
-				}
-			},
-
-			yAxis: {
-				title: {
-					text: "Testcase time: "
-				}
-			},
-			legend: {
-				layout: 'vertical',
-				align: 'right',
-				verticalAlign: 'middle',
-			},
-			series: 
-					param // oggetti dei comand completed
-			
-		});
-	});
-};
-
-function stackedChart(param,appendTo,categories,compOrNotComp){
-	var title;
-	if(compOrNotComp === "completed"){
-		title = "Stacked Bar Chart of Completed Test!"
-	}else{
-		title = "Stacked Bar Chart of NOT Completed Test!"
-	}
-	$(function () {
-		Highcharts.chart(appendTo, {
-			chart: {
-
-				type: 'bar'
-			},
-			title: {
-				text: title
-			},
-			xAxis: {
-				categories: categories
-			},
-			yAxis: {
-				min: 0,
-				title: {
-					text: title
-				}
-			},
-			legend: {
-				reversed: true
-			},
-			plotOptions: {
-				bar: {
-					dataLabels: {
-						enabled: false
-					}
-				}
-			},
-			series: 
-			param
 
 
-		});
-	});
-}
+
 
 function scatterChart(param,appendTo,categories,compOrNotComp){
 	var title;
@@ -374,3 +302,82 @@ function scatterChart(param,appendTo,categories,compOrNotComp){
 
 
 });
+
+
+function lineChart(param,appendTo){
+	console.log(param);
+	var title;
+	title = "Line chart of Testcases Time!";
+	$(function () {
+		Highcharts.chart(appendTo, {
+			title: {
+				text: title
+			},
+			xAxis: {
+				categories: "",
+				title:{
+					text:"Testcase number:"
+				}
+			},
+
+			yAxis: {
+				title: {
+					text: "Testcase time: "
+				}
+			},
+			legend: {
+				layout: 'vertical',
+				align: 'right',
+				verticalAlign: 'middle',
+			},
+			series: 
+					param // oggetti dei comand completed
+			
+		});
+	});
+};
+
+
+function stackedChart(param,appendTo,categories,compOrNotComp){
+	console.log(param); // prima per i completed e poi per i not completed
+	var title;
+	if(compOrNotComp === "completed"){
+		title = "Stacked Bar Chart of Completed Test!"
+	}else{
+		title = "Stacked Bar Chart of NOT Completed Test!"
+	}
+	$(function () {
+		Highcharts.chart(appendTo, {
+			chart: {
+
+				type: 'bar'
+			},
+			title: {
+				text: title
+			},
+			xAxis: {
+				categories: categories
+			},
+			yAxis: {
+				min: 0,
+				title: {
+					text: title
+				}
+			},
+			legend: {
+				reversed: true
+			},
+			plotOptions: {
+				bar: {
+					dataLabels: {
+						enabled: false
+					}
+				}
+			},
+			series: 
+			param
+
+
+		});
+	});
+}

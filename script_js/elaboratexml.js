@@ -32,9 +32,6 @@ function closeNav() {
 jQuery(document).ready(function(){
 	$("#openSidenav").on('click',openNav);
 
-	$("#modalBench").on('click',function(){
-		$('#benchListModal').modal('show');
-	});
 
     var filenameSelected = sessionStorage.getItem("filename");
     $.ajax({ 
@@ -91,7 +88,6 @@ jQuery(document).ready(function(){
                        "</tr>");
 
                     $("#removedBench2").append("<div class='ui toggle checkbox'><input class='bench_"+benchIndex+" rem_bench' type='checkbox' name='public' checked ><label>"+benchmarkId_elem+"</label></div>");
-                    $("#listBenchmark").append("<li><div class='ui toggle checkbox'><input class='bench_"+benchIndex+" rem_bench' type='checkbox' name='public' checked ><label>"+benchmarkId_elem+"</label></div></li>");
                     $("#benchList").append("<li><div class='ui toggle checkbox'><input class='bench_"+benchIndex+" rem_bench' type='checkbox' name='public' checked ><label class='listColour'>"+benchmarkId_elem+"</label></div></li>");
 
                     cmd_id_array.forEach(function(cmd,ind){
@@ -424,7 +420,6 @@ jQuery(document).ready(function(){
                     
                     var sign ="";
 
-                    alert(classOfTrToRemove);
                     if( ! ($(this).is(":checked"))  ){
                         numberOfBenchmark--;
                         sign = "minus";

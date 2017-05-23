@@ -1,5 +1,10 @@
 var selectedBenchmarkObject = JSON.parse( sessionStorage.getItem("selectedBenchmark") );
 var cmdIdArray;
+var arrayForLineChart = [];
+var arrayForStackedChart = [];
+var arrayForStackedChartNotCompleted = [];
+
+var arrayOfTestcases; // all testcase of selected benchmark
 
 /* Set the width of the side navigation to 250px */
 function openNav() {
@@ -11,16 +16,12 @@ function closeNav() {
     document.getElementById("mySidenav").style.width = "0";
 } 
 
+
+
 jQuery(document).ready(function(){
   $("#openSidenav").on('click',openNav);
 
-  $("#modalTcase").on('click',function(){
-    $('#testcaseListModal').modal('show');
-  });
-
   var originalCmdId = JSON.parse( sessionStorage.getItem("originalCmdId"));
-  console.log(originalCmdId);
-	console.log(selectedBenchmarkObject);
 	var idSelBenchmark = selectedBenchmarkObject.id;
 	$("#selBenchTitle").html(idSelBenchmark);
 
@@ -39,22 +40,31 @@ jQuery(document).ready(function(){
         "<th class='time "+cmd+" cmd"+index+"' id='th_"+cmd+"_avgtime'>TIME </th>"+
         "<th class='memory "+cmd+" cmd"+index+" last_col' id='th_"+cmd+"_avgmem'>MEMORY </th>"
       );
+
+        var cmdObjToLine = {
+          name:originalCmdId[cmd],
+          data:[],
+          active:true
+        };
+
+        arrayForLineChart.push(cmdObjToLine);
+        
    });//end 
 
-    var arrayOfTestcases = selectedBenchmarkObject.testcaseList;
+    arrayOfTestcases = selectedBenchmarkObject.testcaseList; // tutti i testcase del benchmark selezionato
     var solutionPerTestcase = 0;
     var numberOfTestcaseExecution = 0;
     var avgMemOfTestcase = 0;
     var avgTimeOfTestcase = 0;
+
     arrayOfTestcases.forEach(function(testcaseElem,index_i){
-      $("#tbody_testcase").append("<tr class='row_tcase_"+index_i+"' id='tcase_"+index_i+"'><td class='tcase"+index_i+"'>"+testcaseElem.id+"</td>"+
+      $("#tbody_testcase").append("<tr class='row_tcase_"+index_i+"' id='tcase"+index_i+"'><td class='tcase"+index_i+"'>"+testcaseElem.id+"</td>"+
                        "</tr>");
 
-      $("#listTestcase").append("<li><div class='ui toggle checkbox'><input type='checkbox' name='public' checked ><label>"+testcaseElem.id+"</label></div></li>");
       $("#tcaseList").append("<li><div class='ui toggle checkbox'><input id='check_tcase"+index_i+"' type='checkbox' name='public' class='rem_tcase' checked ><label class='listColour'>"+testcaseElem.id+"</label></div></li>");
 
       cmdIdArray.forEach(function(cmd,index_cmd){
-        $("#tcase_"+index_i).append("<td first_col' id='status_cmd"+index_cmd+"_tcase"+index_i+"' class='status cmd"+index_cmd+" tcase"+index_i+"'></td>"+ 
+        $("#tcase"+index_i).append("<td first_col' id='status_cmd"+index_cmd+"_tcase"+index_i+"' class='status cmd"+index_cmd+" tcase"+index_i+"'></td>"+ 
                        "<td id='time_cmd"+index_cmd+"_tcase"+index_i+"' class='time cmd"+index_cmd+" tcase"+index_i+"'></td>"+
                        "<td id='memory_cmd"+index_cmd+"_tcase"+index_i+"' class='memory cmd"+index_cmd+" last_col tcase"+index_i+"'></td>");
       });
@@ -72,9 +82,17 @@ jQuery(document).ready(function(){
           cmdTime = cmdTime.toFixed(2);
           cmdMem = cmdMem.toFixed(2);
         
-
+          cmdTime = parseFloat(cmdTime);
           if(cmdStatus == "complete"){
               solutionPerTestcase++;
+
+              arrayForLineChart.forEach(function(elem,index){
+                if(cmdElem.cmdid == elem.name){
+                  elem.data.push(cmdTime); // inserisco i dati nella struttura per la line chart
+                }
+                elem.data.sort( function(a,b) { return a-b } );
+              });
+  
           }
           
           $("#status_cmd"+index_j+"_tcase"+index_i).html(cmdStatus);
@@ -82,12 +100,10 @@ jQuery(document).ready(function(){
           $("#memory_cmd"+index_j+"_tcase"+index_i).html(cmdMem);
         });
     });// end foreach testcase
-        
-        avgTimeOfTestcase /= numberOfTestcaseExecution;
+        avgTimeOfTestcase /= numberOfTestcaseExecution; // dati generali di tutto il benchmark
         avgMemOfTestcase /= numberOfTestcaseExecution;
         avgMemOfTestcase = avgMemOfTestcase.toFixed(2);
         avgTimeOfTestcase = avgTimeOfTestcase.toFixed(2);
-
     selectedBenchmarkObject["avgmem"] = parseFloat(avgMemOfTestcase);
     selectedBenchmarkObject["avgtime"] = parseFloat(avgTimeOfTestcase);
 
@@ -99,13 +115,24 @@ jQuery(document).ready(function(){
       clickedId = clickedId.split("_");
       clickedId = clickedId[1];
       console.log(clickedId);
-
+      var commandName = $(this).next().html(); // id del commandche nascondo/mostro. Prendo il nome dal label
+      
       if( ! $("#check_"+clickedId).is(":checked")  ){
               //numberOfCmd--;
               $("#check_"+clickedId).attr("checked",false);
               $("."+clickedId).hide();
               $("."+clickedId).addClass("cmdHide");
+              arrayForLineChart.forEach(function(currElem,i){
+                if(currElem.name == commandName){
+                  currElem.active = false;
+                }
+              });
       }else if( $("#check_"+clickedId).is(":checked") ){
+              arrayForLineChart.forEach(function(currElem,i){
+                  if(currElem.name == commandName){
+                      currElem.active = true;
+                  }
+              });
               $("#check_"+clickedId).attr("checked",true);
                     $("."+clickedId).show();
 
@@ -123,7 +150,6 @@ jQuery(document).ready(function(){
                         $(".time").hide();
                     }
       }
-    
     });//end check command
 
     $(".check_type_benchPage").on('click',function(){
@@ -145,9 +171,7 @@ jQuery(document).ready(function(){
             
               $("."+clickedId).show();
               cmdIdArray.forEach(function(cmd,index){
-                console.log("il cmd:"+cmd+" di index: "+index+" dovrebbe essere hide");
                 if( $(".cmd"+index).hasClass("cmdHide") ){
-                  alert("aaaa");
                   $(".cmd"+index).hide();
                 } 
               });
@@ -162,18 +186,17 @@ jQuery(document).ready(function(){
       var clickedId = $(this).prop("id");
       clickedId = clickedId.split("_");
       clickedId = clickedId[1];
-      alert("click: "+clickedId);
+ //     alert("click: "+clickedId);
 
       if( ! ($(this).is(":checked"))  ){
         ($(this)).attr("checked",false);
-        $("."+clickedId).fadeOut();
+        $("#"+clickedId).fadeOut("slow");
       }else if( $(this).is(":checked") ){
         ($(this)).attr("checked",true);
-        $("."+clickedId).fadeIn();
+        $("#"+clickedId).fadeIn();
       }
     });
 
-	
 
   //evento per gauge
   $("#summary").on('click',function(){
@@ -221,5 +244,69 @@ jQuery(document).ready(function(){
         chart.draw(data, options);
   }//end drawchart
 
+  $(".tcase_graphics").on('click',function(){
+    var clickedId = $(this).prop("id");
+    if(clickedId == "line_tcase"){
+      $("#graphic_stacked_tcase").hide(); 
+      $("#graphic_line_tcase").show();
+      //hide anche su scatter
+      var newArrayForLineChart = [];
+      arrayForLineChart.forEach(function(currentElement, index){
+        if(currentElement.active == true){
+          newArrayForLineChart.push(currentElement);
+        }
+      }); 
+      lineChart(newArrayForLineChart,"container_line_tcase");
+    }else if(clickedId == "stacked_tcase"){
+      $("#graphic_line_tcase").hide();
+      $("#graphic_stacked_tcase").show();
+      //hide anche scatter
+      arrayForStackedChart = []; // reset dell'array in cui metto i dati (test completed)
+      arrayForStackedChartNotCompleted = [];
+      var categories = [];
+      categories.push(selectedBenchmarkObject.id);
+      elaborateDataForTestcaseStackedChart(arrayForStackedChart,arrayForStackedChartNotCompleted,arrayOfTestcases);
+
+      stackedChart(arrayForStackedChart,"container_stacked_tcase",categories,"completed");
+      stackedChart(arrayForStackedChartNotCompleted,"container_stacked_tcase_notCompleted",categories,"not completed");
+    }else if(clickedId == "scatter_tcase"){
+      alert("scatter");
+    }
+  });
+
+  function elaborateDataForTestcaseStackedChart(arrayForStackedChart,arrayForStackedChartNotCompleted,arrayOfTestcases){
+    cmdIdArray.forEach(function(cmdId,index_k){
+      var solution = 0;
+      var notCompleted = 0;
+      
+      var cmdWithSolution = {
+        name : originalCmdId[cmdId],
+        data:[]
+      };
+
+      var cmdNotCompleted = {
+        name : originalCmdId[cmdId],
+        data:[]
+      };
+
+      arrayOfTestcases.forEach(function(tcaseElem,index_i){
+        var cmdOfThisTcase = tcaseElem.commandList;
+        cmdOfThisTcase.forEach(function(cmdElem,index_j){
+          //console.log("Qui: "+originalCmdId[cmdId]+" ======= "+cmdElem.cmdid);
+          if(originalCmdId[cmdId] == cmdElem.cmdid){
+            if(cmdElem.cmdstatus == "complete"){
+              solution++;
+            }else{
+              notCompleted++;
+            }
+          }
+        });
+      });
+      cmdWithSolution.data.push(solution);
+      cmdNotCompleted.data.push(notCompleted);
+      arrayForStackedChart.push(cmdWithSolution);
+      arrayForStackedChartNotCompleted.push(cmdNotCompleted);
+    });
+  }
 
 });

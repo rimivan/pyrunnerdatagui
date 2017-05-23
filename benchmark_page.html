@@ -7,6 +7,7 @@
     <link href="css/general_css.css" rel="stylesheet" type="text/css">
     <link href="css/sidenav_style.css" rel="stylesheet" type="text/css">
     <script language="javascript" type="text/javascript" src="jquery-1.12.3.min.js"></script>
+    <script src="highcharts/code/highcharts.js"></script>
 	
     <script src="script_js/utility_script.js" type="text/javascript" charset="utf-8"></script>
 	<script src="script_js/create_graphics.js" type="text/javascript" charset="utf-8"></script>
@@ -35,27 +36,12 @@
 	<h1>Details of selected benchmark:</h1>
 	<h2 id="selBenchTitle"></h2>
 
+<a href="#graphics">vai ai grafici</a>
 	<div id="mySidenav" class="sidenav">
 		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
 		<ul class="listColour" id="tcaseList">Select/Deselect Benchmark</ul>
 	</div>
 
-<!-- Use any element to open the sidenav -->
-<button type="" id="openSidenav">Menu</button>
-	
-	<button type="" id="modalTcase">modalTcaseList</button>
-	<div class="ui long modal" id="testcaseListModal">
-		<i class="close icon"></i>
-		<div class="header">
-			Modal Title
-		</div>
-		<ul id="listTestcase">
-		</ul>
-		<div class="actions">
-			<div class="ui button">Cancel</div>
-			<div class="ui button">OK</div>
-		</div>
-	</div>
 
 	<button id="summary" type="">Riepilogo Benchmark</button>
 
@@ -106,6 +92,9 @@
 					</div>
 			</div>
 
+			<div class="col_12" id="testcaseList">
+				<button type="" id="openSidenav">Lista completa dei testcase</button>
+			</div>
 
 			<div class="" id="div_testcase_table"> 
 				<table class="ui definition table" id="testcase_table">
@@ -123,6 +112,40 @@
 		</div>
 
 		<div class="col_1"></div>
+
+		<div class="col_12">
+			<a name="graphics">Grafici</a>
+
+			<button class="tcase_graphics" id="line_tcase">Line chart</button>
+			<button class="tcase_graphics" id="stacked_tcase">Stacked </button>
+			<button class="tcase_graphics" id="scatter_tcase">Scatter</button>
+		</div>
+
+		<div class="col_12" id="graphic_line_tcase">
+			<div class="col_1"></div>
+			<div class="col_10">
+				<div id="container_line_tcase" style="width:100%; height:100%;"></div>
+			</div>
+			<div class="col_1"></div>
+		</div>
+
+		<div class="col_12" id="graphic_stacked_tcase">
+			<div class="col_12">
+				<div class="col_1"></div>
+				<div class="col_10">
+					<div id="container_stacked_tcase" style="width:100%; height:100%;"></div>
+				</div>
+				<div class="col_1"></div>
+			</div>
+
+			<div class="col_12">
+				<div class="col_1"></div>
+				<div class="col_10">
+					<div id="container_stacked_tcase_notCompleted" style="width:100%; height:100%;"></div>
+				</div>
+				<div class="col_1"></div>
+			</div>
+		</div>
 	</div>
 </body>
 </html>
