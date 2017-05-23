@@ -3,6 +3,7 @@ var cmdIdArray;
 var arrayForLineChart = [];
 var arrayForStackedChart = [];
 var arrayForStackedChartNotCompleted = [];
+var arrayForScatterTestcaseChart = [];
 
 var arrayOfTestcases; // all testcase of selected benchmark
 
@@ -33,7 +34,7 @@ jQuery(document).ready(function(){
     $("#cmd_row_1").append("<th class='cmd"+index+" th_cmd "+cmd+"' colspan='3' id='"+cmd+"'>"+originalCmdId[cmd]+"</th>");
 
     $("#div_cmnd_benchPage").append("<div class='ui toggle checkbox cmnd'><input type='checkbox' class='check_cmnd_benchPage' name='public' id='check_cmd"+index+"' checked ><label>"+originalCmdId[cmd]+"</label></div>");
-                    
+    $("#compareCmdGraph").append("<input name='compare' class='compareCheckbox' type='checkbox' id='compareCheck_"+cmd+"'/><label for='compareCheck_"+cmd+"' class='inline'>"+originalCmdId[cmd]+"</label>");      
 
       $("#type_row_1").append(
         "<th class='status "+cmd+" cmd"+index+" first_col' id='th_"+cmd+"_solution'>STATUS </th>"+
@@ -198,6 +199,21 @@ jQuery(document).ready(function(){
     });
 
 
+    //Checkbox dei command per il grafico scatter.
+    $('.compareCheckbox').on('click', function (e) {
+      if ($('.compareCheckbox:checked').length < 3) {
+        if($(this).attr('checked'))
+          $(this).attr('checked', false);
+        else
+          $(this).attr('checked', true);
+      }
+      else if($('.compareCheckbox:checked')){
+        $(this).removeAttr('checked');
+      }
+
+    });
+                // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
   //evento per gauge
   $("#summary").on('click',function(){
     var totalSol = selectedBenchmarkObject.totalsolution;
@@ -270,9 +286,44 @@ jQuery(document).ready(function(){
       stackedChart(arrayForStackedChart,"container_stacked_tcase",categories,"completed");
       stackedChart(arrayForStackedChartNotCompleted,"container_stacked_tcase_notCompleted",categories,"not completed");
     }else if(clickedId == "scatter_tcase"){
-      alert("scatter");
+      arrayForScatterTestcaseChart = [];
+      var checkedCmdForScatter = [];
+      controlCheckedCmd(checkedCmdForScatter);
+      if(checkedCmdForScatter.length > 1){
+        console.log(checkedCmdForScatter);
+           // bisogna controllare che i checked siano due
+          elaborateDataForScatterTestcaseChart(arrayForScatterTestcaseChart,arrayOfTestcases,checkedCmdForScatter);
+          scatterChart(arrayForScatterTestcaseChart,"container_stacked_tcase_notCompleted");
+          //nascondere gli altri grafici
+        }else{
+          alert("seleziona due cmd");
+        }
     }
-  });
+  });//end event graphics button
+
+  function elaborateDataForScatterTestcaseChart(arrayForScatterTestcaseChart,arrayOfTestcases,checkedCmdForScatter){
+    console.log(arrayOfTestcases);
+    arrayOfTestcases.forEach(function(tcaseElem,index_j){
+      var tcaseObj = {
+        name : tcaseElem.id,
+        data:[]
+      };
+      var dataArray = [];
+      var commands = tcaseElem.commandList;
+      checkedCmdForScatter.forEach(function(idCmdChecked,index_i){
+        commands.forEach(function(cmdElem,index_k){
+          if(cmdElem.cmdid == originalCmdId[idCmdChecked] && cmdElem.cmdstatus=="complete"){
+            dataArray.push(cmdElem.cmdtime);
+          }
+        }); 
+      });
+      if(dataArray.length > 0){
+        tcaseObj.data.push(dataArray);
+        arrayForScatterTestcaseChart.push(tcaseObj);
+      }
+    });
+    console.log(arrayForScatterTestcaseChart);
+  }
 
   function elaborateDataForTestcaseStackedChart(arrayForStackedChart,arrayForStackedChartNotCompleted,arrayOfTestcases){
     cmdIdArray.forEach(function(cmdId,index_k){
@@ -310,3 +361,5 @@ jQuery(document).ready(function(){
   }
 
 });
+
+

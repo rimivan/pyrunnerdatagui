@@ -1,3 +1,13 @@
+	function controlCheckedCmd(checkedCmdForScatter){//controlla i check per il grafico scatter
+			var inputCheckCmd = $("#compareCmdGraph").children("input");
+			inputCheckCmd.each(function(inputCheck_index,inputCheck){
+				var currentIdCmdChecked = $(this).prop("id");
+				if( $(this).prop("checked") ){
+					var idCmdChecked = currentIdCmdChecked.split("_"); 
+					checkedCmdForScatter.push(idCmdChecked[1]);
+				}
+			});	
+		}
 
 //prendo i benchmark e i command attivi e elaboro i dati time per ogni testcase.
 	function elaborateDataForScatterChart( checkedCmdForScatter ){ // scatter chart of home.html

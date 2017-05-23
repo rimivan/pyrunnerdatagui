@@ -465,9 +465,8 @@ jQuery(document).ready(function(){
                     else if($('.compareCheckbox:checked')){
                         $(this).removeAttr('checked');
                     }
-                       
                 });
-                // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+                // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
                 $(".goToBenchPage").on('click',function(){
                     var idBenchSelected = $(this).prop('id');

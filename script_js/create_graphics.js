@@ -102,11 +102,11 @@ jQuery(document).ready(function(){
 			//grafico scatter su avg time a due istanze
 			var checkedCmdForScatter = [];
 			if(clicked_id==="scatter"){
-				controlCheckedCmd(); // crea l'array con gli id dei command checked
+				controlCheckedCmd(checkedCmdForScatter); // crea l'array con gli id dei command checked
 				if(checkedCmdForScatter.length > 1){
 					 // bisogna controllare che i checked siano due
 					elaborateDataForScatterChart( checkedCmdForScatter ); // function in utility_script
-					scatterChart(dataForScatterChart,"container_scatter",bench_only_id_arr,"completed");
+					scatterChart(dataForScatterChart,"container_scatter");
 					$("#graphic_1").hide();
 					$("#graphic_2").hide();
 					$("#container_scatter").show();
@@ -119,16 +119,7 @@ jQuery(document).ready(function(){
 			alert("Qualcosa è andato storto nella lettura dal sessionStorage.");
 		}
 
-		function controlCheckedCmd(){
-			var inputCheckCmd = $("#compareCmdGraph").children("input");
-			inputCheckCmd.each(function(inputCheck_index,inputCheck){
-				var currentIdCmdChecked = $(this).prop("id");
-				if( $(this).prop("checked") ){
-					var idCmdChecked = currentIdCmdChecked.split("_"); 
-					checkedCmdForScatter.push(idCmdChecked[1]);
-				}
-			});	
-		}
+	
 
 		//creazione dati e grafici per i test non completi
 		if(sessionStorage["notcompleted"]){ // in session storage deve esserci l'elemento notcompleted
@@ -185,123 +176,32 @@ jQuery(document).ready(function(){
 	}); // end on click 
 
 										//line chart of home.html
-function elaborateDataForLineChart(){ // riempe dataLineForChart per poi essere passato alla funzione che Line
-	dataForLineChart = [];
-	var cmdObjForLine;
-	arrayDeiValoriDiAvgPerSingoloTestcase.forEach(function(arrCmd,index_k){	
-		if(allCmdCheck[index_k].active == "true"){
-			console.log(allCmdCheck[index_k].id+ ":true");
-			var oggetto = {
-				name:allCmdCheck[index_k].id,
-			}
-			var arrayLineData = [];
-
-			arrCmd.forEach(function(valTcase,index_l){
-				if( sessionStorage.getItem(valTcase.name) =="true" ){
-					arrayLineData.push(valTcase.data);
+	function elaborateDataForLineChart(){ // riempe dataLineForChart per poi essere passato alla funzione che Line
+		dataForLineChart = [];
+		var cmdObjForLine;
+		arrayDeiValoriDiAvgPerSingoloTestcase.forEach(function(arrCmd,index_k){	
+			if(allCmdCheck[index_k].active == "true"){
+				console.log(allCmdCheck[index_k].id+ ":true");
+				var oggetto = {
+					name:allCmdCheck[index_k].id,
 				}
-			});
-			arrayLineData.sort( function(a,b) { return a-b } );
-			oggetto.data = arrayLineData;
-			dataForLineChart.push(oggetto);
-		}
-	});
-	console.log(dataForLineChart);
-}
+				var arrayLineData = [];
 
-
-
-
-
-
-function scatterChart(param,appendTo,categories,compOrNotComp){
-	var title;
-	if(compOrNotComp === "completed"){
-		title = "Scatter chart Of Completed Test!";
-	}else{
-		title = "Scatter chart Of NOT Completed Test!";
+				arrCmd.forEach(function(valTcase,index_l){
+					if( sessionStorage.getItem(valTcase.name) =="true" ){
+						arrayLineData.push(valTcase.data);
+					}
+				});
+				arrayLineData.sort( function(a,b) { return a-b } );
+				oggetto.data = arrayLineData;
+				dataForLineChart.push(oggetto);
+			}
+		});
+		console.log(dataForLineChart);
 	}
-	$(function () {
-		Highcharts.chart(appendTo, {
-			chart: {
-				events: {
-					load: function() {
-						var extremeY = this.yAxis[0].getExtremes();
-						var extremeX = this.xAxis[0].getExtremes();
-
-						var lineSeries = {
-							name:"diagonal line",
-							type: 'line',
-							data: [
-							[extremeX.min, extremeY.min],
-							[extremeX.max, extremeY.max]
-							],
-							lineWidth: 1,
-							lineColor: 'rgb(0,0,0)',
-							marker: {
-								enabled: false
-							}
-						};
-
-						this.addSeries(lineSeries);
-					}
-				},
-				type: 'scatter',
-				zoomType: 'xy',
-				width: 700,
-				height: 700
-			},
-			legend:{
-				enabled:true
-			},
-			title: {
-				text: title
-			},
-			xAxis: {
-				min:0,
-					//categories: categories
-			},
-			yAxis: {
-					min:0,
-					tickInterval: 10,
-					title: {
-						text: 'Number of '+compOrNotComp
-					}
-			},
-				
-				plotOptions: {
-					scatter: {
-						marker: {
-							radius: 6,
-							states: {
-								hover: {
-									enabled: true,
-									lineColor: 'rgb(100,100,100)'
-								}
-							}
-						},
-						states: {
-							hover: {
-								marker: {
-									enabled: false
-								}
-							}
-						},
-						tooltip: {
-							headerFormat: '<b>{series.name}</b><br>',
-							pointFormat: '{point.x} s,{point.y} s'
-						}
-					}
-				},
-				series:
-				param
-			});
-	});
-
-}
 
 
-});
+}); // end jquery
 
 
 function lineChart(param,appendTo){
@@ -380,4 +280,86 @@ function stackedChart(param,appendTo,categories,compOrNotComp){
 
 		});
 	});
+}
+
+function scatterChart(param,appendTo){
+	console.log(param);
+	var title = "Scatter chart of selected command Time";
+	$(function () {
+		Highcharts.chart(appendTo, {
+			chart: {
+				events: {
+					load: function() {
+						var extremeY = this.yAxis[0].getExtremes();
+						var extremeX = this.xAxis[0].getExtremes();
+
+						var lineSeries = {
+							name:"diagonal line",
+							type: 'line',
+							data: [
+							[extremeX.min, extremeY.min],
+							[extremeX.max, extremeY.max]
+							],
+							lineWidth: 1,
+							lineColor: 'rgb(0,0,0)',
+							marker: {
+								enabled: false
+							}
+						};
+
+						this.addSeries(lineSeries);
+					}
+				},
+				type: 'scatter',
+				zoomType: 'xy',
+				width: 700,
+				height: 700
+			},
+			legend:{
+				enabled:true
+			},
+			title: {
+				text: title
+			},
+			xAxis: {
+				min:0,
+					//categories: categories
+			},
+			yAxis: {
+					min:0,
+					tickInterval: 10,
+					title: {
+						text: 'Time'
+					}
+			},
+				
+				plotOptions: {
+					scatter: {
+						marker: {
+							radius: 6,
+							states: {
+								hover: {
+									enabled: true,
+									lineColor: 'rgb(100,100,100)'
+								}
+							}
+						},
+						states: {
+							hover: {
+								marker: {
+									enabled: false
+								}
+							}
+						},
+						tooltip: {
+							headerFormat: '<b>{series.name}</b><br>',
+							pointFormat: '{point.x} s,{point.y} s'
+						}
+					}
+				},
+				series:
+				param
+			});
+	});
+
 }
