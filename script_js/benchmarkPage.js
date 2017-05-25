@@ -101,10 +101,10 @@ jQuery(document).ready(function(){
           $("#memory_cmd"+index_j+"_tcase"+index_i).html(cmdMem);
         });
     });// end foreach testcase
-        avgTimeOfTestcase /= numberOfTestcaseExecution; // dati generali di tutto il benchmark
-        avgMemOfTestcase /= numberOfTestcaseExecution;
-        avgMemOfTestcase = avgMemOfTestcase.toFixed(2);
-        avgTimeOfTestcase = avgTimeOfTestcase.toFixed(2);
+    avgTimeOfTestcase /= numberOfTestcaseExecution; // dati generali di tutto il benchmark
+    avgMemOfTestcase /= numberOfTestcaseExecution;
+    avgMemOfTestcase = avgMemOfTestcase.toFixed(2);
+    avgTimeOfTestcase = avgTimeOfTestcase.toFixed(2);
     selectedBenchmarkObject["avgmem"] = parseFloat(avgMemOfTestcase);
     selectedBenchmarkObject["avgtime"] = parseFloat(avgTimeOfTestcase);
 
@@ -263,9 +263,10 @@ jQuery(document).ready(function(){
   $(".tcase_graphics").on('click',function(){
     var clickedId = $(this).prop("id");
     if(clickedId == "line_tcase"){
-      $("#graphic_stacked_tcase").hide(); 
-      $("#graphic_line_tcase").show();
-      //hide anche su scatter
+      $("#graphic_line_tcase").empty();
+      $("#graphic_stacked_tcase").empty();
+      $("#graphic_scatter_tcase").empty();
+      $("#graphic_line_tcase").append("<div class='col_1'></div><div class='col_10'><div id='container_line_tcase' style='width:100%; height:100%;'></div></div><div class='col_1'></div>");
       var newArrayForLineChart = [];
       arrayForLineChart.forEach(function(currentElement, index){
         if(currentElement.active == true){
@@ -273,10 +274,12 @@ jQuery(document).ready(function(){
         }
       }); 
       lineChart(newArrayForLineChart,"container_line_tcase");
-    }else if(clickedId == "stacked_tcase"){
-      $("#graphic_line_tcase").hide();
-      $("#graphic_stacked_tcase").show();
-      //hide anche scatter
+    }
+    if(clickedId == "stacked_tcase"){
+      $("#graphic_line_tcase").empty();
+      $("#graphic_scatter_tcase").empty();
+      $("#graphic_stacked_tcase").empty();
+      $("#graphic_stacked_tcase").append("<div class='col_12'><div class='col_1'></div><div class='col_10'><div id='container_stacked_tcase' style='width:100%; height:100%;'></div></div><div class='col_1'></div></div><div class='col_12'><div class='col_1'></div><div class='col_10'><div id='container_stacked_tcase_notCompleted' style='width:100%; height:100%;'></div></div><div class='col_1'></div></div>")
       arrayForStackedChart = []; // reset dell'array in cui metto i dati (test completed)
       arrayForStackedChartNotCompleted = [];
       var categories = [];
@@ -285,16 +288,21 @@ jQuery(document).ready(function(){
 
       stackedChart(arrayForStackedChart,"container_stacked_tcase",categories,"completed");
       stackedChart(arrayForStackedChartNotCompleted,"container_stacked_tcase_notCompleted",categories,"not completed");
-    }else if(clickedId == "scatter_tcase"){
+    }
+    if(clickedId == "scatter_tcase"){
+     
       arrayForScatterTestcaseChart = [];
       var checkedCmdForScatter = [];
       controlCheckedCmd(checkedCmdForScatter);
-      if(checkedCmdForScatter.length > 1){
+      if(checkedCmdForScatter.length > 1){// bisogna controllare che i checked siano due
         console.log(checkedCmdForScatter);
-           // bisogna controllare che i checked siano due
-          elaborateDataForScatterTestcaseChart(arrayForScatterTestcaseChart,arrayOfTestcases,checkedCmdForScatter);
-          scatterChart(arrayForScatterTestcaseChart,"container_stacked_tcase_notCompleted");
-          //nascondere gli altri grafici
+        $("#graphic_line_tcase").empty();
+        $("#graphic_stacked_tcase").empty();
+        $("#graphic_scatter_tcase").empty();
+        $("#graphic_scatter_tcase").append("<div class='col_3'></div><div class='col_6'><div id='container_scatter_tcase' style='width:100%; height:100%;'></div></div><div class='col_3'></div>");
+
+        elaborateDataForScatterTestcaseChart(arrayForScatterTestcaseChart,arrayOfTestcases,checkedCmdForScatter);
+        scatterChart(arrayForScatterTestcaseChart,"container_scatter_tcase");
         }else{
           alert("seleziona due cmd");
         }

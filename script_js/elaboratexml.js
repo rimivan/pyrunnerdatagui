@@ -2,21 +2,21 @@ var cmdID = { // lo utilizzo visualizzare in grafica l'id reale del command trov
     //idCommandModificato -> idCommandReale
 };
 
-var benchmarkObject = {
+var benchmarkObject = { // oggetto benchmark
     //idBench -> object del benchmark
 }
 
 var arrayOfBenchmarkObject = []; // array in cui sono presenti oggetti benchmark e i valori dei command per ogni benchmark
 
-var arrayTimeTestCase = [];
+var arrayTimeTestCase = [];//array in cui sono presenti i tempi per ogni testcase
 var arrayOfObjectTimeTestCase = [];
 
 var arrayDeiValoriDiAvgPerSingoloTestcase = [];
 
-var allBenchmarks;
-var allCommands;
-var allTestcases;
-var cmd_id_array = []; //array con gli id da usare nel codice
+var allBenchmarks; // tutti gli elementi benchmark presi dal file XML
+var allCommands;    // tutti gli elementi command presi dal file XML
+var allTestcases;   // tutti gli elementi testcase presi dal file XML
+var cmd_id_array = []; //array con gli id dei command da usare nel codice
 var regex = /[\_ | \W]/gi;
 
 /* Set the width of the side navigation to 250px */
@@ -27,11 +27,11 @@ function openNav() {
 /* Set the width of the side navigation to 0 */
 function closeNav() {
     document.getElementById("mySidenav").style.width = "0";
-} 
+}
 
-jQuery(document).ready(function(){
+
+jQuery(document).ready(function(){ // start jquery code
 	$("#openSidenav").on('click',openNav);
-
 
     var filenameSelected = sessionStorage.getItem("filename");
     $.ajax({ 
@@ -140,168 +140,166 @@ jQuery(document).ready(function(){
                     cmdTestcaseTime.name = currentCmd;
                     var arrayOfLaunchNumForBench = [];
                     allBenchmarks.each(function(benchmark_i){
-                        var idCurrentBenchmark =$(this).attr("id");
-                        var bench = {
-                            idBench:idCurrentBenchmark,
-                            //arrayOfAvgTime:[]
-                            command:{
-                                idCmd:currentCmd,
-                                solution:0,
-                                avgtime:0,
-                                avgmem:0,
-                                sumtime:0,
+                            var idCurrentBenchmark =$(this).attr("id");
+                            var bench = {
+                                idBench:idCurrentBenchmark,
+                                //arrayOfAvgTime:[]
+                                command:{
+                                    idCmd:currentCmd,
+                                    solution:0,
+                                    avgtime:0,
+                                    avgmem:0,
+                                    sumtime:0,
+                                }
+                            };
+                            // function testcaseData ; elaboro i dati dei testcase per ogni benchmark passato
+                		    testcasesData( $(this), command_element, index,allTestcaseValues );
+
+                    		solution_array.push(solution);
+                    		notCompleted_array.push(notCompleted);
+    	                	
+    	                	avgMem = avgMem / launchNumForBench;
+    	                	avgTime = avgTime / launchNumForBench;
+
+    	                	avgMem = avgMem.toFixed(2);
+    	                	avgTime = avgTime.toFixed(2);
+    	                	sumTime = sumTime.toFixed(2);
+    	                	sumTime = parseFloat(sumTime);
+	                	
+                    		$("#avgmem_cmd_"+index+"_bench_"+benchmark_i).replaceWith("<td class='"+currentCmd+" last_col avgmem cmd_"+index+"' id='avgmem_cmd_"+index+"_bench_"+benchmark_i+"'>"+avgMem+"</td>"); // potrebbe servire la riaggiunta dell'id
+                    		$("#sol_cmd_"+index+"_bench_"+benchmark_i).replaceWith("<td class='"+currentCmd+" first_col solution cmd_"+index+"' id='sol_cmd_"+index+"_bench_"+benchmark_i+"'>"+solution+"</td>");
+                    		$("#avgtime_cmd_"+index+"_bench_"+benchmark_i).replaceWith("<td class='"+currentCmd+" avgtime cmd_"+index+"' id='avgtime_cmd_"+index+"_bench_"+benchmark_i+"'>"+avgTime+"</td>");
+                    		$("#sumtime_cmd_"+index+"_bench_"+benchmark_i).replaceWith("<td class='"+currentCmd+" sumtime cmd_"+index+"' id='sumtime_cmd_"+index+"_bench_"+benchmark_i+"'>"+sumTime+"</td>");
+
+                            bench.command.solution = parseInt(solution);
+                            bench.command.avgtime = parseFloat(avgTime);
+                            bench.command.avgmem = parseFloat(avgMem);
+                            bench.command.sumtime = parseFloat(sumTime);
+
+                            arrayOfBenchmarkObject.push(bench);
+
+                            totalSolution += solution;
+                            totalSumTime += sumTime;
+                            arrayOfLaunchNumForBench.push(launchNumForBench);
+
+                            var launchForBenchObj = { // oggetto in cui abbiamo il nome del command e l'array del numero dei lanci per ogni benchmark per quel command
+                                cmdName : command_element,
+                                cmdIndex : index,
+                                launchForBenchValues : arrayOfLaunchNumForBench 
                             }
-                        };
-
-                		testcasesData( $(this), command_element, index,allTestcaseValues );
-
-                		solution_array.push(solution);
-                		notCompleted_array.push(notCompleted);
-	                	
-	                	avgMem = avgMem / launchNumForBench;
-	                	avgTime = avgTime / launchNumForBench;
-
-	                	avgMem = avgMem.toFixed(2);
-	                	avgTime = avgTime.toFixed(2);
-	                	sumTime = sumTime.toFixed(2);
-	                	sumTime = parseFloat(sumTime);
-	                	
-                		$("#avgmem_cmd_"+index+"_bench_"+benchmark_i).replaceWith("<td class='"+currentCmd+" last_col avgmem cmd_"+index+"' id='avgmem_cmd_"+index+"_bench_"+benchmark_i+"'>"+avgMem+"</td>"); // potrebbe servire la riaggiunta dell'id
-                		$("#sol_cmd_"+index+"_bench_"+benchmark_i).replaceWith("<td class='"+currentCmd+" first_col solution cmd_"+index+"' id='sol_cmd_"+index+"_bench_"+benchmark_i+"'>"+solution+"</td>");
-                		$("#avgtime_cmd_"+index+"_bench_"+benchmark_i).replaceWith("<td class='"+currentCmd+" avgtime cmd_"+index+"' id='avgtime_cmd_"+index+"_bench_"+benchmark_i+"'>"+avgTime+"</td>");
-                		$("#sumtime_cmd_"+index+"_bench_"+benchmark_i).replaceWith("<td class='"+currentCmd+" sumtime cmd_"+index+"' id='sumtime_cmd_"+index+"_bench_"+benchmark_i+"'>"+sumTime+"</td>");
-
-                        bench.command.solution = parseInt(solution);
-                        bench.command.avgtime = parseFloat(avgTime);
-                        bench.command.avgmem = parseFloat(avgMem);
-                        bench.command.sumtime = parseFloat(sumTime);
-
-                        arrayOfBenchmarkObject.push(bench);
-
-                        totalSolution += solution;
-                        totalSumTime += sumTime;
-                        arrayOfLaunchNumForBench.push(launchNumForBench);
-
-                        var launchForBenchObj = { // oggetto in cui abbiamo il nome del command e l'array del numero dei lanci per ogni benchmark per quel command
-                            cmdName : command_element,
-                            cmdIndex : index,
-                            launchForBenchValues : arrayOfLaunchNumForBench 
-                        }
-                        sessionStorage.setItem("launchForBenchObj_"+index,JSON.stringify(launchForBenchObj));
-                        avgTime = parseFloat(avgTime); // se non lo converto avgTime viene trattato come stringa
-                        //bench[currentCmd]=avgTime;  ????????
-                        launchNumForBench = 0;
-                        solution = 0;
-                        notCompleted = 0;
-                        avgMem = 0;
-                        avgTime = 0;
-                        sumTime = 0;
-                        
+                            sessionStorage.setItem("launchForBenchObj_"+index,JSON.stringify(launchForBenchObj));
+                            avgTime = parseFloat(avgTime); // se non lo converto avgTime viene trattato come stringa
+                            //bench[currentCmd]=avgTime;  ????????
+                            launchNumForBench = 0;
+                            solution = 0;
+                            notCompleted = 0;
+                            avgMem = 0;
+                            avgTime = 0;
+                            sumTime = 0;
                     });//end foreach benchmark
-                        //console.log(cmdWithAvgTime.data);
-                        cmdTestcaseTime.data = arrayTimeTestCase;
-                        arrayOfObjectTimeTestCase.push(cmdTestcaseTime);
-                        
-                        totalAvgMem /= launchNumForCmd;
-	                	totalAvgTime /= launchNumForCmd;
+                    //console.log(cmdWithAvgTime.data);
+                    cmdTestcaseTime.data = arrayTimeTestCase;
+                    arrayOfObjectTimeTestCase.push(cmdTestcaseTime);
+                    
+                    totalAvgMem /= launchNumForCmd;
+                    totalAvgTime /= launchNumForCmd;
 
-	                	totalAvgTime = roundTo(totalAvgTime,2);
-	                	totalSumTime = roundTo(totalSumTime,2); 
-	                	totalAvgMem = roundTo(totalAvgMem,2);
+                    totalAvgTime = roundTo(totalAvgTime,2);
+                    totalSumTime = roundTo(totalSumTime,2); 
+                    totalAvgMem = roundTo(totalAvgMem,2);
 
-                        var tmpTotals = [];
-                        var totalObj = { // ci serve il numero di lanci per il benchmark
-                            totalOf : "",
-                            index : index,
-                            totals : [],
-                        };
-                       
-                        tmpTotals.push(totalSolution);
-                        tmpTotals.push(totalAvgTime);
-                        tmpTotals.push(totalSumTime);
-                        tmpTotals.push(totalAvgMem);
-                        totalObj.totalOf = currentCmd;
-                        totalObj.totals = tmpTotals;
-                        arrayOfTotalObj.push(totalObj);
+                    var tmpTotals = [];
+                    var totalObj = { // ci serve il numero di lanci per il benchmark
+                        totalOf : "",
+                        index : index,
+                        totals : [],
+                    };
 
-                        sessionStorage.setItem("LaunchForCmd_"+index, launchNumForCmd);
-                        sessionStorage.setItem("arrayOfTotalObj",JSON.stringify(arrayOfTotalObj));
+                    tmpTotals.push(totalSolution);
+                    tmpTotals.push(totalAvgTime);
+                    tmpTotals.push(totalSumTime);
+                    tmpTotals.push(totalAvgMem);
+                    totalObj.totalOf = currentCmd;
+                    totalObj.totals = tmpTotals;
+                    arrayOfTotalObj.push(totalObj);
 
-	                	launchNumForCmd = 0;
+                    sessionStorage.setItem("LaunchForCmd_"+index, launchNumForCmd);
+                    sessionStorage.setItem("arrayOfTotalObj",JSON.stringify(arrayOfTotalObj));
 
-                        //Inserisce nella tabella grafica i totali
-                        updateTotalInTable(currentCmd,index,totalSolution,totalAvgTime,totalSumTime,totalAvgMem);
-	                	
-                        //azzera variabili per i totali
-                        totalSolution = 0;
-	                	totalAvgMem = 0;
-	                	totalAvgTime = 0;
-	                	totalSumTime = 0;
-                        command_element = command_element.replace(regex,'-');
-	                	sessionStorage.setItem(command_element,solution_array);
+                    launchNumForCmd = 0;
 
-	                	var notCompObj = {
-	                		name:command_element,
-	                		data:notCompleted_array
-	                	};
-	                	notCompletedObj_array.push(notCompObj);
+                    //Inserisce nella tabella grafica i totali
+                    updateTotalInTable(currentCmd,index,totalSolution,totalAvgTime,totalSumTime,totalAvgMem);
 
-	                	solution_array = [];
-	                	notCompleted_array = [];
-                        
-                        arrayDeiValoriDiAvgPerSingoloTestcase.push(allTestcaseValues);
-                        //console.log(allTestcaseValues);
+                    //azzera variabili per i totali
+                    totalSolution = 0;
+                    totalAvgMem = 0;
+                    totalAvgTime = 0;
+                    totalSumTime = 0;
+                    command_element = command_element.replace(regex,'-');
+                    sessionStorage.setItem(command_element,solution_array);
+
+                    var notCompObj = {
+                     name:command_element,
+                     data:notCompleted_array
+                    };
+                    notCompletedObj_array.push(notCompObj);
+
+                    solution_array = [];
+                    notCompleted_array = [];
+
+                    arrayDeiValoriDiAvgPerSingoloTestcase.push(allTestcaseValues);
                 });//end foreach cmd_id
-    sessionStorage.setItem("notcompleted", JSON.stringify(notCompletedObj_array)); // serve per la creazione dei grafici nel "sumTable.js"
-    var arrayOfBenchAndAvg = [];
-    //console.log(arrayOfObjectTimeTestCase);
-    //console.log(arrayDeiValoriDiAvgPerSingoloTestcase);    
+    
+                sessionStorage.setItem("notcompleted", JSON.stringify(notCompletedObj_array)); // serve per la creazione dei grafici nel "sumTable.js"
+                var arrayOfBenchAndAvg = [];
 
-    console.log(arrayOfBenchmarkObject);
+                console.log(arrayOfBenchmarkObject);
 
-    function testcasesData(thisBenchmark,command_element,index, allTestcaseValues){ // index è index del cmd
-        var testcases=thisBenchmark.find("testcase");
-        
-        testcases.each(function(testcase_j){
-         var objBenchTcasetime = {
-            name:thisBenchmark.prop("id"),
-        };
-            var tcaseTime=0;
-            var this_commands = $(this).find("command");
-            this_commands.each(function(command_k){
-                var idToCompare = this_commands[command_k].id.replace(regex, '-');
-                if( cmd_id_array[index] === idToCompare ){
-                    launchNumForBench++;
-                    launchNumForCmd++;
-                    var currentPyrunlim = $(this).find("pyrunlim");
-                    currentPyrunlim.each(function(py_l){
-                        var currentStats = $(this).find("stats");
-                        currentStats.each(function(stats_h){
-                            var mem = parseFloat( $(this).attr("memory") ) ;
-                            var time = parseFloat( $(this).attr("time") ) ;
-                            avgMem += mem;
-                            avgTime +=time;
-                            sumTime += time;
-                            totalAvgMem += mem;//somma di tutte le medie
-                            totalAvgTime += time; // somma di tutte le medie
-                            var status = $(this).attr("status");
-                            if(status === "complete"){
-                                solution++;
-                                tcaseTime = time; // tempo del testcase
-                                objBenchTcasetime.data = tcaseTime;    
+                //function che crea i dati dei testcase 
+                function testcasesData(thisBenchmark,command_element,index, allTestcaseValues){ // index è index del cmd
+                    var testcases=thisBenchmark.find("testcase");
+                    
+                    testcases.each(function(testcase_j){
+                        var objBenchTcasetime = {
+                            name:thisBenchmark.prop("id"),
+                        };
+                        var tcaseTime=0;
+                        var this_commands = $(this).find("command");
+                        this_commands.each(function(command_k){
+                            var idToCompare = this_commands[command_k].id.replace(regex, '-');
+                            if( cmd_id_array[index] === idToCompare ){
+                                launchNumForBench++;
+                                launchNumForCmd++;
+                                var currentPyrunlim = $(this).find("pyrunlim");
+                                currentPyrunlim.each(function(py_l){
+                                    var currentStats = $(this).find("stats");
+                                    currentStats.each(function(stats_h){
+                                        var mem = parseFloat( $(this).attr("memory") ) ;
+                                        var time = parseFloat( $(this).attr("time") ) ;
+                                        avgMem += mem;
+                                        avgTime +=time;
+                                        sumTime += time;
+                                        totalAvgMem += mem;//somma di tutte le medie
+                                        totalAvgTime += time; // somma di tutte le medie
+                                        var status = $(this).attr("status");
+                                        if(status === "complete"){
+                                            solution++;
+                                            tcaseTime = time; // tempo del testcase
+                                            objBenchTcasetime.data = tcaseTime;    
 
-                                arrayTimeTestCase.push(tcaseTime);
-                                allTestcaseValues.push(objBenchTcasetime);
-                            }else{
-                                notCompleted++;
+                                            arrayTimeTestCase.push(tcaseTime);
+                                            allTestcaseValues.push(objBenchTcasetime);
+                                        }else{
+                                            notCompleted++;
+                                        }
+                                    }); 
+                                });
                             }
-                        }); 
-                    });
-                }
-            });
-        });
-        
-    }//end testcases data
+                        });//end foreach command
+                    }); //end foreach testcase
+                }//end function testcases data
+                
 
             // Events
             var numberCheck_type = $(".check_type").length;
@@ -542,9 +540,9 @@ jQuery(document).ready(function(){
                     console.log(tmpBenchObject);
                     sessionStorage.setItem("selectedBenchmark",JSON.stringify(tmpBenchObject));
                 });// end go to benchpage on click
+                
                 //end events
-
-            $("#stacked").click(); //quando si avvia la pagina la tabella visualizzata sarà la stacked bar.
+                $("#stacked").click(); //quando si avvia la pagina la tabella visualizzata sarà la stacked bar.
 
         },//end success
         error:function(){

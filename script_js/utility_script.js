@@ -1,13 +1,15 @@
-	function controlCheckedCmd(checkedCmdForScatter){//controlla i check per il grafico scatter
-			var inputCheckCmd = $("#compareCmdGraph").children("input");
-			inputCheckCmd.each(function(inputCheck_index,inputCheck){
-				var currentIdCmdChecked = $(this).prop("id");
-				if( $(this).prop("checked") ){
-					var idCmdChecked = currentIdCmdChecked.split("_"); 
-					checkedCmdForScatter.push(idCmdChecked[1]);
-				}
-			});	
-		}
+
+//controlla i check dei command per il grafico scatter
+function controlCheckedCmd(checkedCmdForScatter){
+		var inputCheckCmd = $("#compareCmdGraph").children("input");
+		inputCheckCmd.each(function(inputCheck_index,inputCheck){
+			var currentIdCmdChecked = $(this).prop("id");
+			if( $(this).prop("checked") ){
+				var idCmdChecked = currentIdCmdChecked.split("_"); 
+				checkedCmdForScatter.push(idCmdChecked[1]);
+			}
+		});	
+}
 
 //prendo i benchmark e i command attivi e elaboro i dati time per ogni testcase.
 	function elaborateDataForScatterChart( checkedCmdForScatter ){ // scatter chart of home.html
@@ -16,51 +18,51 @@
 		
 			allBenchmarks.each(function(bench_i,benchObj){
 				var benchmarkId = $(this).prop("id");
-				if( sessionStorage.getItem(benchmarkId) == "true"){
+				if( sessionStorage.getItem(benchmarkId) == "true"){ // il benchmark è attivo
 
-				var arrayOfDataTimeTemp = [];
-					benchmarkObj = {
-						name:benchmarkId,//nome del testcase
-						data:[] // conterrà i due valori time dei due command selezionati
-					}
-				var testcases = $(this).find("testcase");
-				testcases.each(function(testcase_j,testcaseObj){
-					var currentTestcaseId = $(this).prop("id");
-					var arrayForTestCase = [];
+					var arrayOfDataTimeTemp = [];
+						benchmarkObj = {
+							name:benchmarkId,//nome del testcase
+							data:[] // conterrà i due valori time dei due command selezionati
+						}
+					var testcases = $(this).find("testcase");
+					testcases.each(function(testcase_j,testcaseObj){
+						var currentTestcaseId = $(this).prop("id");
+						var arrayForTestCase = [];
 
-					var commands = $(this).find("command");
-					checkedCmdForScatter.forEach(function(cmdId,cmdIdIndex){
-						commands.each(function(cmd_k,cmdObj){
-							var currentCmdId = $(this).prop("id"); 
-							currentCmdId = currentCmdId.replace(regex,'-');
-							if(cmdId == currentCmdId){
-								var currentPyrunlim = $(this).find("pyrunlim");
-								currentPyrunlim.each(function(py_l){
-									var currentStats = $(this).find("stats");
-									currentStats.each(function(stats_h){
-										var status = $(this).attr("status");
-										if(status === "complete"){
-											var time = parseFloat( $(this).attr("time") ) ;
-											arrayForTestCase.push(time);
-									
-										}
+						var commands = $(this).find("command");
+						checkedCmdForScatter.forEach(function(cmdId,cmdIdIndex){
+							commands.each(function(cmd_k,cmdObj){
+								var currentCmdId = $(this).prop("id"); 
+								currentCmdId = currentCmdId.replace(regex,'-');
+								if(cmdId == currentCmdId){
+									var currentPyrunlim = $(this).find("pyrunlim");
+									currentPyrunlim.each(function(py_l){
+										var currentStats = $(this).find("stats");
+										currentStats.each(function(stats_h){
+											var status = $(this).attr("status");
+											if(status === "complete"){
+												var time = parseFloat( $(this).attr("time") ) ;
+												arrayForTestCase.push(time);
+										
+											}
+										});
 									});
-								});
-							}
+								}
+							});
 						});
+						arrayOfDataTimeTemp.push(arrayForTestCase);
 					});
-					arrayOfDataTimeTemp.push(arrayForTestCase);
-				});
-				//console.log(arrayOfDataTimeTemp);
-				benchmarkObj.data=arrayOfDataTimeTemp;
-				dataForScatterChart.push(benchmarkObj);
-			}
-		});
+					//console.log(arrayOfDataTimeTemp);
+					benchmarkObj.data=arrayOfDataTimeTemp;
+					dataForScatterChart.push(benchmarkObj);
+				}
+			});
 		console.log(dataForScatterChart);
 	};//end elaborate data for scatter.
 
 
-	function createMainTable(cmd,index,cmdRow,typeRow) {
+	function createMainTable(cmd,index,cmdRow,typeRow) { // scheletro della tabella di home.html
 		var currentCmd = cmd;
 		$("#"+cmdRow).append(
 			"<th class='th_cmd "+currentCmd+"' colspan='4' id='"+cmd+"'>"+cmdID[cmd]+"</th>"
@@ -85,7 +87,7 @@
      //+++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-    function updateTable(valuesOfTr,clickedClass,sign){ // update alla rimozione di righe(benchmark)
+    function updateTable(valuesOfTr,clickedClass,sign){ // update alla rimozione/aggiunta di righe(benchmark) nella tabella in home.html
     	var splittedClass = clickedClass.split(" ");
         var indexOfBenchClicked = splittedClass[0].split("_"); // solo indice del benchmark cliccato che servirà a farci avere il numero di volte che quel benchmark è stato lanciato
         indexOfBenchClicked = indexOfBenchClicked[1];
@@ -166,7 +168,7 @@
     }//End recalc data total
 
 
-    function updateTotalInTable( nospaceCmd,index,totalSolution,totalAvgTime,totalSumTime,totalAvgMem ){
+    function updateTotalInTable( nospaceCmd,index,totalSolution,totalAvgTime,totalSumTime,totalAvgMem ){ // update della tabella nella grafica dei totali
         $("#total_row").append("<td class='"+nospaceCmd+" solution cmd_"+index+"'><b>"+totalSolution+"</b></td>");
         $("#total_row").append("<td class='"+nospaceCmd+" avgtime cmd_"+index+"'><b>"+totalAvgTime+"</b></td>");
         $("#total_row").append("<td class='"+nospaceCmd+" sumtime cmd_"+index+"'><b>"+totalSumTime+"</b></td>");
@@ -215,6 +217,7 @@
 			allCmdCheck.push(command);	//allCmdCheck mi dice i command attivi e non attivi
 		});
 	}
+	
 jQuery(document).ready(function(){
 
 	

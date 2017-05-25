@@ -1,10 +1,27 @@
 var allCmdCheck = [];
 var dataForLineChart = [];
 var dataForScatterChart = [];
-
+var DIM_SCATTER = 700;
 
 jQuery(document).ready(function(){
 	var bench_id_arr;
+	$(".scatterZoom").on('click',function(){
+		var id = $(this).prop("id");
+		if( id == "bigger"){
+			DIM_SCATTER += 100;
+		}
+
+		if( id == "smaller"){
+			DIM_SCATTER -= 100;
+		}
+		var l = location.href;
+		var currentLocation = l.substr(l.lastIndexOf("/")+1).split(/[?#]/)[0];
+		if(currentLocation == "home.html"){
+			$("#scatter").click();
+		}else if(currentLocation == "benchmark_page.html"){
+			$("#scatter_tcase").click();
+		}
+	});
 
 	$(".graphicbtn").on("click",function(){ // grafici homepage
 		var clicked_id = $(this).attr("id");
@@ -52,8 +69,8 @@ jQuery(document).ready(function(){
 					data: []
 				};
 
-				if(sessionStorage[elem]){ // dall' id del command costruisco il json che servira per il grafico
-					obj.name = elem;
+				if(sessionStorage[elem]){ // dall' id(elem) del command costruisco gli oggetti che serviranno per il grafico stacked con i completed test
+					obj.name = elem;	
 
 					tmpDataString = sessionStorage.getItem(elem);
 					tmpDataArrayString = tmpDataString.split(",");
@@ -69,7 +86,7 @@ jQuery(document).ready(function(){
 				}else{
 					console.log("elemento command non trovato nella sessionStorage:"+elem);
 				}
-				cmdObjArr.push(obj);
+				cmdObjArr.push(obj); // cmdObjArr è l'array di oggetti che passo al grafico stacked
 				
 			});
 			bench_only_id_arr = [];
@@ -83,19 +100,11 @@ jQuery(document).ready(function(){
 			//grafico line su avg time ordinati
 			if(clicked_id ==="line"){
 				elaborateDataForLineChart();
-
+				$("#graphic_1").empty();
+				$("#graphic_2").empty();
+				$("#graphic_scatter").empty();
+				$("#graphic_1").append("<div class='col_1'></div><div class='col_10'><div id='container_1' style='width:100%; height:100%;'></div></div><div class='col_1'></div>");
 				lineChart(dataForLineChart,"container_1"); // creazione grafico per test completed
-				$("#container_scatter").hide();
-				$("#graphic_2").hide();
-				$("#graphic_1").show();
-			}
-
-			//grafico riassuntivo sui test completi e non completi
-			if(clicked_id==="stacked"){
-				stackedChart(cmdObjArr,"container_1",bench_only_id_arr,"completed");
-				$("#container_scatter").hide();
-				$("#graphic_1").show();	
-				$("#graphic_2").show();	
 			}
 
 
@@ -103,13 +112,14 @@ jQuery(document).ready(function(){
 			var checkedCmdForScatter = [];
 			if(clicked_id==="scatter"){
 				controlCheckedCmd(checkedCmdForScatter); // crea l'array con gli id dei command checked
-				if(checkedCmdForScatter.length > 1){
-					 // bisogna controllare che i checked siano due
+				if(checkedCmdForScatter.length > 1){ // bisogna controllare che i checked siano due
+					$("#graphic_1").empty();
+            		$("#graphic_2").empty();
+            		$("#graphic_scatter").empty();
+            		$("#graphic_scatter").append("<div class='col_3'></div><div class='col_6'><div id='container_scatter' style='width:100%; height:400px;''></div></div><div class='col_3></div>");
 					elaborateDataForScatterChart( checkedCmdForScatter ); // function in utility_script
 					scatterChart(dataForScatterChart,"container_scatter");
-					$("#graphic_1").hide();
-					$("#graphic_2").hide();
-					$("#container_scatter").show();
+					
 				}else{
 					alert("seleziona due cmd");
 				}
@@ -122,7 +132,7 @@ jQuery(document).ready(function(){
 	
 
 		//creazione dati e grafici per i test non completi
-		if(sessionStorage["notcompleted"]){ // in session storage deve esserci l'elemento notcompleted
+		if(sessionStorage["notcompleted"]){ // in session storage deve esserci l'elemento notcompleted per creare il grafico stacked con i test not completed
 			var notCompleted_all = JSON.parse (sessionStorage.getItem("notcompleted")) ;
 
 			var newNotCompletedArray =[];
@@ -165,6 +175,12 @@ jQuery(document).ready(function(){
             
 
             if(clicked_id === "stacked"){
+            	$("#graphic_1").empty();
+            	$("#graphic_2").empty();
+            	$("#graphic_scatter").empty();
+            	$("#graphic_1").append("<div class='col_1'></div><div class='col_10'><div id='container_1' style='width:100%; height:400px;'></div></div><div class='col_1'></div>");
+            	$("#graphic_2").append("<div class='col_1'></div><div class='col_10'><div id='container_2' style='width:100%; height:400px;'></div></div><div class='col_1'></div>");
+            	stackedChart(cmdObjArr,"container_1",bench_only_id_arr,"completed");
             	stackedChart(cmdObjToGraphicsArray,"container_2",bench_only_id_arr,"notcompleted");
             }
 
@@ -173,7 +189,7 @@ jQuery(document).ready(function(){
         	alert("Non è possibile caricare i test Non Completati!");
         }
 
-	}); // end on click 
+	}); // end on click grafic button
 
 										//line chart of home.html
 	function elaborateDataForLineChart(){ // riempe dataLineForChart per poi essere passato alla funzione che Line
@@ -203,7 +219,7 @@ jQuery(document).ready(function(){
 
 }); // end jquery
 
-
+//function per i grafici
 function lineChart(param,appendTo){
 	console.log(param);
 	var title;
@@ -312,8 +328,8 @@ function scatterChart(param,appendTo){
 				},
 				type: 'scatter',
 				zoomType: 'xy',
-				width: 700,
-				height: 700
+				width: DIM_SCATTER,
+				height: DIM_SCATTER
 			},
 			legend:{
 				enabled:true
