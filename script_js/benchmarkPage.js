@@ -42,16 +42,15 @@ jQuery(document).ready(function(){
         "<th class='memory "+cmd+" cmd"+index+" last_col' id='th_"+cmd+"_avgmem'>MEMORY </th>"
       );
 
-        var cmdObjToLine = {
+        var cmdObjToLine = {  //creo un oggetto per ogni command; i dati vengono inseriti a riga 90
           name:originalCmdId[cmd],
           data:[],
           active:true
         };
 
         arrayForLineChart.push(cmdObjToLine);
-        
-   });//end 
-
+  });//end crea tabella dei testcase
+    console.log(arrayForLineChart);
     arrayOfTestcases = selectedBenchmarkObject.testcaseList; // tutti i testcase del benchmark selezionato
     var solutionPerTestcase = 0;
     var numberOfTestcaseExecution = 0;
@@ -101,14 +100,16 @@ jQuery(document).ready(function(){
           $("#memory_cmd"+index_j+"_tcase"+index_i).html(cmdMem);
         });
     });// end foreach testcase
+
+    console.log(arrayForLineChart);
     avgTimeOfTestcase /= numberOfTestcaseExecution; // dati generali di tutto il benchmark
     avgMemOfTestcase /= numberOfTestcaseExecution;
     avgMemOfTestcase = avgMemOfTestcase.toFixed(2);
     avgTimeOfTestcase = avgTimeOfTestcase.toFixed(2);
-    selectedBenchmarkObject["avgmem"] = parseFloat(avgMemOfTestcase);
+    selectedBenchmarkObject["avgmem"] = parseFloat(avgMemOfTestcase); // avg mem del benchmark
     selectedBenchmarkObject["avgtime"] = parseFloat(avgTimeOfTestcase);
 
-
+    summary();
 
     //events
     $(".check_cmnd_benchPage").on('click',function(){
@@ -151,6 +152,8 @@ jQuery(document).ready(function(){
                         $(".time").hide();
                     }
       }
+
+      $("#stacked_tcase").click();
     });//end check command
 
     $(".check_type_benchPage").on('click',function(){
@@ -214,51 +217,19 @@ jQuery(document).ready(function(){
     });
                 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-  //evento per gauge
-  $("#summary").on('click',function(){
+
+   function summary(){ // valori a inizio pagina
     var totalSol = selectedBenchmarkObject.totalsolution;
     var totalSumTime = selectedBenchmarkObject.totalsumtime ;
     var avgTime = selectedBenchmarkObject.avgtime;
     var avgMem = selectedBenchmarkObject.avgmem;
+    
+    $("#pCompTest").append(totalSol);
+    $("#pTotTime").append(totalSumTime);
+    $("#pAvgTime").append(avgTime);
+    $("#pAvgMem").append(avgMem);
+  }
 
-
-    drawChart_gauge(totalSol,"solution");
-    drawChart_gauge(totalSumTime,"sumtime");
-    drawChart_gauge(avgTime,"avgtime");
-    drawChart_gauge(avgMem,"avgmemory");
-  });
-
-	function drawChart_gauge(value,type) {
-
-    var label = "";
-    if(type == "solution"){
-      label = "Solution";
-    }else if(type == "sumtime"){
-      label = "Total Time";  
-    }else if(type == "avgtime"){
-      label = "Average Time";
-    }else if(type =="avgmemory"){
-      label = "Average Memory";
-    }
-
-    var data = google.visualization.arrayToDataTable([
-      ['Label', 'Value'],
-      [label, value],
-    ]);
-
-    var settedMax = Math.round ( value + (value / 3) );
-
-    var options = {
-      width: 600, height: 220,
-          yellowFrom :(value/2), yellowTo:value,
-          redFrom : value , redTo: settedMax,
-          minorTicks: 10,
-          max:settedMax
-    };
-
-        var chart = new google.visualization.Gauge(document.getElementById('summary_gauge_'+type));
-        chart.draw(data, options);
-  }//end drawchart
 
   $(".tcase_graphics").on('click',function(){
     var clickedId = $(this).prop("id");
@@ -333,41 +304,45 @@ jQuery(document).ready(function(){
     console.log(arrayForScatterTestcaseChart);
   }
 
-  function elaborateDataForTestcaseStackedChart(arrayForStackedChart,arrayForStackedChartNotCompleted,arrayOfTestcases){
+function elaborateDataForTestcaseStackedChart(arrayForStackedChart,arrayForStackedChartNotCompleted,arrayOfTestcases){
     cmdIdArray.forEach(function(cmdId,index_k){
-      var solution = 0;
-      var notCompleted = 0;
-      
-      var cmdWithSolution = {
-        name : originalCmdId[cmdId],
-        data:[]
-      };
+        if(originalCmdId[cmdId] == arrayForLineChart[index_k].name && arrayForLineChart[index_k].active==true){ // controllo se il cmd è attivo dall'arrayLine
+            console.log("ENTRO:"+originalCmdId[cmdId]+" true" );
+            var solution = 0;
+            var notCompleted = 0;
+            
+            var cmdWithSolution = {
+              name : originalCmdId[cmdId],
+              data:[]
+            };
 
-      var cmdNotCompleted = {
-        name : originalCmdId[cmdId],
-        data:[]
-      };
+            var cmdNotCompleted = {
+              name : originalCmdId[cmdId],
+              data:[]
+            };
 
-      arrayOfTestcases.forEach(function(tcaseElem,index_i){
-        var cmdOfThisTcase = tcaseElem.commandList;
-        cmdOfThisTcase.forEach(function(cmdElem,index_j){
-          //console.log("Qui: "+originalCmdId[cmdId]+" ======= "+cmdElem.cmdid);
-          if(originalCmdId[cmdId] == cmdElem.cmdid){
-            if(cmdElem.cmdstatus == "complete"){
-              solution++;
-            }else{
-              notCompleted++;
-            }
-          }
-        });
-      });
-      cmdWithSolution.data.push(solution);
-      cmdNotCompleted.data.push(notCompleted);
-      arrayForStackedChart.push(cmdWithSolution);
-      arrayForStackedChartNotCompleted.push(cmdNotCompleted);
+            arrayOfTestcases.forEach(function(tcaseElem,index_i){
+              var cmdOfThisTcase = tcaseElem.commandList;
+              cmdOfThisTcase.forEach(function(cmdElem,index_j){
+                //console.log("Qui: "+originalCmdId[cmdId]+" ======= "+cmdElem.cmdid);
+                if(originalCmdId[cmdId] == cmdElem.cmdid){
+                  if(cmdElem.cmdstatus == "complete"){
+                    solution++;
+                  }else{
+                    notCompleted++;
+                  }
+                }
+              });
+            });
+            cmdWithSolution.data.push(solution);
+            cmdNotCompleted.data.push(notCompleted);
+            arrayForStackedChart.push(cmdWithSolution);
+            arrayForStackedChartNotCompleted.push(cmdNotCompleted);
+        }
     });
   }
 
+  $("#stacked_tcase").click();
 });
 
 

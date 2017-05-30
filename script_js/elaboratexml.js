@@ -19,19 +19,7 @@ var allTestcases;   // tutti gli elementi testcase presi dal file XML
 var cmd_id_array = []; //array con gli id dei command da usare nel codice
 var regex = /[\_ | \W]/gi;
 
-/* Set the width of the side navigation to 250px */
-function openNav() {
-    document.getElementById("mySidenav").style.width = "40%";
-}
-
-/* Set the width of the side navigation to 0 */
-function closeNav() {
-    document.getElementById("mySidenav").style.width = "0";
-}
-
-
 jQuery(document).ready(function(){ // start jquery code
-	$("#openSidenav").on('click',openNav);
 
     var filenameSelected = sessionStorage.getItem("filename");
     $.ajax({ 
@@ -88,7 +76,7 @@ jQuery(document).ready(function(){ // start jquery code
                        "</tr>");
 
                     $("#removedBench2").append("<div class='ui toggle checkbox'><input class='bench_"+benchIndex+" rem_bench' type='checkbox' name='public' checked ><label>"+benchmarkId_elem+"</label></div>");
-                    $("#benchList").append("<li><div class='ui toggle checkbox'><input class='bench_"+benchIndex+" rem_bench' type='checkbox' name='public' checked ><label class='listColour'>"+benchmarkId_elem+"</label></div></li>");
+                    //$("#benchList").append("<li><div class='ui toggle checkbox'><input class='bench_"+benchIndex+" rem_bench' type='checkbox' name='public' checked ><label class='listColour'>"+benchmarkId_elem+"</label></div></li>");
 
                     cmd_id_array.forEach(function(cmd,ind){
                       $("#bench_"+benchIndex).append("<td first_col' id='sol_cmd_"+ind+"_bench_"+benchIndex+"'></td>"+ 
@@ -403,7 +391,6 @@ jQuery(document).ready(function(){ // start jquery code
                 var clickedBenchId;
                 var numberOfBenchmark = $(".rem_bench").length;
                 $(".rem_bench").on('click',function(){
-
                     var clickedClass = $(this).attr("class");
                     clickedBenchId = $(this).next().html();
                     var classOfTrToRemove = clickedClass.split(" ");
@@ -436,7 +423,7 @@ jQuery(document).ready(function(){ // start jquery code
                         //devo sommare i valori che ripristino ai totali
                         updateTable(valuesOfTr,clickedClass,sign); // update table in utility
                     }
-                   
+                  
                     if(numberOfBenchmark == 0 ){
                         $("#main_table").hide();
                         $("#graphic_wrapper").hide();
