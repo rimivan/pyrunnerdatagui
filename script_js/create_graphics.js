@@ -221,6 +221,11 @@ jQuery(document).ready(function(){
 
 //function per i grafici
 function lineChart(param,appendTo){
+	var biggerScatterBtn = document.getElementById("bigger");
+	var smallerScatterBtn = document.getElementById("smaller");
+	biggerScatterBtn.classList.add("hide");
+	smallerScatterBtn.classList.add("hide");
+	
 	console.log(param);
 	var title;
 	title = "Line chart of Testcases Time!";
@@ -255,6 +260,11 @@ function lineChart(param,appendTo){
 
 
 function stackedChart(param,appendTo,categories,compOrNotComp){
+	var biggerScatterBtn = document.getElementById("bigger");
+	var smallerScatterBtn = document.getElementById("smaller");
+	biggerScatterBtn.classList.add("hide");
+	smallerScatterBtn.classList.add("hide");
+
 	console.log(param); // prima per i completed e poi per i not completed
 	var title;
 	if(compOrNotComp === "completed"){
@@ -300,6 +310,12 @@ function stackedChart(param,appendTo,categories,compOrNotComp){
 
 function scatterChart(param,appendTo){
 	console.log(param);
+	var biggerScatterBtn = document.getElementById("bigger");
+	var smallerScatterBtn = document.getElementById("smaller");
+	biggerScatterBtn.classList.remove("hide");
+	smallerScatterBtn.classList.remove("hide");
+	
+
 	var title = "Scatter chart of selected command Time";
 	$(function () {
 		Highcharts.chart(appendTo, {

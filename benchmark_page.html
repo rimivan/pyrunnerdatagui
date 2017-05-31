@@ -125,11 +125,20 @@
 		<div class="col_12">
 			<a name="graphics">Grafici</a>
 
-			<button class="tcase_graphics" id="line_tcase">Line chart</button>
-			<button class="tcase_graphics" id="stacked_tcase">Stacked </button>
-			<button class="tcase_graphics" id="scatter_tcase">Scatter</button>
-			<button class="small scatterZoom" id="bigger">Bigger</button>
-			<button class="small scatterZoom" id="smaller">Smaller</button>
+			<div>Graphics of Average Time:
+				<br><button class="tcase_graphics" id="line_tcase">Line chart</button>
+			</div>
+			<div>
+				Summary Graphics of completed and not completed test:
+				<br><button class="tcase_graphics" id="stacked_tcase">Stacked </button>
+			</div>
+			<div>Seleziona due command per confrontare i testcase:
+				<br><button class="tcase_graphics" id="scatter_tcase">Scatter</button>
+					<div>
+						<button class="small scatterZoom hide" id="bigger" style="background: url(img/zoomin.png)"></button>
+						<button class="small scatterZoom hide" id="smaller" style="background: url(img/zoomout.png)"></button>
+					</div>
+			</div>
 			<div id="compareCmdGraph">
 			</div>
 		</div>

@@ -102,16 +102,19 @@
 		</div>
 			<div class="col_8" id="graphics_type">
 				<div>Summary Graphics of completed and not completed test:
-					<br><button class="graphicbtn" type="" id="stacked"> Stacked </button>
+					<br><button class="graphicbtn fa fa-bar-chart" type="" id="stacked" > Stacked </button>
 				</div>
 				<div>Graphics of Average Time:
-					<br><button class="graphicbtn" type="" id="line"> Line </button>
+					<br><button class="graphicbtn fa fa-line-chart" type="" id="line"> Line </button>
 				</div>
 				<div>Seleziona due command per confrontare i testcase:
 					<br>
-					<button class="graphicbtn" type="" id="scatter"> Scatter </button>
-					<button class="small scatterZoom" id="bigger">Bigger</button>
-					<button class="small scatterZoom" id="smaller">Smaller</button>
+					<button class="graphicbtn fa fa-ellipsis-v" type="" id="scatter"> Scatter </button>
+						<div>
+							<button class=" scatterZoom hide" id="bigger" style="background: url(img/zoomin.png)"></button>
+							<button class=" scatterZoom hide" id="smaller" style="background: url(img/zoomout.png)"></button>
+						</div>
+					
 					<div id="compareCmdGraph">
 					</div>
 				</div>

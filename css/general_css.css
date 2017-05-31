@@ -73,3 +73,11 @@ td,th{
 	height: 500px;
 }
 
+.scatterZoom{
+	height: 32px;
+	width: 32px;
+	background-position: center !important;
+	border: none;
+}
+
+
