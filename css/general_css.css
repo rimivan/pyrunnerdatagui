@@ -1,30 +1,78 @@
+html{
+	padding: 3%;
+}
 
+.col_12{
+
+}
 h1,h2{
 	text-align: center;
+	font-style: italic;
+	font-family: monospace;
+	color:#1c2770;
+}
+
+#hGuide{
+	text-align: center;
+	font-style: italic;
+	font-family: monospace;
+	color:#0d47a1;
+}
+
+.pGuide{
+	font-family: monospace;
+	font-size: 120%;
+}
+
+.step{
+	color:#0d47a1;
+}
+
+#h1Upload{
+	font-size: 150% !important;
 }
 
 body{
 	text-align: center;
 }
 
+#commandListTitle{
+	font-style: italic;
+	font-size: 150%;
+}
+
+.step{
+	font:  italic bold 12px/30px Georgia, serif;
+}
+
+#removedBench{
+	font-style: italic;
+	font-size: 150%;
+}
 
 .hide{
     display: hide;
 }
 
 #div_cmnd{
-	border-style: solid; 
+	border-style: inset; 
+	border-width: 3px;
+	border-color: #303030;
 	padding: 2%;
 	overflow-x: auto;
 }
 
 .th_cmd{
-	border-style: solid;
+	border-style: outset;
+	border-color: #607D8B;
+	border-width: 3px;
+
 }
 
-.last_col{
+/*.last_col{
 	border-right: solid;
-}
+	border-color: #607D8B;
+}*/
 
 table { /* table dei cmd */
 	padding: 3%;
@@ -34,14 +82,21 @@ td,th{
 	text-align: right !important;
 }
 
+th{
+	font-style: italic;
+}
+
+
 #graphics_type{
-	border-style: solid;
+	/*border-style: solid;*/
 	overflow-x: auto;
 }
 
 
 #myWorkContent{
-	border-style: solid;
+	border-style: outset;
+	border-width: 3px;
+	border-color: #2979FF;
     width:80%;
     height:auto;
     overflow-x: auto;
@@ -55,13 +110,16 @@ td,th{
 }
 
 .bordered{
-	padding: 5px;
-	border-style: solid;
+	padding: 3px;
+	border-style: inset;
+	border-width: 3px;
+	border-color: #303030;
 }
 
 .removedBenchmarkDiv{
-	padding: 5px;
-	border-style: solid;
+	padding: 2px;
+	border-style: outset;
+	border-color: #2979FF;
 	overflow-x: auto;
 }
 
@@ -80,4 +138,13 @@ td,th{
 	border: none;
 }
 
+#divUpload{
+	padding: 3% 3% 3% 3%;
+	background-color: #f1f8e9;
+}
 
+
+.benchDetails{
+	font-style: italic;
+	font-size:120%;
+}

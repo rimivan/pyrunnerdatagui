@@ -36,14 +36,18 @@
 	<h1>Details of selected benchmark:</h1>
 	<h2 id="selBenchTitle"></h2>
 
-<a href="#graphics">vai ai grafici</a>
+	<div>
+		<p>Click here to go to the graphics!</p>
+		<a href="#graphics"><img src="img/gotographic.png" alt="Click here to go to the graphics!" ></a>
+	</div>
+
 	<div id="mySidenav" class="sidenav">
 		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
 		<ul class="listColour" id="tcaseList">Select/Deselect Benchmark</ul>
 	</div>
 
 
-	<div class="col_12">
+	<div class="col_12 benchDetails">
 		<div class="col_2"></div>
 
 			<div class="col_2">
@@ -75,7 +79,7 @@
 		</div>
 		
 		<div class="col_6" id="div_cmnd_benchPage">
-			<div>Commands List:</div>
+			<div id="commandListTitle">Commands List:</div>
 		</div>
 
 		<div class="col_3"><!-- Empty -->
@@ -109,9 +113,9 @@
 				<table class="ui definition table" id="testcase_table">
 					<thead id="thead_table">
 						<tr id="cmd_row_1">
-							<td></td>
+							<td> </td>
 						</tr>
-						<tr id="type_row_1"><td></td></tr>
+						<tr id="type_row_1"><td>TESTCASES:</td></tr>
 					</thead>
 					<tbody id="tbody_testcase">
 					</tbody>
@@ -123,17 +127,17 @@
 		<div class="col_1"></div>
 
 		<div class="col_12">
-			<a name="graphics">Grafici</a>
+			<a name="graphics" hide></a>
 
 			<div>Graphics of Average Time:
-				<br><button class="tcase_graphics" id="line_tcase">Line chart</button>
+				<br><button class="tcase_graphics fa fa-line-chart" id="line_tcase">Line chart</button>
 			</div>
 			<div>
 				Summary Graphics of completed and not completed test:
-				<br><button class="tcase_graphics" id="stacked_tcase">Stacked </button>
+				<br><button class="tcase_graphics fa fa-bar-chart" id="stacked_tcase">Stacked bar </button>
 			</div>
 			<div>Seleziona due command per confrontare i testcase:
-				<br><button class="tcase_graphics" id="scatter_tcase">Scatter</button>
+				<br><button class="tcase_graphics fa fa-ellipsis-v" id="scatter_tcase">Scatter chart</button>
 					<div>
 						<button class="small scatterZoom hide" id="bigger" style="background: url(img/zoomin.png)"></button>
 						<button class="small scatterZoom hide" id="smaller" style="background: url(img/zoomout.png)"></button>

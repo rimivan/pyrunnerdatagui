@@ -28,8 +28,7 @@
 
 </head>
 <body>
-	<h1>Navigate the output</h1>
-	<h2>TITLE</h2>
+	<h1>Explore the output data of <br> Pyrunlim and Pyrunner tool: </h1>
 
 	<!-- Al centro: lista command -->
 	<div class="col_12"> <!-- Command list -->
@@ -37,7 +36,7 @@
 		</div>
 		
 		<div class="col_6" id="div_cmnd">
-			<div>Commands List:</div>
+			<div id="commandListTitle">Commands List:</div>
 		</div>
 
 		<div class="col_3"><!-- Empty -->
@@ -83,7 +82,7 @@
 						<tr id="cmd_row">
 							<td></td>
 						</tr>
-						<tr id="type_row"><td></td></tr>
+						<tr id="type_row"><td>BENCHMARK:</td></tr>
 					</thead>
 					<tbody id="tbody">
 					</tbody>
@@ -102,14 +101,14 @@
 		</div>
 			<div class="col_8" id="graphics_type">
 				<div>Summary Graphics of completed and not completed test:
-					<br><button class="graphicbtn fa fa-bar-chart" type="" id="stacked" > Stacked </button>
+					<br><button class="graphicbtn fa fa-bar-chart" type="" id="stacked" > Stacked bar</button>
 				</div>
 				<div>Graphics of Average Time:
-					<br><button class="graphicbtn fa fa-line-chart" type="" id="line"> Line </button>
+					<br><button class="graphicbtn fa fa-line-chart" type="" id="line"> Line chart </button>
 				</div>
-				<div>Seleziona due command per confrontare i testcase:
+				<div>Select two command to compare the instances:
 					<br>
-					<button class="graphicbtn fa fa-ellipsis-v" type="" id="scatter"> Scatter </button>
+					<button class="graphicbtn fa fa-ellipsis-v" type="" id="scatter"> Scatter chart</button>
 						<div>
 							<button class=" scatterZoom hide" id="bigger" style="background: url(img/zoomin.png)"></button>
 							<button class=" scatterZoom hide" id="smaller" style="background: url(img/zoomout.png)"></button>

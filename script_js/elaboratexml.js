@@ -20,7 +20,6 @@ var cmd_id_array = []; //array con gli id dei command da usare nel codice
 var regex = /[\_ | \W]/gi;
 
 jQuery(document).ready(function(){ // start jquery code
-
     var filenameSelected = sessionStorage.getItem("filename");
     $.ajax({ 
         type : "GET",
@@ -305,6 +304,7 @@ jQuery(document).ready(function(){ // start jquery code
         			colspan = parseInt ( $("#cmd_row").children("th").attr("colspan") ) ;
         			colspan--;
         			$("#cmd_row").children("th").attr("colspan",colspan);
+
         		}else if( $("#check_"+onlyIdCommand).is(":checked") ){
                     numberCheck_type++;
         			$("#check_"+onlyIdCommand).attr("checked",true);
@@ -320,6 +320,7 @@ jQuery(document).ready(function(){ // start jquery code
         			colspan = parseInt ( $("#cmd_row").children("th").attr("colspan") ) ;
         			colspan++;
         			$("#cmd_row").children("th").attr("colspan",colspan);
+
         		}
                 if(numberCheck_type == 0 ){
                     alert("Seleziona almeno una tipologia di dato!");
