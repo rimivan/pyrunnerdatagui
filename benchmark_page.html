@@ -33,6 +33,7 @@
 
 </head>
 <body>
+	<a name="top" hide></a>
 	<h1>Details of selected benchmark:</h1>
 	<h2 id="selBenchTitle"></h2>
 
@@ -92,15 +93,15 @@
 
 		<div class="col_10" id="myWorkContent">
 			<div class="col_12">
-					<div class="col_4 bordered">
+					<div class="col_4 bordered type_benchpage">
 						<div class='ui toggle checkbox cmnd' ><input id="check_status" type='checkbox' class='check_type_benchPage' name='public' checked ><label>Status</label></div>
 					</div>
 
-					<div class="col_4 bordered">
+					<div class="col_4 bordered type_benchpage">
 						<div class='ui toggle checkbox cmnd' ><input id="check_time" type='checkbox' class='check_type_benchPage' name='public' checked ><label>Time</label></div>
 					</div>
 
-					<div class="col_4 bordered">
+					<div class="col_4 bordered type_benchpage">
 						<div class='ui toggle checkbox cmnd' ><input id="check_memory" type='checkbox' class='check_type_benchPage' name='public' checked ><label>Memory</label></div>
 					</div>
 			</div>
@@ -129,14 +130,14 @@
 		<div class="col_12">
 			<a name="graphics" hide></a>
 
-			<div>Graphics of Average Time:
+			<div><i>Graphics of Average Time:</i>
 				<br><button class="tcase_graphics fa fa-line-chart" id="line_tcase">Line chart</button>
 			</div>
 			<div>
-				Summary Graphics of completed and not completed test:
+				<i>Summary Graphics of completed and not completed test:</i>
 				<br><button class="tcase_graphics fa fa-bar-chart" id="stacked_tcase">Stacked bar </button>
 			</div>
-			<div>Seleziona due command per confrontare i testcase:
+			<div><i>Select two command to compare the instances: </i>
 				<br><button class="tcase_graphics fa fa-ellipsis-v" id="scatter_tcase">Scatter chart</button>
 					<div>
 						<button class="small scatterZoom hide" id="bigger" style="background: url(img/zoomin.png)"></button>
@@ -182,5 +183,14 @@
 			<div class="col_3"></div>
 		</div>
 	</div>
+
+
+	<div>
+		<p>Click here to go on top of page!</p>
+		<a href="#top"><img src="img/top.png" alt="Back on top" ></a>
+	</div>
+
+	<div class="col_12"></div><!-- EMPTY -->
+	<div class="col_12"></div>
 </body>
 </html>

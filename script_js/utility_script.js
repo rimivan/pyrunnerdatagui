@@ -71,7 +71,7 @@ function controlCheckedCmd(checkedCmdForScatter){
 		$("#"+typeRow).append(
 			"<th class='solution "+currentCmd+" first_col' id='th_"+cmd+"_solution'>SOLUTION </th>"+
 			"<th class='avgtime "+currentCmd+"' id='th_"+cmd+"_avgtime'>AVG TIME </th>"+
-			"<th class='sumtime "+currentCmd+"' id='th_"+cmd+"_sumtime'>SUM TIME </th>"+
+			"<th class='sumtime "+currentCmd+"' id='th_"+cmd+"_sumtime'>TOTAL TIME </th>"+
 			"<th class='avgmem "+currentCmd+" last_col' id='th_"+cmd+"_avgmem'>AVG MEM </th>"
 		);
 	};
@@ -220,5 +220,4 @@ function controlCheckedCmd(checkedCmdForScatter){
 	
 jQuery(document).ready(function(){
 
-	
 });

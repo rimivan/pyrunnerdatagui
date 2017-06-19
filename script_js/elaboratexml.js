@@ -43,7 +43,7 @@ jQuery(document).ready(function(){ // start jquery code
                 sessionStorage.setItem("originalCmdId",JSON.stringify(cmdID));
                	sessionStorage.setItem("cmd_array",cmd_id_array);
 
-                cmd_id_array.forEach(function(command_element,index) {
+                cmd_id_array.forEach(function(command_element,index) { //Lista dei comandi
                     var currId = command_element;
                     $("#div_cmnd").append("<div class='ui toggle checkbox cmnd'><input type='checkbox' class='check_cmnd' name='public' id='check_"+currId+"' checked ><label>"+cmdID[command_element]+"</label></div>");
                     $("#compareCmdGraph").append("<input name='compare' class='compareCheckbox' type='checkbox' id='compareCheck_"+currId+"'/><label for='compareCheck_"+currId+"' class='inline'>"+cmdID[command_element]+"</label>");

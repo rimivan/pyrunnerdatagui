@@ -18,6 +18,8 @@
 	<script src="script_js/elaboratexml.js" type="text/javascript" charset="utf-8"></script>
 	<script src="script_js/create_graphics.js" type="text/javascript" charset="utf-8"></script>
     
+
+
     <!-- Semantic UI-->
     <script src="semantic_ui_framework/semantic.min.js"></script>
     <link rel="stylesheet" href="semantic_ui_framework/semantic.min.css" media="all" />
@@ -26,9 +28,16 @@
 	<script src="kickstart_framework/js/kickstart.js"></script> 
 	<link rel="stylesheet" href="kickstart_framework/css/kickstart.css" media="all" />
 
+	
+
 </head>
 <body>
 	<h1>Explore the output data of <br> Pyrunlim and Pyrunner tool: </h1>
+	<a name="top" hide></a>
+	<div>
+		<p>Click here to go to the graphics!</p>
+		<a href="#graphics"><img src="img/gotographic.png" alt="Click here to go to the graphics!" ></a>
+	</div>
 
 	<!-- Al centro: lista command -->
 	<div class="col_12"> <!-- Command list -->
@@ -52,20 +61,20 @@
 				<div><br></div>
 				
 				<div class="col_12">
-					<div class="col_3 bordered">
-						<div class='ui toggle checkbox cmnd' ><input id="check_solution" type='checkbox' class='check_type' name='public' checked ><label>Solution</label></div>
+					<div class="col_3 bordered checktype_div">
+						<div class='ui toggle checkbox cmnd ' ><input id="check_solution" type='checkbox' class='check_type' name='public' checked ><label>Solution</label></div>
 					</div>
 
-					<div class="col_3 bordered">
-						<div class='ui toggle checkbox cmnd' ><input id="check_avgtime" type='checkbox' class='check_type' name='public' checked ><label>Average Time</label></div>
+					<div class="col_3 bordered checktype_div">
+						<div class='ui toggle checkbox cmnd ' ><input id="check_avgtime" type='checkbox' class='check_type' name='public' checked ><label>Average Time</label></div>
 					</div>
 
-					<div class="col_3 bordered">
-						<div class='ui toggle checkbox cmnd' ><input id="check_sumtime" type='checkbox' class='check_type' name='public' checked ><label>Total Time</label></div>
+					<div class="col_3 bordered checktype_div">
+						<div class='ui toggle checkbox cmnd ' ><input id="check_sumtime" type='checkbox' class='check_type' name='public' checked ><label>Total Time</label></div>
 					</div>
 								
-					<div class="col_3 bordered">
-						<div class='ui toggle checkbox cmnd' ><input id="check_avgmem" type='checkbox' class='check_type' name='public' checked ><label>Average Memory</label></div>
+					<div class="col_3 bordered checktype_div">
+						<div class='ui toggle checkbox cmnd ' ><input id="check_avgmem" type='checkbox' class='check_type' name='public' checked ><label>Average Memory</label></div>
 					</div>
 				</div>
 
@@ -97,6 +106,7 @@
 
 	<!--  Tipi di Grafici -->
 	<div class="col_12">
+		<a name="graphics" hide></a>
 		<div class="col_2"><!-- Empty -->
 		</div>
 			<div class="col_8" id="graphics_type">
@@ -150,7 +160,13 @@
 		</div> 
 
 	</div>
+	<div>
+		<p>Click here to go on top of page!</p>
+		<a href="#top"><img src="img/top.png" alt="Back on top" ></a>
+	</div>
 
+	<div class="col_12"></div><!-- EMPTY -->
+	<div class="col_12"></div>
 
 </body>
 </html>
