@@ -41,7 +41,10 @@ body{
 	font-size: 150%;
 }
 
-
+#divDataType{
+	font-style: italic;
+	font-size: 150%;
+}
 
 #removedBench{
 	font-style: italic;
@@ -121,11 +124,16 @@ td.sumtime{
 	background-color: #f9fbe7;
 }*/
 
-#graphics_type{
+#graphics_type{/*home*/
 	/*border-style: solid;*/
 	overflow-x: auto;
+	padding: 1%;
+	font-style: italic;
 }
-
+#graphics_type_benchPage{/*bench page*/
+	padding: 1%;
+	font-style: italic;
+}
 
 #myWorkContent{
 	border-style: outset;

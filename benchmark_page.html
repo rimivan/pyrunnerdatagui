@@ -23,19 +23,24 @@
 
 	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script> 
 
-	<script type="text/javascript">
-		google.charts.load('current', {'packages':['gauge']});
-
-      
-  </script>
-
-
 
 </head>
 <body>
 	<a name="top" hide></a>
-	<h1>Details of selected benchmark:</h1>
-	<h2 id="selBenchTitle"></h2>
+	<div class="col_12">
+		<div class="col_2">
+			<a href="home.html" class="tooltip" data-content="#goBackTooltip"><img src="img/back.png" alt=""></a>
+			<!-- Tooltip Content -->
+			<div class="tooltip-content" id="goBackTooltip"><h5>Go Back!</h5></div>
+		</div>	
+			<div class="col_8">
+				<h1>Details of selected benchmark:</h1>
+				<h2 id="selBenchTitle"></h2>
+			</div>	
+		<div class="col_2">
+		</div>	
+	</div>
+	
 
 	<div>
 		<p>Click here to go to the graphics!</p>
@@ -92,7 +97,8 @@
 		<div class="col_1"></div>
 
 		<div class="col_10" id="myWorkContent">
-			<div class="col_12">
+			<div class="col_12" id="divDataType">
+			Type of Data:
 					<div class="col_4 bordered type_benchpage">
 						<div class='ui toggle checkbox cmnd' ><input id="check_status" type='checkbox' class='check_type_benchPage' name='public' checked ><label>Status</label></div>
 					</div>
@@ -129,23 +135,28 @@
 
 		<div class="col_12">
 			<a name="graphics" hide></a>
-
-			<div><i>Graphics of Average Time:</i>
-				<br><button class="tcase_graphics fa fa-line-chart" id="line_tcase">Line chart</button>
+			<div class="col_2"></div>
+			<div class="col_8" id="graphics_type_benchPage">
+				<div><i>Graphics of Average Time:</i>
+					<br><button class="tcase_graphics fa fa-line-chart" id="line_tcase">Line chart</button>
+				</div>
+				<div class="col_12"></div><!-- EMPTY -->
+				<div>
+					<i>Summary Graphics of completed and not completed test:</i>
+					<br><button class="tcase_graphics fa fa-bar-chart" id="stacked_tcase">Stacked bar </button>
+				</div>
+				<div class="col_12"></div><!-- EMPTY -->
+				<div><i>Select two command to compare the instances: </i>
+					<br><button class="tcase_graphics fa fa-ellipsis-v" id="scatter_tcase">Scatter chart</button>
+						<div>
+							<button class="small scatterZoom hide" id="bigger" style="background: url(img/zoomin.png)"></button>
+							<button class="small scatterZoom hide" id="smaller" style="background: url(img/zoomout.png)"></button>
+						</div>
+				</div>
+				<div id="compareCmdGraph">
+				</div>
 			</div>
-			<div>
-				<i>Summary Graphics of completed and not completed test:</i>
-				<br><button class="tcase_graphics fa fa-bar-chart" id="stacked_tcase">Stacked bar </button>
-			</div>
-			<div><i>Select two command to compare the instances: </i>
-				<br><button class="tcase_graphics fa fa-ellipsis-v" id="scatter_tcase">Scatter chart</button>
-					<div>
-						<button class="small scatterZoom hide" id="bigger" style="background: url(img/zoomin.png)"></button>
-						<button class="small scatterZoom hide" id="smaller" style="background: url(img/zoomout.png)"></button>
-					</div>
-			</div>
-			<div id="compareCmdGraph">
-			</div>
+			<div class="col_2"></div>
 		</div>
 
 		<div class="col_12" id="graphic_line_tcase">
