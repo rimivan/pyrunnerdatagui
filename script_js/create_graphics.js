@@ -121,12 +121,11 @@ jQuery(document).ready(function(){
 					scatterChart(dataForScatterChart,"container_scatter");
 					
 				}else{
-					alert("seleziona due cmd");
+					swal("Devi selezionare due cmd");
 				}
 			}
-
 		}else{
-			alert("Qualcosa è andato storto nella lettura dal sessionStorage.");
+			sweetAlert("Oops...", "Something went wrong!", "error");
 		}
 
 	
@@ -172,8 +171,6 @@ jQuery(document).ready(function(){
             	}
             });
 
-            
-
             if(clicked_id === "stacked"){
             	$("#graphic_1").empty();
             	$("#graphic_2").empty();
@@ -184,9 +181,8 @@ jQuery(document).ready(function(){
             	stackedChart(cmdObjToGraphicsArray,"container_2",bench_only_id_arr,"notcompleted");
             }
 
-
         }else{
-        	alert("Non è possibile caricare i test Non Completati!");
+        	swal("Non è stato possibile caricare i test Non Completati!");
         }
 
 	}); // end on click grafic button

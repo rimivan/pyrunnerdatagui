@@ -2,25 +2,7 @@
 <benchmark id='wpms_crafted/CSG'>
 
 <testcase id="('/home/alviano/experiment-fairsat//wpms_crafted/CSG/CSGNaive70-70-91.wcnf',)">
-<command id='binary 4'>
-<pyrunlim version="2.12" time-limit="610" memory-limit="15360" real-time-limit="10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" swap-limit="10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" cpu-affinity="0" pyrunlim-cpu-affinity="1" nice="20" running="bash -c &quot;/home/alviano/experiment-fairsat//maxsat2fairsat.py /home/alviano/experiment-fairsat//wpms_crafted/CSG/CSGNaive70-70-91.wcnf 4 | /home/alviano/experiment-fairsat//aspino --mode=fairsat --no-fairsat-print-model --fairsat-alg=binary&quot;" start="Wed Jan 27 09:48:30 2016">
-<stream type="stdout" real="0.878"><line>c searching in [-1..17382]</line></stream>
-<stream type="stdout" real="0.881"><line>o 8939</line></stream>
-<stream type="stdout" real="0.882"><line>o 13201</line></stream>
-<stream type="stdout" real="0.883"><line>o 15318</line></stream>
-<stream type="stdout" real="0.884"><line>o 16420</line></stream>
-<stream type="stdout" real="0.884"><line>c ub 16900</line></stream>
-<stream type="stdout" real="0.884"><line>c ub 16659</line></stream>
-<stream type="stdout" real="0.884"><line>c ub 16538</line></stream>
-<stream type="stdout" real="0.884"><line>c ub 16478</line></stream>
-<stream type="stdout" real="0.884"><line>c ub 16448</line></stream>
-<stream type="stdout" real="0.885"><line>o 16445</line></stream>
-<stream type="stdout" real="0.885"><line>c ub 16445</line></stream>
-<stream type="stdout" real="0.885"><line>s OPTIMUM FOUND</line></stream>
-<stats end="Wed Jan 27 09:48:31 2016" status="complete" result="20" output="./.2016-01-27_08-44-55_00028_OUT_binary 4" error="./.2016-01-27_08-44-55_00028_ERR_binary 4" children="4" real="0.918" time="0.730" user="0.700" system="0.030" memory="32.3" samples="8"/>
-</pyrunlim>
-<validator response='yes' />
-</command>
+
 <command id='binary 8'>
 <pyrunlim version="2.12" time-limit="610" memory-limit="15360" real-time-limit="10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" swap-limit="10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" cpu-affinity="0" pyrunlim-cpu-affinity="1" nice="20" running="bash -c &quot;/home/alviano/experiment-fairsat//maxsat2fairsat.py /home/alviano/experiment-fairsat//wpms_crafted/CSG/CSGNaive70-70-91.wcnf 8 | /home/alviano/experiment-fairsat//aspino --mode=fairsat --no-fairsat-print-model --fairsat-alg=binary&quot;" start="Wed Jan 27 09:48:31 2016">
 <stream type="stdout" real="0.873"><line>c searching in [-1..8033]</line></stream>
@@ -64,26 +46,7 @@
 
 
 <testcase id="('/home/alviano/experiment-fairsat//wpms_crafted/auctions/auc-scheduling/cat_sched_60_200_0001.txt.wcnf',)">
-<command id='binary 4'>
-<pyrunlim version="2.12" time-limit="610" memory-limit="15360" real-time-limit="10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" swap-limit="10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" cpu-affinity="0" pyrunlim-cpu-affinity="1" nice="20" running="bash -c &quot;/home/alviano/experiment-fairsat//maxsat2fairsat.py /home/alviano/experiment-fairsat//wpms_crafted/auctions/auc-scheduling/cat_sched_60_200_0001.txt.wcnf 4 | /home/alviano/experiment-fairsat//aspino --mode=fairsat --no-fairsat-print-model --fairsat-alg=binary&quot;" start="Wed Jan 27 11:53:54 2016">
-<stream type="stdout" real="0.070"><line>c searching in [-1..11877]</line></stream>
-<stream type="stdout" real="0.073"><line>c ub 5937</line></stream>
-<stream type="stdout" real="0.079"><line>c ub 2967</line></stream>
-<stream type="stdout" real="0.117"><line>c ub 1482</line></stream>
-<stream type="stdout" real="0.392"><line>c ub 739</line></stream>
-<stream type="stdout" real="0.810"><line>c ub 368</line></stream>
-<stream type="stdout" real="1.178"><line>c ub 182</line></stream>
-<stream type="stdout" real="1.179"><line>o 125</line></stream>
-<stream type="stdout" real="2.160"><line>c ub 152</line></stream>
-<stream type="stdout" real="2.529"><line>c ub 137</line></stream>
-<stream type="stdout" real="3.344"><line>c ub 130</line></stream>
-<stream type="stdout" real="3.619"><line>c ub 126</line></stream>
-<stream type="stdout" real="4.163"><line>c ub 125</line></stream>
-<stream type="stdout" real="4.163"><line>s OPTIMUM FOUND</line></stream>
-<stats end="Wed Jan 27 11:53:59 2016" status="complete" result="20" output="./.2016-01-27_08-44-55_00142_OUT_binary 4" error="./.2016-01-27_08-44-55_00142_ERR_binary 4" children="3" real="4.229" time="3.960" user="3.960" system="0.000" memory="21.2" samples="24"/>
-</pyrunlim>
-<validator response='yes' />
-</command>
+
 <command id='binary 8'>
 <pyrunlim version="2.12" time-limit="610" memory-limit="15360" real-time-limit="10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" swap-limit="10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" cpu-affinity="0" pyrunlim-cpu-affinity="1" nice="20" running="bash -c &quot;/home/alviano/experiment-fairsat//maxsat2fairsat.py /home/alviano/experiment-fairsat//wpms_crafted/auctions/auc-scheduling/cat_sched_60_200_0001.txt.wcnf 8 | /home/alviano/experiment-fairsat//aspino --mode=fairsat --no-fairsat-print-model --fairsat-alg=binary&quot;" start="Wed Jan 27 11:53:59 2016">
 <stream type="stdout" real="0.060"><line>c searching in [-1..5662]</line></stream>
@@ -125,26 +88,7 @@
 </command>
 </testcase>
 <testcase id="('/home/alviano/experiment-fairsat//wpms_crafted/auctions/auc-scheduling/cat_sched_60_200_0002.txt.wcnf',)">
-<command id='binary 4'>
-<pyrunlim version="2.12" time-limit="610" memory-limit="15360" real-time-limit="10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" swap-limit="10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" cpu-affinity="0" pyrunlim-cpu-affinity="1" nice="20" running="bash -c &quot;/home/alviano/experiment-fairsat//maxsat2fairsat.py /home/alviano/experiment-fairsat//wpms_crafted/auctions/auc-scheduling/cat_sched_60_200_0002.txt.wcnf 4 | /home/alviano/experiment-fairsat//aspino --mode=fairsat --no-fairsat-print-model --fairsat-alg=binary&quot;" start="Wed Jan 27 11:54:04 2016">
-<stream type="stdout" real="0.073"><line>c searching in [-1..36402]</line></stream>
-<stream type="stdout" real="0.074"><line>c ub 18199</line></stream>
-<stream type="stdout" real="0.084"><line>c ub 9098</line></stream>
-<stream type="stdout" real="0.118"><line>c ub 4547</line></stream>
-<stream type="stdout" real="0.537"><line>c ub 2272</line></stream>
-<stream type="stdout" real="0.928"><line>c ub 1134</line></stream>
-<stream type="stdout" real="2.509"><line>c ub 565</line></stream>
-<stream type="stdout" real="4.414"><line>c ub 281</line></stream>
-<stream type="stdout" real="4.415"><line>o 228</line></stream>
-<stream type="stdout" real="4.425"><line>o 263</line></stream>
-<stream type="stdout" real="5.402"><line>c ub 271</line></stream>
-<stream type="stdout" real="6.656"><line>c ub 266</line></stream>
-<stream type="stdout" real="8.577"><line>c ub 263</line></stream>
-<stream type="stdout" real="8.577"><line>s OPTIMUM FOUND</line></stream>
-<stats end="Wed Jan 27 11:54:13 2016" status="complete" result="20" output="./.2016-01-27_08-44-55_00145_OUT_binary 4" error="./.2016-01-27_08-44-55_00145_ERR_binary 4" children="3" real="8.907" time="8.330" user="8.320" system="0.010" memory="41.2" samples="36"/>
-</pyrunlim>
-<validator response='yes' />
-</command>
+
 <command id='binary 8'>
 <pyrunlim version="2.12" time-limit="610" memory-limit="15360" real-time-limit="10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" swap-limit="10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" cpu-affinity="0" pyrunlim-cpu-affinity="1" nice="20" running="bash -c &quot;/home/alviano/experiment-fairsat//maxsat2fairsat.py /home/alviano/experiment-fairsat//wpms_crafted/auctions/auc-scheduling/cat_sched_60_200_0002.txt.wcnf 8 | /home/alviano/experiment-fairsat//aspino --mode=fairsat --no-fairsat-print-model --fairsat-alg=binary&quot;" start="Wed Jan 27 11:54:13 2016">
 <stream type="stdout" real="0.074"><line>c searching in [-1..17977]</line></stream>
@@ -191,28 +135,7 @@
 </command>
 </testcase>
 <testcase id="('/home/alviano/experiment-fairsat//wpms_crafted/auctions/auc-scheduling/cat_sched_60_200_0003.txt.wcnf',)">
-<command id='binary 4'>
-<pyrunlim version="2.12" time-limit="610" memory-limit="15360" real-time-limit="10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" swap-limit="10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" cpu-affinity="0" pyrunlim-cpu-affinity="1" nice="20" running="bash -c &quot;/home/alviano/experiment-fairsat//maxsat2fairsat.py /home/alviano/experiment-fairsat//wpms_crafted/auctions/auc-scheduling/cat_sched_60_200_0003.txt.wcnf 4 | /home/alviano/experiment-fairsat//aspino --mode=fairsat --no-fairsat-print-model --fairsat-alg=binary&quot;" start="Wed Jan 27 11:54:24 2016">
-<stream type="stdout" real="0.074"><line>c searching in [-1..47238]</line></stream>
-<stream type="stdout" real="0.075"><line>c ub 23617</line></stream>
-<stream type="stdout" real="0.082"><line>c ub 11807</line></stream>
-<stream type="stdout" real="0.118"><line>c ub 5902</line></stream>
-<stream type="stdout" real="0.576"><line>c ub 2949</line></stream>
-<stream type="stdout" real="1.268"><line>c ub 1473</line></stream>
-<stream type="stdout" real="1.897"><line>c ub 735</line></stream>
-<stream type="stdout" real="2.531"><line>c ub 366</line></stream>
-<stream type="stdout" real="2.531"><line>o 239</line></stream>
-<stream type="stdout" real="2.970"><line>c ub 301</line></stream>
-<stream type="stdout" real="3.561"><line>c ub 269</line></stream>
-<stream type="stdout" real="4.147"><line>c ub 253</line></stream>
-<stream type="stdout" real="5.125"><line>c ub 245</line></stream>
-<stream type="stdout" real="5.665"><line>c ub 241</line></stream>
-<stream type="stdout" real="6.226"><line>c ub 239</line></stream>
-<stream type="stdout" real="6.226"><line>s OPTIMUM FOUND</line></stream>
-<stats end="Wed Jan 27 11:54:30 2016" status="complete" result="20" output="./.2016-01-27_08-44-55_00148_OUT_binary 4" error="./.2016-01-27_08-44-55_00148_ERR_binary 4" children="3" real="6.323" time="5.750" user="5.730" system="0.020" memory="28.9" samples="31"/>
-</pyrunlim>
-<validator response='yes' />
-</command>
+
 <command id='binary 8'>
 <pyrunlim version="2.12" time-limit="610" memory-limit="15360" real-time-limit="10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" swap-limit="10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" cpu-affinity="0" pyrunlim-cpu-affinity="1" nice="20" running="bash -c &quot;/home/alviano/experiment-fairsat//maxsat2fairsat.py /home/alviano/experiment-fairsat//wpms_crafted/auctions/auc-scheduling/cat_sched_60_200_0003.txt.wcnf 8 | /home/alviano/experiment-fairsat//aspino --mode=fairsat --no-fairsat-print-model --fairsat-alg=binary&quot;" start="Wed Jan 27 11:54:30 2016">
 <stream type="stdout" real="0.073"><line>c searching in [-1..23578]</line></stream>
@@ -261,54 +184,7 @@
 <benchmark id='wpms_crafted/causal-discovery'>
 
 <testcase id="('/home/alviano/experiment-fairsat//wpms_crafted/causal-discovery/causal_n7_i9_N500_uai14_log_int.wcnf',)">
-<command id='binary 4'>
-<pyrunlim version="2.12" time-limit="610" memory-limit="15360" real-time-limit="10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" swap-limit="10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" cpu-affinity="0" pyrunlim-cpu-affinity="1" nice="20" running="bash -c &quot;/home/alviano/experiment-fairsat//maxsat2fairsat.py /home/alviano/experiment-fairsat//wpms_crafted/causal-discovery/causal_n7_i9_N500_uai14_log_int.wcnf 4 | /home/alviano/experiment-fairsat//aspino --mode=fairsat --no-fairsat-print-model --fairsat-alg=binary&quot;" start="Wed Jan 27 12:24:00 2016">
-<stream type="stdout" real="1.006"><line>c searching in [-1..7912660988359]</line></stream>
-<stream type="stdout" real="1.017"><line>o 4005767952810</line></stream>
-<stream type="stdout" real="1.022"><line>o 6045665522309</line></stream>
-<stream type="stdout" real="1.043"><line>o 7072072637800</line></stream>
-<stream type="stdout" real="1.048"><line>o 7573668533209</line></stream>
-<stream type="stdout" real="1.222"><line>o 7813757679009</line></stream>
-<stream type="stdout" real="1.226"><line>o 7863604069009</line></stream>
-<stream type="stdout" real="4.444"><line>o 7889009049809</line></stream>
-<sample real="10.015" user="9.980" sys="0.010" max-memory="46.7" rss="36.7" swap="0.0"/>
-<stream type="stdout" real="15.664"><line>c ub 7900835019083</line></stream>
-<sample real="20.338" user="20.290" sys="0.010" max-memory="46.7" rss="46.1" swap="0.0"/>
-<sample real="30.005" user="29.960" sys="0.020" max-memory="46.7" rss="46.1" swap="0.0"/>
-<stream type="stdout" real="36.020"><line>o 7896277912809</line></stream>
-<stream type="stdout" real="39.484"><line>o 7900796325609</line></stream>
-<sample real="40.172" user="40.120" sys="0.020" max-memory="47.7" rss="47.7" swap="0.0"/>
-<stream type="stdout" real="41.202"><line>c ub 7900815672345</line></stream>
-<stream type="stdout" real="42.942"><line>c ub 7900805998976</line></stream>
-<stream type="stdout" real="44.643"><line>c ub 7900801162291</line></stream>
-<stream type="stdout" real="45.816"><line>c ub 7900798743949</line></stream>
-<stream type="stdout" real="46.719"><line>c ub 7900797534778</line></stream>
-<stream type="stdout" real="47.843"><line>c ub 7900796930192</line></stream>
-<stream type="stdout" real="48.783"><line>c ub 7900796627899</line></stream>
-<stream type="stdout" real="49.543"><line>c ub 7900796476753</line></stream>
-<sample real="50.339" user="50.290" sys="0.030" max-memory="47.7" rss="47.7" swap="0.0"/>
-<stream type="stdout" real="50.606"><line>c ub 7900796401180</line></stream>
-<stream type="stdout" real="51.298"><line>c ub 7900796363393</line></stream>
-<stream type="stdout" real="51.980"><line>c ub 7900796344500</line></stream>
-<stream type="stdout" real="52.625"><line>c ub 7900796335053</line></stream>
-<stream type="stdout" real="53.165"><line>c ub 7900796330330</line></stream>
-<stream type="stdout" real="53.773"><line>c ub 7900796327968</line></stream>
-<stream type="stdout" real="54.770"><line>c ub 7900796326787</line></stream>
-<stream type="stdout" real="55.362"><line>c ub 7900796326197</line></stream>
-<stream type="stdout" real="55.852"><line>c ub 7900796325902</line></stream>
-<stream type="stdout" real="56.461"><line>c ub 7900796325754</line></stream>
-<stream type="stdout" real="57.058"><line>c ub 7900796325680</line></stream>
-<stream type="stdout" real="57.636"><line>c ub 7900796325643</line></stream>
-<stream type="stdout" real="58.139"><line>c ub 7900796325625</line></stream>
-<stream type="stdout" real="58.739"><line>c ub 7900796325616</line></stream>
-<stream type="stdout" real="59.233"><line>c ub 7900796325611</line></stream>
-<stream type="stdout" real="59.729"><line>c ub 7900796325609</line></stream>
-<stream type="stdout" real="59.729"><line>s OPTIMUM FOUND</line></stream>
-<sample real="60.492" user="59.440" sys="0.030" max-memory="48.2" rss="2.3" swap="0.0"/>
-<stats end="Wed Jan 27 12:25:00 2016" status="complete" result="20" output="./.2016-01-27_08-44-55_00253_OUT_binary 4" error="./.2016-01-27_08-44-55_00253_ERR_binary 4" children="4" real="60.492" time="59.470" user="59.440" system="0.030" memory="48.2" samples="98"/>
-</pyrunlim>
-<validator response='yes' />
-</command>
+
 <command id='binary 8'>
 <pyrunlim version="2.12" time-limit="610" memory-limit="15360" real-time-limit="10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" swap-limit="10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" cpu-affinity="0" pyrunlim-cpu-affinity="1" nice="20" running="bash -c &quot;/home/alviano/experiment-fairsat//maxsat2fairsat.py /home/alviano/experiment-fairsat//wpms_crafted/causal-discovery/causal_n7_i9_N500_uai14_log_int.wcnf 8 | /home/alviano/experiment-fairsat//aspino --mode=fairsat --no-fairsat-print-model --fairsat-alg=binary&quot;" start="Wed Jan 27 12:25:01 2016">
 <stream type="stdout" real="0.995"><line>c searching in [-1..3451071765410]</line></stream>

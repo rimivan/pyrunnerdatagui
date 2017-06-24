@@ -112,6 +112,7 @@ jQuery(document).ready(function(){
     summary();
 
     //events
+    var numberOfCmd_BenchPage = $(".check_cmnd_benchPage").length;
     $(".check_cmnd_benchPage").on('click',function(){
       var clickedId = $(this).prop("id");
       clickedId = clickedId.split("_");
@@ -120,7 +121,7 @@ jQuery(document).ready(function(){
       var commandName = $(this).next().html(); // id del commandche nascondo/mostro. Prendo il nome dal label
       
       if( ! $("#check_"+clickedId).is(":checked")  ){
-              //numberOfCmd--;
+              numberOfCmd_BenchPage--;
               $("#check_"+clickedId).attr("checked",false);
               $("."+clickedId).hide();
               $("."+clickedId).addClass("cmdHide");
@@ -130,6 +131,7 @@ jQuery(document).ready(function(){
                 }
               });
       }else if( $("#check_"+clickedId).is(":checked") ){
+              numberOfCmd_BenchPage++;
               arrayForLineChart.forEach(function(currElem,i){
                   if(currElem.name == commandName){
                       currElem.active = true;
@@ -137,7 +139,6 @@ jQuery(document).ready(function(){
               });
               $("#check_"+clickedId).attr("checked",true);
                     $("."+clickedId).show();
-
                     $("."+clickedId).removeClass("cmdHide"); 
 
                     if( $(".status").hasClass("hideElem") ){
@@ -153,9 +154,20 @@ jQuery(document).ready(function(){
                     }
       }
 
+      if(numberOfCmd_BenchPage == 0){
+        swal("Tutti i command sono stati deselezionati");
+        $("#benchPageWrap").hide();
+      }
+
+      if(numberOfCmd_BenchPage > 0){
+        $("#benchPageWrap").show();
+      }
+
+
       $("#stacked_tcase").click();
     });//end check command
 
+    var numCheckType_benchPage = $(".check_type_benchPage").length;
     $(".check_type_benchPage").on('click',function(){
       var clickedId = $(this).prop("id");
       clickedId = clickedId.split("_");
@@ -163,6 +175,7 @@ jQuery(document).ready(function(){
       console.log("clicked id:"+clickedId);
       var colspan;
             if( ! $("#check_"+clickedId).is(":checked")  ){
+              numCheckType_benchPage--;
               $("#check_"+clickedId).attr("checked",false);
               $("."+clickedId).addClass("hideElem");
               $("."+clickedId).hide();
@@ -170,6 +183,7 @@ jQuery(document).ready(function(){
               colspan--;
               $("#cmd_row_1").children("th").attr("colspan",colspan);
             }else if( $("#check_"+clickedId).is(":checked") ){
+              numCheckType_benchPage++;
               $("#check_"+clickedId).attr("checked",true);
               $("."+clickedId).removeClass("hideElem");
             
@@ -184,21 +198,44 @@ jQuery(document).ready(function(){
               colspan++;
               $("#cmd_row_1").children("th").attr("colspan",colspan);
             }
+
+            if(numCheckType_benchPage == 0){
+                swal("Tutti i tipi di dato sono stati desel.");
+                $("#div_testcase_table").hide();
+            }
+
+            if(numCheckType_benchPage > 0 && numTestcase_BenchPage > 0){
+                $("#div_testcase_table").show();
+            }
+
+
     });
 
+    var numTestcase_BenchPage = $(".rem_tcase").length;
     $(".rem_tcase").on('click',function(){
       var clickedId = $(this).prop("id");
       clickedId = clickedId.split("_");
       clickedId = clickedId[1];
- //     alert("click: "+clickedId);
 
       if( ! ($(this).is(":checked"))  ){
+        numTestcase_BenchPage--;
         ($(this)).attr("checked",false);
         $("#"+clickedId).fadeOut("slow");
       }else if( $(this).is(":checked") ){
+        numTestcase_BenchPage++;
         ($(this)).attr("checked",true);
         $("#"+clickedId).fadeIn();
       }
+
+      if(numTestcase_BenchPage == 0){
+        swal("Devi selezionare almeno un testcase");
+        $("#div_testcase_table").hide();
+      }
+
+      if(numTestcase_BenchPage > 0 && numCheckType_benchPage > 0){
+        $("#div_testcase_table").show();
+      }
+
     });
 
 
@@ -275,7 +312,7 @@ jQuery(document).ready(function(){
         elaborateDataForScatterTestcaseChart(arrayForScatterTestcaseChart,arrayOfTestcases,checkedCmdForScatter);
         scatterChart(arrayForScatterTestcaseChart,"container_scatter_tcase");
         }else{
-          alert("seleziona due cmd");
+          swal("Devi selezionare due cmd");
         }
     }
   });//end event graphics button

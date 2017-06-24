@@ -44,6 +44,7 @@ function controlCheckedCmd(checkedCmdForScatter){
 											if(status === "complete"){
 												var time = parseFloat( $(this).attr("time") ) ;
 												arrayForTestCase.push(time);
+												console.log("cmd: "+cmdId+" time :"+time)
 										
 											}
 										});

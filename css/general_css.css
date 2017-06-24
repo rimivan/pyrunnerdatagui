@@ -170,6 +170,7 @@ td.sumtime{
 	padding:5px;
 }
 
+
 #container_1,#container_2,#container_line_tcase,#container_stacked_tcase,#container_stacked_tcase_notCompleted{
 	height: 500px;
 	border-style: inset;
@@ -184,7 +185,8 @@ td.sumtime{
 	border: none;
 }
 
-#divUpload{
+
+#divUpload{ /* Select file Page*/
 	padding: 3% 3% 3% 3%;
 	background-color: #f1f8e9;
 	border-color: #2979FF; 

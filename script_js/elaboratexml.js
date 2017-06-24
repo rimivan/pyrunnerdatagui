@@ -131,7 +131,7 @@ jQuery(document).ready(function(){ // start jquery code
                             var bench = {
                                 idBench:idCurrentBenchmark,
                                 //arrayOfAvgTime:[]
-                                command:{
+                                command:{	//il command idCmd impiega ad esempio avgtime per il benchmark idCurrentBench
                                     idCmd:currentCmd,
                                     solution:0,
                                     avgtime:0,
@@ -323,7 +323,7 @@ jQuery(document).ready(function(){ // start jquery code
 
         		}
                 if(numberCheck_type == 0 ){
-                    alert("Seleziona almeno una tipologia di dato!");
+                    swal("Seleziona almeno una tipologia di dato!");
                     $("#main_table").hide();
                     $("#graphic_wrapper").hide();
                 }else if(numberOfBenchmark == 0){
@@ -371,7 +371,7 @@ jQuery(document).ready(function(){ // start jquery code
                     }
         		}
                 if(numberOfCmd == 0){
-                    alert("Non hai selezionato nessun cmd!");
+                    swal("Non hai selezionato nessun cmd!");
                     $("#myWorkContent").hide();
                     $("#graphics_type").hide();
                     $("#graphic_wrapper").hide();
@@ -428,7 +428,7 @@ jQuery(document).ready(function(){ // start jquery code
                     if(numberOfBenchmark == 0 ){
                         $("#main_table").hide();
                         $("#graphic_wrapper").hide();
-                        alert("Hai deselezionato tutti i benchmark")
+                        swal("Hai deselezionato tutti i benchmark")
                     }else if(numberCheck_type == 0){
                         $("#main_table").hide();
                         $("#graphic_wrapper").hide();
@@ -534,7 +534,15 @@ jQuery(document).ready(function(){ // start jquery code
 
         },//end success
         error:function(){
-        	alert("Il file selezionato non è stato processato correttamente!");
+        	swal({
+                title: "Error!",
+                text: ". . File NOT Loaded . .",
+                type: "error",
+            },function(){
+                  setTimeout(function(){
+                    window.location.href = 'select_file.html';
+                  }, 500);
+                });
         }
     });//end ajax call
 
