@@ -1,47 +1,145 @@
+html{
+	padding: 3%;
+}
+
 
 h1,h2{
 	text-align: center;
+	font-style: italic;
+	font-family: monospace;
+	color:#1c2770;
+}
+
+#hGuide{
+	text-align: center;
+	font-style: italic;
+	font-family: monospace;
+	color:#0d47a1;
+}
+
+.pGuide{ /* Select file page*/
+	font-family: monospace;
+	font-size: 120%;
+}
+
+.step{ /* Select file page*/
+	color:#0d47a1;
+	font:  italic bold 12px/30px Georgia, serif;
+}
+
+#h1Upload{ /* Select file page*/
+	font-size: 150% !important;
 }
 
 body{
 	text-align: center;
+	background-color: #fafafa !important;
 }
 
+#commandListTitle{ /* Benchmark page*/
+	font-style: italic;
+	font-size: 150%;
+}
+
+#divDataType{
+	font-style: italic;
+	font-size: 150%;
+}
+
+#removedBench{
+	font-style: italic;
+	font-size: 150%;
+	background-color: #eeeeee;
+}
 
 .hide{
     display: hide;
 }
 
 #div_cmnd{
-	border-style: solid; 
+	border-style: inset; 
+	border-width: 3px;
+	border-color: #303030;
 	padding: 2%;
 	overflow-x: auto;
+	background-color: #eeeeee;
+}
+
+.checktype_div{
+	background-color: #eeeeee;
 }
 
 .th_cmd{
-	border-style: solid;
+	border-style: outset;
+	border-color: #607D8B;
+	border-width: 3px;
+
 }
 
-.last_col{
-	border-right: solid;
+#stacked,#stacked_tcase{
+	background-color: #ffca28 !important; 
 }
+
+#line,#line_tcase{
+	background-color: #82b1ff !important; 
+}
+
+#scatter,#scatter_tcase{
+	background-color: #b2ff59 !important; 
+}
+
+/*.last_col{
+	border-right: solid;
+	border-color: #607D8B;
+}*/
 
 table { /* table dei cmd */
 	padding: 3%;
+	background-color: #f5f5f5 !important;
+	
 }
 
 td,th{
 	text-align: right !important;
 }
 
-#graphics_type{
-	border-style: solid;
-	overflow-x: auto;
+th{
+	font-style: italic;
+	background-color: #eeeeee !important;
+	background-color: #eeeeee !important;
 }
 
+/*td.solution{
+	background-color: #fffde7;
+}
+
+td.avgtime{
+	background-color: #fff8e1;
+}
+
+td.avgmem{
+	background-color: #fff3e0;
+}
+
+td.sumtime{
+	background-color: #f9fbe7;
+}*/
+
+#graphics_type{/*home*/
+	/*border-style: solid;*/
+	overflow-x: auto;
+	padding: 1%;
+	font-style: italic;
+}
+#graphics_type_benchPage{/*bench page*/
+	padding: 1%;
+	font-style: italic;
+}
 
 #myWorkContent{
-	border-style: solid;
+	border-style: outset;
+	border-width: 3px;
+	border-color: #2979FF;
     width:80%;
     height:auto;
     overflow-x: auto;
@@ -55,23 +153,31 @@ td,th{
 }
 
 .bordered{
-	padding: 5px;
-	border-style: solid;
+	padding: 3px;
+	border-style: inset;
+	border-width: 3px;
+	border-color: #303030;
 }
 
 .removedBenchmarkDiv{
-	padding: 5px;
-	border-style: solid;
+	padding: 2px;
+	border-style: outset;
+	border-color: #2979FF;
 	overflow-x: auto;
+	background-color: #fafafa;
 }
 
 .checkbox{
 	padding:5px;
 }
 
-#container_1{
+
+#container_1,#container_2,#container_line_tcase,#container_stacked_tcase,#container_stacked_tcase_notCompleted{
 	height: 500px;
+	border-style: inset;
+	border-color: #2979FF;
 }
+
 
 .scatterZoom{
 	height: 32px;
@@ -81,3 +187,25 @@ td,th{
 }
 
 
+#divUpload{ /* Select file Page*/
+	padding: 3% 3% 3% 3%;
+	background-color: #f1f8e9;
+	border-color: #2979FF; 
+}
+
+
+.benchDetails{
+	font-style: italic;
+	font-size:120%;
+}
+
+#div_cmnd_benchPage{
+	border-style: outset;
+	border-color: #2979FF;
+	background-color: #eeeeee;
+}
+
+.type_benchpage{
+	border-color: #2979FF;
+	background-color: #eeeeee;
+}

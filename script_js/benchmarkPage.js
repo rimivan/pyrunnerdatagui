@@ -29,7 +29,6 @@ jQuery(document).ready(function(){
 	cmdIdArray = sessionStorage.getItem("cmd_array");
 	cmdIdArray = cmdIdArray.split(",");
 
-
   cmdIdArray.forEach(function(cmd,index){//crea tabella testcase
     $("#cmd_row_1").append("<th class='cmd"+index+" th_cmd "+cmd+"' colspan='3' id='"+cmd+"'>"+originalCmdId[cmd]+"</th>");
 
@@ -41,7 +40,8 @@ jQuery(document).ready(function(){
         "<th class='time "+cmd+" cmd"+index+"' id='th_"+cmd+"_avgtime'>TIME </th>"+
         "<th class='memory "+cmd+" cmd"+index+" last_col' id='th_"+cmd+"_avgmem'>MEMORY </th>"
       );
-
+                              
+                              //crea un oggetto e una struttura di supporto per poi inserire i dati per il grafico line
         var cmdObjToLine = {  //creo un oggetto per ogni command; i dati vengono inseriti a riga 90
           name:originalCmdId[cmd],
           data:[],
@@ -50,7 +50,7 @@ jQuery(document).ready(function(){
 
         arrayForLineChart.push(cmdObjToLine);
   });//end crea tabella dei testcase
-    console.log(arrayForLineChart);
+
     arrayOfTestcases = selectedBenchmarkObject.testcaseList; // tutti i testcase del benchmark selezionato
     var solutionPerTestcase = 0;
     var numberOfTestcaseExecution = 0;
@@ -92,7 +92,6 @@ jQuery(document).ready(function(){
                 }
                 elem.data.sort( function(a,b) { return a-b } );
               });
-  
           }
           
           $("#status_cmd"+index_j+"_tcase"+index_i).html(cmdStatus);
@@ -101,7 +100,6 @@ jQuery(document).ready(function(){
         });
     });// end foreach testcase
 
-    console.log(arrayForLineChart);
     avgTimeOfTestcase /= numberOfTestcaseExecution; // dati generali di tutto il benchmark
     avgMemOfTestcase /= numberOfTestcaseExecution;
     avgMemOfTestcase = avgMemOfTestcase.toFixed(2);
@@ -109,18 +107,18 @@ jQuery(document).ready(function(){
     selectedBenchmarkObject["avgmem"] = parseFloat(avgMemOfTestcase); // avg mem del benchmark
     selectedBenchmarkObject["avgtime"] = parseFloat(avgTimeOfTestcase);
 
-    summary();
+    summary(); // dati riassuntivi del benchmark
 
     //events
+    var numberOfCmd_BenchPage = $(".check_cmnd_benchPage").length;
     $(".check_cmnd_benchPage").on('click',function(){
       var clickedId = $(this).prop("id");
       clickedId = clickedId.split("_");
       clickedId = clickedId[1];
-      console.log(clickedId);
       var commandName = $(this).next().html(); // id del commandche nascondo/mostro. Prendo il nome dal label
       
       if( ! $("#check_"+clickedId).is(":checked")  ){
-              //numberOfCmd--;
+              numberOfCmd_BenchPage--;
               $("#check_"+clickedId).attr("checked",false);
               $("."+clickedId).hide();
               $("."+clickedId).addClass("cmdHide");
@@ -130,6 +128,7 @@ jQuery(document).ready(function(){
                 }
               });
       }else if( $("#check_"+clickedId).is(":checked") ){
+              numberOfCmd_BenchPage++;
               arrayForLineChart.forEach(function(currElem,i){
                   if(currElem.name == commandName){
                       currElem.active = true;
@@ -137,7 +136,6 @@ jQuery(document).ready(function(){
               });
               $("#check_"+clickedId).attr("checked",true);
                     $("."+clickedId).show();
-
                     $("."+clickedId).removeClass("cmdHide"); 
 
                     if( $(".status").hasClass("hideElem") ){
@@ -153,16 +151,26 @@ jQuery(document).ready(function(){
                     }
       }
 
+      if(numberOfCmd_BenchPage == 0){
+        swal("All commands are deselected!");
+        $("#benchPageWrap").hide();
+      }
+
+      if(numberOfCmd_BenchPage > 0){
+        $("#benchPageWrap").show();
+      }
+
       $("#stacked_tcase").click();
     });//end check command
 
+    var numCheckType_benchPage = $(".check_type_benchPage").length;
     $(".check_type_benchPage").on('click',function(){
       var clickedId = $(this).prop("id");
       clickedId = clickedId.split("_");
       clickedId = clickedId[1]; //status/time/memory
-      console.log("clicked id:"+clickedId);
       var colspan;
             if( ! $("#check_"+clickedId).is(":checked")  ){
+              numCheckType_benchPage--;
               $("#check_"+clickedId).attr("checked",false);
               $("."+clickedId).addClass("hideElem");
               $("."+clickedId).hide();
@@ -170,6 +178,7 @@ jQuery(document).ready(function(){
               colspan--;
               $("#cmd_row_1").children("th").attr("colspan",colspan);
             }else if( $("#check_"+clickedId).is(":checked") ){
+              numCheckType_benchPage++;
               $("#check_"+clickedId).attr("checked",true);
               $("."+clickedId).removeClass("hideElem");
             
@@ -184,21 +193,42 @@ jQuery(document).ready(function(){
               colspan++;
               $("#cmd_row_1").children("th").attr("colspan",colspan);
             }
+
+            if(numCheckType_benchPage == 0){
+                swal("All data type are deselected!");
+                $("#div_testcase_table").hide();
+            }
+
+            if(numCheckType_benchPage > 0 && numTestcase_BenchPage > 0){
+                $("#div_testcase_table").show();
+            }
     });
 
+    var numTestcase_BenchPage = $(".rem_tcase").length;
     $(".rem_tcase").on('click',function(){
       var clickedId = $(this).prop("id");
       clickedId = clickedId.split("_");
       clickedId = clickedId[1];
- //     alert("click: "+clickedId);
 
       if( ! ($(this).is(":checked"))  ){
+        numTestcase_BenchPage--;
         ($(this)).attr("checked",false);
         $("#"+clickedId).fadeOut("slow");
       }else if( $(this).is(":checked") ){
+        numTestcase_BenchPage++;
         ($(this)).attr("checked",true);
         $("#"+clickedId).fadeIn();
       }
+
+      if(numTestcase_BenchPage == 0){
+        swal("Select at least one testcase!");
+        $("#div_testcase_table").hide();
+      }
+
+      if(numTestcase_BenchPage > 0 && numCheckType_benchPage > 0){
+        $("#div_testcase_table").show();
+      }
+
     });
 
 
@@ -261,12 +291,10 @@ jQuery(document).ready(function(){
       stackedChart(arrayForStackedChartNotCompleted,"container_stacked_tcase_notCompleted",categories,"not completed");
     }
     if(clickedId == "scatter_tcase"){
-     
       arrayForScatterTestcaseChart = [];
       var checkedCmdForScatter = [];
       controlCheckedCmd(checkedCmdForScatter);
       if(checkedCmdForScatter.length > 1){// bisogna controllare che i checked siano due
-        console.log(checkedCmdForScatter);
         $("#graphic_line_tcase").empty();
         $("#graphic_stacked_tcase").empty();
         $("#graphic_scatter_tcase").empty();
@@ -275,13 +303,12 @@ jQuery(document).ready(function(){
         elaborateDataForScatterTestcaseChart(arrayForScatterTestcaseChart,arrayOfTestcases,checkedCmdForScatter);
         scatterChart(arrayForScatterTestcaseChart,"container_scatter_tcase");
         }else{
-          alert("seleziona due cmd");
+          swal("Select TWO Commands!");
         }
     }
   });//end event graphics button
 
   function elaborateDataForScatterTestcaseChart(arrayForScatterTestcaseChart,arrayOfTestcases,checkedCmdForScatter){
-    console.log(arrayOfTestcases);
     arrayOfTestcases.forEach(function(tcaseElem,index_j){
       var tcaseObj = {
         name : tcaseElem.id,
@@ -301,13 +328,11 @@ jQuery(document).ready(function(){
         arrayForScatterTestcaseChart.push(tcaseObj);
       }
     });
-    console.log(arrayForScatterTestcaseChart);
   }
 
 function elaborateDataForTestcaseStackedChart(arrayForStackedChart,arrayForStackedChartNotCompleted,arrayOfTestcases){
     cmdIdArray.forEach(function(cmdId,index_k){
         if(originalCmdId[cmdId] == arrayForLineChart[index_k].name && arrayForLineChart[index_k].active==true){ // controllo se il cmd è attivo dall'arrayLine
-            console.log("ENTRO:"+originalCmdId[cmdId]+" true" );
             var solution = 0;
             var notCompleted = 0;
             
@@ -324,7 +349,6 @@ function elaborateDataForTestcaseStackedChart(arrayForStackedChart,arrayForStack
             arrayOfTestcases.forEach(function(tcaseElem,index_i){
               var cmdOfThisTcase = tcaseElem.commandList;
               cmdOfThisTcase.forEach(function(cmdElem,index_j){
-                //console.log("Qui: "+originalCmdId[cmdId]+" ======= "+cmdElem.cmdid);
                 if(originalCmdId[cmdId] == cmdElem.cmdid){
                   if(cmdElem.cmdstatus == "complete"){
                     solution++;

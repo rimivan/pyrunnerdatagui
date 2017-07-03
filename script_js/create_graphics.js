@@ -5,7 +5,7 @@ var DIM_SCATTER = 700;
 
 jQuery(document).ready(function(){
 	var bench_id_arr;
-	$(".scatterZoom").on('click',function(){
+	$(".scatterZoom").on('click',function(){ // ZoomIN ZoomOUT
 		var id = $(this).prop("id");
 		if( id == "bigger"){
 			DIM_SCATTER += 100;
@@ -84,7 +84,7 @@ jQuery(document).ready(function(){
 							
 						obj.data = tmpDataArray;
 				}else{
-					console.log("elemento command non trovato nella sessionStorage:"+elem);
+					console.log("Command Element isn't in storage: "+elem);
 				}
 				cmdObjArr.push(obj); // cmdObjArr è l'array di oggetti che passo al grafico stacked
 				
@@ -121,12 +121,11 @@ jQuery(document).ready(function(){
 					scatterChart(dataForScatterChart,"container_scatter");
 					
 				}else{
-					alert("seleziona due cmd");
+					swal("Select TWO commands!");
 				}
 			}
-
 		}else{
-			alert("Qualcosa è andato storto nella lettura dal sessionStorage.");
+			sweetAlert("Oops...", "Something went wrong!", "error");
 		}
 
 	
@@ -172,8 +171,6 @@ jQuery(document).ready(function(){
             	}
             });
 
-            
-
             if(clicked_id === "stacked"){
             	$("#graphic_1").empty();
             	$("#graphic_2").empty();
@@ -184,9 +181,8 @@ jQuery(document).ready(function(){
             	stackedChart(cmdObjToGraphicsArray,"container_2",bench_only_id_arr,"notcompleted");
             }
 
-
         }else{
-        	alert("Non è possibile caricare i test Non Completati!");
+        	swal("Impossible to load Uncompleted tests!");
         }
 
 	}); // end on click grafic button
@@ -213,7 +209,6 @@ jQuery(document).ready(function(){
 				dataForLineChart.push(oggetto);
 			}
 		});
-		console.log(dataForLineChart);
 	}
 
 
@@ -302,14 +297,11 @@ function stackedChart(param,appendTo,categories,compOrNotComp){
 			},
 			series: 
 			param
-
-
 		});
 	});
 }
 
 function scatterChart(param,appendTo){
-	console.log(param);
 	var biggerScatterBtn = document.getElementById("bigger");
 	var smallerScatterBtn = document.getElementById("smaller");
 	biggerScatterBtn.classList.remove("hide");

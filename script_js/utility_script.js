@@ -44,14 +44,15 @@ function controlCheckedCmd(checkedCmdForScatter){
 											if(status === "complete"){
 												var time = parseFloat( $(this).attr("time") ) ;
 												arrayForTestCase.push(time);
-										
 											}
 										});
 									});
 								}
 							});
 						});
-						arrayOfDataTimeTemp.push(arrayForTestCase);
+						if( arrayForTestCase.length == 2){ // arrayForTestCase deve essere di due elementi poichè entrambi i cmd scelti devono aver completato il test per rappresentare il punto sullo scatter.
+							arrayOfDataTimeTemp.push(arrayForTestCase);
+						}
 					});
 					//console.log(arrayOfDataTimeTemp);
 					benchmarkObj.data=arrayOfDataTimeTemp;
@@ -71,7 +72,7 @@ function controlCheckedCmd(checkedCmdForScatter){
 		$("#"+typeRow).append(
 			"<th class='solution "+currentCmd+" first_col' id='th_"+cmd+"_solution'>SOLUTION </th>"+
 			"<th class='avgtime "+currentCmd+"' id='th_"+cmd+"_avgtime'>AVG TIME </th>"+
-			"<th class='sumtime "+currentCmd+"' id='th_"+cmd+"_sumtime'>SUM TIME </th>"+
+			"<th class='sumtime "+currentCmd+"' id='th_"+cmd+"_sumtime'>TOTAL TIME </th>"+
 			"<th class='avgmem "+currentCmd+" last_col' id='th_"+cmd+"_avgmem'>AVG MEM </th>"
 		);
 	};
@@ -220,5 +221,4 @@ function controlCheckedCmd(checkedCmdForScatter){
 	
 jQuery(document).ready(function(){
 
-	
 });

@@ -8,14 +8,45 @@
 
     <script language="javascript" type="text/javascript" src="jquery-1.12.3.min.js"></script>
     <link href="css/general_css.css" rel="stylesheet" type="text/css">
+
+    <!-- KICKSTART -->
+	<script src="kickstart_framework/js/kickstart.js"></script> 
+	<link rel="stylesheet" href="kickstart_framework/css/kickstart.css" media="all" />
+
+	<!-- Material Design Lite -->
+	<link rel="stylesheet" href="materialDesignLite/material.min.css">
+	<script src="materialDesignLite/material.min.js"></script>
+
+	<!-- Sweet Alert -->
+	<script src="sweetalert/sweetalert.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="sweetalert/sweetalert.css">
+
 	<script src="script_js/setfilename.js" type="text/javascript" charset="utf-8"></script>
 
 </head>
 <body>
-	<h1>Select an XML file output of Pyrunlim tool</h1>
-	<div id="div_input_file">
-		<input id="input_filename" type='file' name='userFile' value=""><br>
-		<a href="home.html"><button id="btn_filename" type="">Select</button></a>
+	<div class="col_1"></div>
+	<div id="divUpload" class=" col_10 bordered">
+		<div id="uploadImg">
+			<img src="img/upload.png" alt="Upload XML File">	
+		</div>
+		<h1 id="h1Upload">Select and upload an XML output file of<br>Pyrunlim tool : </h1>
+		<div id="div_input_file">
+			<input id="input_filename" type='file' name='userFile' value=""><br>
+			<!-- <a href="home.html"> --><button id="btn_filename" class="mdl-button mdl-js-button mdl-button--raised" type="">Select</button><!-- </a> -->
+
+		</div>
+
+		<div class="col_2"></div>
+		<div class="col_8">
+			<h5 id="hGuide">Guidelines:</h5>
+			<p class="pGuide"><i class="step">Step 1:</i> Select and upload the XML file that the benchmarking tool, Pyrunlim, produces.<br></p>
+			<p class="pGuide"><i class="step">Step 2:</i> In first page you can see all data in the main table and you can consult the graphics in the bottom of the page. You can also select/deselect any data and data-type you consider interesting.<br></p>
+			<p class="pGuide"><i class="step">Step 3:</i> If needed of details data of a benchmark, you can click over it and you'll be redicted on the specific page.<br></p>
+			<p class="pGuide"><i class="step">Step 4:</i> In the page of a specific benchmark you can move in the same way.</p>
+		</div>
+		<div class="col_2"></div>
 	</div>
+	<div class="col_1"></div>
 </body>
 </html>

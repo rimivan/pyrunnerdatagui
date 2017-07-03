@@ -17,7 +17,8 @@
 	<script src="script_js/utility_script.js" type="text/javascript" charset="utf-8"></script>
 	<script src="script_js/elaboratexml.js" type="text/javascript" charset="utf-8"></script>
 	<script src="script_js/create_graphics.js" type="text/javascript" charset="utf-8"></script>
-    
+
+
     <!-- Semantic UI-->
     <script src="semantic_ui_framework/semantic.min.js"></script>
     <link rel="stylesheet" href="semantic_ui_framework/semantic.min.css" media="all" />
@@ -26,10 +27,24 @@
 	<script src="kickstart_framework/js/kickstart.js"></script> 
 	<link rel="stylesheet" href="kickstart_framework/css/kickstart.css" media="all" />
 
+	<!-- Sweet Alert -->
+	<script src="sweetalert/sweetalert.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="sweetalert/sweetalert.css">
+
 </head>
 <body>
-	<h1>Navigate the output</h1>
-	<h2>TITLE</h2>
+	<div class="col_12">
+		<div class="col_3"> </div>
+		<div class="col_6">
+			<img src="img/homeicon.png" alt=""><h1>Explore the output data of <br> Pyrunlim and Pyrunner tool: </h1>
+		</div>
+		<div class="col_3"></div>
+	</div>
+	<a name="top" hide></a>
+	<div>
+		<p>Click here to go to the graphics!</p>
+		<a href="#graphics"><img src="img/gotographic.png" alt="Click here to go to the graphics!" ></a>
+	</div>
 
 	<!-- Al centro: lista command -->
 	<div class="col_12"> <!-- Command list -->
@@ -37,7 +52,7 @@
 		</div>
 		
 		<div class="col_6" id="div_cmnd">
-			<div>Commands List:</div>
+			<div id="commandListTitle">Commands List:</div>
 		</div>
 
 		<div class="col_3"><!-- Empty -->
@@ -52,21 +67,22 @@
 
 				<div><br></div>
 				
-				<div class="col_12">
-					<div class="col_3 bordered">
-						<div class='ui toggle checkbox cmnd' ><input id="check_solution" type='checkbox' class='check_type' name='public' checked ><label>Solution</label></div>
+				<div class="col_12" id="divDataType">
+					Type of Data:
+					<div class="col_3 bordered checktype_div">
+						<div class='ui toggle checkbox cmnd ' ><input id="check_solution" type='checkbox' class='check_type' name='public' checked ><label>Solution</label></div>
 					</div>
 
-					<div class="col_3 bordered">
-						<div class='ui toggle checkbox cmnd' ><input id="check_avgtime" type='checkbox' class='check_type' name='public' checked ><label>Average Time</label></div>
+					<div class="col_3 bordered checktype_div">
+						<div class='ui toggle checkbox cmnd ' ><input id="check_avgtime" type='checkbox' class='check_type' name='public' checked ><label>Average Time</label></div>
 					</div>
 
-					<div class="col_3 bordered">
-						<div class='ui toggle checkbox cmnd' ><input id="check_sumtime" type='checkbox' class='check_type' name='public' checked ><label>Total Time</label></div>
+					<div class="col_3 bordered checktype_div">
+						<div class='ui toggle checkbox cmnd ' ><input id="check_sumtime" type='checkbox' class='check_type' name='public' checked ><label>Total Time</label></div>
 					</div>
 								
-					<div class="col_3 bordered">
-						<div class='ui toggle checkbox cmnd' ><input id="check_avgmem" type='checkbox' class='check_type' name='public' checked ><label>Average Memory</label></div>
+					<div class="col_3 bordered checktype_div">
+						<div class='ui toggle checkbox cmnd ' ><input id="check_avgmem" type='checkbox' class='check_type' name='public' checked ><label>Average Memory</label></div>
 					</div>
 				</div>
 
@@ -83,7 +99,7 @@
 						<tr id="cmd_row">
 							<td></td>
 						</tr>
-						<tr id="type_row"><td></td></tr>
+						<tr id="type_row"><td>BENCHMARK:</td></tr>
 					</thead>
 					<tbody id="tbody">
 					</tbody>
@@ -98,18 +114,21 @@
 
 	<!--  Tipi di Grafici -->
 	<div class="col_12">
+		<a name="graphics" hide></a>
 		<div class="col_2"><!-- Empty -->
 		</div>
 			<div class="col_8" id="graphics_type">
 				<div>Summary Graphics of completed and not completed test:
-					<br><button class="graphicbtn fa fa-bar-chart" type="" id="stacked" > Stacked </button>
+					<br><button class="graphicbtn fa fa-bar-chart" type="" id="stacked" > Stacked bar</button>
 				</div>
+				<div class="col_12"></div><!-- EMPTY -->
 				<div>Graphics of Average Time:
-					<br><button class="graphicbtn fa fa-line-chart" type="" id="line"> Line </button>
+					<br><button class="graphicbtn fa fa-line-chart" type="" id="line"> Line chart </button>
 				</div>
-				<div>Seleziona due command per confrontare i testcase:
+				<div class="col_12"></div><!-- EMPTY -->
+				<div>Select two command to compare the instances:
 					<br>
-					<button class="graphicbtn fa fa-ellipsis-v" type="" id="scatter"> Scatter </button>
+					<button class="graphicbtn fa fa-ellipsis-v" type="" id="scatter"> Scatter chart</button>
 						<div>
 							<button class=" scatterZoom hide" id="bigger" style="background: url(img/zoomin.png)"></button>
 							<button class=" scatterZoom hide" id="smaller" style="background: url(img/zoomout.png)"></button>
@@ -152,6 +171,9 @@
 
 	</div>
 
+
+	<div class="col_12"></div><!-- EMPTY -->
+	<div class="col_12"></div>
 
 </body>
 </html>
