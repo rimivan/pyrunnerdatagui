@@ -83,7 +83,7 @@ jQuery(document).ready(function(){ // start jquery code
 
                 
  
-
+                //Elaborazione di tutti i dati
                 var arrayOfTotalObj = [];
                 var notCompletedObj_array = [];
 
@@ -123,7 +123,6 @@ jQuery(document).ready(function(){ // start jquery code
                             var idCurrentBenchmark =$(this).attr("id");
                             var bench = {
                                 idBench:idCurrentBenchmark,
-                                //arrayOfAvgTime:[]
                                 command:{	//il command idCmd impiega ad esempio avgtime per il benchmark idCurrentBench
                                     idCmd:currentCmd,
                                     solution:0,
@@ -186,8 +185,9 @@ jQuery(document).ready(function(){ // start jquery code
                     totalSumTime = roundTo(totalSumTime,2); 
                     totalAvgMem = roundTo(totalAvgMem,2);
 
-                    var tmpTotals = [];
-                    var totalObj = { // ci serve il numero di lanci per il benchmark
+                    var tmpTotals = [];	
+                    				// serve ad avere traccia dei totali che poi saranno aggiornati
+                    var totalObj = { // ci serve il numero di lanci per il benchmark.
                         totalOf : "",
                         index : index,
                         totals : [],
@@ -229,7 +229,7 @@ jQuery(document).ready(function(){ // start jquery code
                     arrayDeiValoriDiAvgPerSingoloTestcase.push(allTestcaseValues);
                 });//end foreach cmd_id
     
-                sessionStorage.setItem("notcompleted", JSON.stringify(notCompletedObj_array)); // serve per la creazione dei grafici nel "sumTable.js"
+                sessionStorage.setItem("notcompleted", JSON.stringify(notCompletedObj_array)); // serve per la creazione del grafico dei test non completati
                 var arrayOfBenchAndAvg = [];
 
                 //function che crea i dati dei testcase 

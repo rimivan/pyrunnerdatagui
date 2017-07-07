@@ -100,11 +100,11 @@ jQuery(document).ready(function(){
         });
     });// end foreach testcase
 
-    avgTimeOfTestcase /= numberOfTestcaseExecution; // dati generali di tutto il benchmark
+    avgTimeOfTestcase /= numberOfTestcaseExecution; // dati generali di tutto il benchmark per completare l'oggetto selectedBenchmarkObject
     avgMemOfTestcase /= numberOfTestcaseExecution;
     avgMemOfTestcase = avgMemOfTestcase.toFixed(2);
     avgTimeOfTestcase = avgTimeOfTestcase.toFixed(2);
-    selectedBenchmarkObject["avgmem"] = parseFloat(avgMemOfTestcase); // avg mem del benchmark
+    selectedBenchmarkObject["avgmem"] = parseFloat(avgMemOfTestcase); // Aggiungo le chiavi avgmem e avgtime del benchmark selezionato con i valori
     selectedBenchmarkObject["avgtime"] = parseFloat(avgTimeOfTestcase);
 
     summary(); // dati riassuntivi del benchmark

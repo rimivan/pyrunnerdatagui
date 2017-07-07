@@ -54,12 +54,10 @@ function controlCheckedCmd(checkedCmdForScatter){
 							arrayOfDataTimeTemp.push(arrayForTestCase);
 						}
 					});
-					//console.log(arrayOfDataTimeTemp);
 					benchmarkObj.data=arrayOfDataTimeTemp;
 					dataForScatterChart.push(benchmarkObj);
 				}
 			});
-		console.log(dataForScatterChart);
 	};//end elaborate data for scatter.
 
 

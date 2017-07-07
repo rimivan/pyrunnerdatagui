@@ -89,7 +89,7 @@ jQuery(document).ready(function(){
 				cmdObjArr.push(obj); // cmdObjArr è l'array di oggetti che passo al grafico stacked
 				
 			});
-			bench_only_id_arr = [];
+			bench_only_id_arr = []; // array con gli id dei benchmark attivi
 			
 			bench_id_arr.forEach(function(val,index){
 				if(val.active == "true")
@@ -130,7 +130,7 @@ jQuery(document).ready(function(){
 
 	
 
-		//creazione dati e grafici per i test non completi
+		//creazione dati e grafico per i test non completi
 		if(sessionStorage["notcompleted"]){ // in session storage deve esserci l'elemento notcompleted per creare il grafico stacked con i test not completed
 			var notCompleted_all = JSON.parse (sessionStorage.getItem("notcompleted")) ;
 
@@ -171,7 +171,7 @@ jQuery(document).ready(function(){
             	}
             });
 
-            if(clicked_id === "stacked"){
+            if(clicked_id === "stacked"){ // grafico stacked con test non completi
             	$("#graphic_1").empty();
             	$("#graphic_2").empty();
             	$("#graphic_scatter").empty();
@@ -187,7 +187,7 @@ jQuery(document).ready(function(){
 
 	}); // end on click grafic button
 
-										//line chart of home.html
+										//line chart data
 	function elaborateDataForLineChart(){ // riempe dataLineForChart per poi essere passato alla funzione che Line
 		dataForLineChart = [];
 		var cmdObjForLine;
