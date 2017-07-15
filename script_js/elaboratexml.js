@@ -443,9 +443,8 @@ jQuery(document).ready(function(){ // start jquery code
 
                 $(".goToBenchPage").on('click',function(){
                     var idBenchSelected = $(this).prop('id');
-                    
+                    																//get(0) mi dà l'oggetto associato del benchmark
                     var benchObjSelected =  benchmarkObject[idBenchSelected].get(0) ;//questo oggetto serve nello script benchmarkpage
-                    
                     var totalSolOfBenchmark = 0;
                     var totalSumTimeOfBenchmark = 0;
                     arrayOfBenchmarkObject.forEach(function(benchmarkElem){ // mi salvo il totale dei solution e sum time per mostrarli nella pagina del singolo benchmark

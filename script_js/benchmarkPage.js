@@ -323,8 +323,8 @@ jQuery(document).ready(function(){
           }
         }); 
       });
-      if(dataArray.length > 0){
-        tcaseObj.data.push(dataArray);
+      if(dataArray.length == 2){ // entrambi i valori status dei comandi selezionati devono essere complete
+        tcaseObj.data.push(dataArray); //testcase Obj è un oggetto per il grafico scatter; ogni testcase ha un oggetto
         arrayForScatterTestcaseChart.push(tcaseObj);
       }
     });
